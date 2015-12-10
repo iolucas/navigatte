@@ -1,0 +1,5 @@
+-Must find way to fix bug of infinite drag positions in zooming/draging
+-Must find proper way to prevent mouse click event to occurr if it is followed by a mouse move event
+-must handle nodes and links with ids (must define if they excluvely globally or locally)
+-must study the best security algorithm for login stuff @ php
+-check if a cached version of the logged page is not stored

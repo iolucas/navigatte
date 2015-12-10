@@ -26,6 +26,7 @@
 	</head>
 
 	<body>
+
         <!--Side menu-->
         <nav id="side-menu">   
             <div id="logo">Navigatte</div>
@@ -34,11 +35,11 @@
 
             <div class="divisor"></div>  
 
-            <button class="btn btn-info btn-lg" 
+            <button id="createNodeButton" class="btn btn-info btn-lg" 
                 type="button" 
-                style="width:300px;border-radius:0;position:absolute;left:0; top:180px;" 
-                onclick="createNewNode();">
-                New Box...
+                style="height:50px;width:300px;border-radius:0;position:absolute;left:0; top:180px;" 
+                onclick="OpenCreateModal();">
+                Create New Node
             </button>
 
             <!--<div id="user-profile-container">
@@ -82,7 +83,10 @@
         <script src="js/g-query.js"></script>
         <script src="navigatte-nodes-container.js"></script>
         <script src="navigatte-nodes-links.js"></script>
-        <script src="navigatte-nodes-modal.js"></script>
+        <script src="navigatte-node-manager.js"></script>
+        <script src="navigatte-modal.js"></script>
+        <script src="navigatte-content-modal.js"></script>
+        <script src="navigatte-create-modal.js"></script>
         <script src="app.js"></script>
         <script>
             
@@ -92,7 +96,7 @@
 
             initApp();
 
-            var userProfile = $("#user-profile-container");
+            /*var userProfile = $("#user-profile-container");
 
             var searchField = $("#search-field");
 
@@ -387,7 +391,7 @@
                 .attr("stroke-width", 2);
 
             return skillLink;
-        }
+        }*/
 
 
         </script>

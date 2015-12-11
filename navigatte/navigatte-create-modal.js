@@ -66,7 +66,7 @@ function OpenCreateModal() {
 				var yPos = (80 - nodesContainerAttr.translate[1])/nodesContainerAttr.scale;
 
 				//Create the new node
-				var newNode = NodeManager.Create({
+				var newNode = Navigatte.NodeManager.Create({
 					name: nodeNameInput.node().value,
 					x: xPos,
 					y: yPos,

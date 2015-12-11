@@ -42,6 +42,13 @@
                 Create New Node
             </button>
 
+            <button id="saveChangesButton" class="btn btn-success btn-lg" 
+                type="button" 
+                style="height:50px;width:300px;border-radius:0;position:absolute;left:0; top:250px;" 
+                onclick="Navigatte.ChangeManager.SaveChanges();">
+                Save Changes
+            </button>
+
             <!--<div id="user-profile-container">
                 <div class="user-img"></div>
                 <div id="user-name" class="black-font"><?php htmlout($userInfo['screen_name']); ?></div>
@@ -81,12 +88,13 @@
         <script src="js/bootstrap.min.js"></script>
 		<script src="js/d3.v3.min.js"></script>
         <script src="js/g-query.js"></script>
-        <script src="navigatte-nodes-container.js"></script>
-        <script src="navigatte-nodes-links.js"></script>
-        <script src="navigatte-node-manager.js"></script>
-        <script src="navigatte-modal.js"></script>
-        <script src="navigatte-content-modal.js"></script>
-        <script src="navigatte-create-modal.js"></script>
+        <script src="navigatte/navigatte-nodes-container.js"></script>
+        <script src="navigatte/navigatte-nodes-links.js"></script>
+        <script src="navigatte/navigatte-node-manager.js"></script>
+        <script src="navigatte/navigatte-changes-manager.js"></script>
+        <script src="navigatte/navigatte-modal.js"></script>
+        <script src="navigatte/navigatte-content-modal.js"></script>
+        <script src="navigatte/navigatte-create-modal.js"></script>
         <script src="app.js"></script>
         <script>
             

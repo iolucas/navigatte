@@ -16,7 +16,7 @@ function OpenContentModal(nodeData) {
 			.text("Delete")
 			.on("click", function() {
 
-				NodeManager.Delete(nodeData);
+				Navigatte.NodeManager.Delete(nodeData);
 
 				//Refresh the nodes based on the user nodes array
 				NodeModal.Close(function() {

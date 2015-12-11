@@ -110,7 +110,44 @@ function deleteNodes(deleteSelection) {
 }
 
 
+//Create object to open node content display
+var enableNodeContentDisplay = function(nodesSelection) {
 
+	//Enable nodes to display content on double click
+	nodesSelection.on("dblclick", function(nodeData) {
+
+		//Cancel event bubble to avoid another actions to occurr on double click 
+		d3.event.cancelBubble = true;
+
+		OpenContentModal(nodeData);
+	});
+}
+
+//Create object to handle nodes drag
+var enableNodeDrag = d3.behavior.drag()
+	.origin(function(d) { return d; })
+	.on("drag", function(d) {
+
+		//Update node attribute
+		Navigatte.NodeManager.Update(d, {
+			x: d3.event.x,
+			y: d3.event.y
+		});
+
+		//Update node position
+		d.d3Select.attr("transform", "translate(" + d.x + " " + d.y + ")");	
+
+		//Update dragged node parent and child links paths
+		/*for(var i = 0; i < d.parentLinks.length ; i++) {
+			var currLink = d.parentLinks[i];
+			currLink.linkObj.attr("d", createLinkPath(currLink));
+		}
+
+		for(var i = 0; i < d.childLinks.length; i++) {
+			var currLink = d.childLinks[i];
+			currLink.linkObj.attr("d", createLinkPath(currLink));
+		}*/		
+	});
 
 
 
@@ -207,39 +244,3 @@ function deleteNodes(deleteSelection) {
 	return nodesGroup;
 }*/
 
-//Create object to open node content display
-var enableNodeContentDisplay = function(nodesSelection) {
-
-	//Enable nodes to display content on double click
-	nodesSelection.on("dblclick", function(nodeData) {
-
-		//Cancel event bubble to avoid another actions to occurr on double click 
-		d3.event.cancelBubble = true;
-
-		OpenContentModal(nodeData);
-	});
-}
-
-//Create object to handle nodes drag
-var enableNodeDrag = d3.behavior.drag()
-	.origin(function(d) { return d; })
-	.on("drag", function(d) {
-		d.x = d3.event.x < 1 ? 1 : d3.event.x;
-		d.y = d3.event.y < 1 ? 1 : d3.event.y;
-
-		d.x = d3.event.x;
-		d.y = d3.event.y;
-
-		//Update dragged node parent and child links paths
-		/*for(var i = 0; i < d.parentLinks.length ; i++) {
-			var currLink = d.parentLinks[i];
-			currLink.linkObj.attr("d", createLinkPath(currLink));
-		}
-
-		for(var i = 0; i < d.childLinks.length; i++) {
-			var currLink = d.childLinks[i];
-			currLink.linkObj.attr("d", createLinkPath(currLink));
-		}*/
-
-		d.d3Select.attr("transform", "translate(" + d.x + " " + d.y + ")");	
-	});

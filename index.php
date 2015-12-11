@@ -53,6 +53,17 @@ if (isset($_POST['action'])) {
 
 		exit();
 	}
+
+	//If the action is a signOut
+	if ($_POST['action'] == 'save_node_changes') {
+		include 'includes/save_node_changes.inc.php';
+
+		$changesArray = json_decode($_POST['changes']);
+		save_nodes_changes($changesArray);
+
+		//print_r($changesArray);
+		exit();
+	}
 }
 
 

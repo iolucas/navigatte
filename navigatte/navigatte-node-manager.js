@@ -1,4 +1,8 @@
-var NodeManager = new function() {
+//Module to handle and compute nodes creation, deletation and update
+if(Navigatte == undefined)
+	var Navigatte = {}
+
+Navigatte.NodeManager = new function() {
 
 	var nodeCreatedId = 1;
 
@@ -6,14 +10,15 @@ var NodeManager = new function() {
 
 		//Create new node object
 		var newNode = {
-			newNode: 1,	//flag to signalize a new node
 			name: nodeAttr.name,
 			x: nodeAttr.x,
 			y: nodeAttr.y,
 			bgcolor: nodeAttr.bgcolor,
 			fgcolor: nodeAttr.fgcolor,
-			id: "created" + nodeCreatedId
+			id: "new" + nodeCreatedId
 		}
+
+		Navigatte.ChangeManager.Push(newNode.id, "create", newNode);
 
 		//Increase the index for created nodes
 		nodeCreatedId++
@@ -31,6 +36,8 @@ var NodeManager = new function() {
 
 		if(nodeIndex == -1)
 			return false;
+
+		Navigatte.ChangeManager.Push(nodeData.id, "delete");
 						
 		//Delete the node data from the user nodes array
 		userNodes.splice(nodeIndex, 1);
@@ -38,10 +45,14 @@ var NodeManager = new function() {
 		return true;
 	}
 
-	this.Update = function(node, nodeAttr) {
+	this.Update = function(nodeData, nodeAttr) {
+		//Pass the changes to the target node
+		for(prop in nodeAttr)
+			if(nodeData[prop] != undefined)
+				nodeData[prop] = nodeAttr[prop];
 
-
-
+		//Push the change to the change manager
+		Navigatte.ChangeManager.Push(nodeData.id, "update", nodeAttr);
 	}
 
 }

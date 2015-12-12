@@ -11,10 +11,16 @@ function save_nodes_changes($changesArray)
 
 	$user_id = $_SESSION['userId'];
 
+	$createdIds = array();
+
 	for($i = 0; $i < count($changesArray); $i++) {
 		$changeData = $changesArray[$i];
 
-		//If this change data wants to create a new 
+		//If there is no action, proceed next iteration
+		if(!isset($changeData->action))
+			continue;
+
+		//If this change data wants to update an existing register...
 		if($changeData->action == "update") {
 			try {
 				$changeDataId = $changeData->id;
@@ -45,13 +51,74 @@ function save_nodes_changes($changesArray)
 
 				$s->execute();
 
-				echo "Sucess!";
-
 			} catch (PDOException $e) {
 				echo "ERROR!";
 			}
+		} else if($changeData->action == "create") { //If the change data wants to create a new register
+			//If there is no name, proceed next iteration
+			if(!isset($changeData->name))
+				continue;
+
+			//Check if the new entry name exists in the master_node
+			$sql = 'SELECT id FROM nodes_master WHERE name = :name';
+			$s = $pdo->prepare($sql);
+			$s->bindValue(':name', $changeData->name);
+			$s->execute();
+
+			$rowResult = $s->fetch();
+
+			if($rowResult) {	//If we got a result, get the nameId
+				$nameId = $rowResult['id'];
+			} else { //If not, create a new entry at the nodes_master
+				$sql = 'INSERT INTO nodes_master (name) VALUES (:name)';
+				$s = $pdo->prepare($sql);
+				$s->bindValue(':name', $changeData->name);
+				$s->execute();
+
+				$sql = 'SELECT LAST_INSERT_ID()';
+				$s = $pdo->prepare($sql);
+				$s->execute();
+
+				$nameId = $s->fetch()[0];
+			}
+
+			//Register the new node in the current user
+			$sql = 'INSERT INTO user_nodes (node_id, owner_id, x, y, bgcolor, fgcolor) 
+					VALUES (:node_id, :owner_id, :x, :y, :bgcolor, :fgcolor)';
+
+			$s = $pdo->prepare($sql);
+			$s->bindValue(':node_id', $nameId);
+			$s->bindValue(':owner_id', $user_id);
+			$s->bindValue(':x', $changeData->x);
+			$s->bindValue(':y', $changeData->y);
+			$s->bindValue(':bgcolor', $changeData->bgcolor);
+			$s->bindValue(':fgcolor', $changeData->fgcolor);
+			$s->execute();	
+
+			//Get the created id and to return it to the user page
+			$sql = 'SELECT LAST_INSERT_ID()';
+			$s = $pdo->prepare($sql);
+			$s->execute();
+
+			$createdIds[] = array('id' => $changeData->id, 'newId' => $s->fetch()[0]);
+		} else if($changeData->action == "delete") {
+
+			//If no id is supplied, proceed next iteration
+			if(!isset($changeData->id))
+				continue;
+
+			$sql = 'DELETE FROM user_nodes WHERE id = :id AND owner_id = :owner_id';
+
+			$s = $pdo->prepare($sql);
+			$s->bindValue(':id', $changeData->id);
+			$s->bindValue(':owner_id', $user_id);
+			$s->execute();
 		}
 	}
+
+	$resultObj = array('result'=>'success', 'createdIds' => $createdIds);
+
+	echo json_encode($resultObj);
 
 	exit();
 }

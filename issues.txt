@@ -3,3 +3,6 @@
 -must handle nodes and links with ids (must define if they excluvely globally or locally)
 -must study the best security algorithm for login stuff @ php
 -check if a cached version of the logged page is not stored
+-in the save changes stuff, the server must return all the actions that were taken and delete them from the changes array 
+-must create something to avoid two consecutive saves in the database side
+-consider use angular js

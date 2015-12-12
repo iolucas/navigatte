@@ -207,6 +207,12 @@ footer {
 	left: 0;
 }
 
+.node-rect {
+	stroke: #fff;
+	stroke-width: 2;
+
+}
+
 .skill-node-container-selected {
 	stroke: #008;
 	stroke-width: 4;

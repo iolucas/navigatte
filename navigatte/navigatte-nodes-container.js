@@ -10,13 +10,15 @@ function initNodesContainer(parentId) {
 
 	//Append rectangle to receive mouse events such void click or screen zooming/moving
 	var svgMouseArea = svgContainer.append("rect")
+		.attr("id", "node-container-mouse-area")
 		.attr("fill", "transparent")
 		.on("mousedown", function() {
 			d3.select(this).style("cursor", "move");		
 		})
 		.on("mouseup", function() {
 			d3.select(this).style("cursor", "");		
-		});	
+		})
+		.on("click", clearAllSelections);
 
 	//Append nodes main container
 	var nodesContainer = svgContainer.append("g")

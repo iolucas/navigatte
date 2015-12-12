@@ -3,7 +3,7 @@ function refreshNodes(nodesArray, nodesClass) {
 	var dataSelection = d3.select("#nodes-container").selectAll("." + nodesClass)
 		.data(nodesArray, function(d) {
 			//Match nodes array member with the data bind in the selection of the classes
-			return d.id;
+			return d.node_id;
 		});
 
 	//Get the nodes which has node element appended and create them
@@ -28,12 +28,15 @@ function createNodes(createSelection, nodesClass) {
 			d.y = parseInt(d.y || "100");
 
 			return "translate(" + d.x + " " + d.y +")";
-		});
+		})
+		.on("click", selectNodePath)
+		;
 
 	//Append the node rectangle to the node group
 	var nodesRect = nodesSelection.append("rect")
-		.style("stroke-width", 2)
-		.style("stroke", "#fff")
+		.attr("class", "node-rect")
+		//.style("stroke-width", 2)
+		//.style("stroke", "#fff")
 		.attr("height", function(d) {
 			//d.containerHeight = 12 * d.outputs.length + 28;
 		
@@ -138,15 +141,95 @@ var enableNodeDrag = d3.behavior.drag()
 		d.d3Select.attr("transform", "translate(" + d.x + " " + d.y + ")");	
 
 		//Update dragged node parent and child links paths
-		/*for(var i = 0; i < d.parentLinks.length ; i++) {
+		for(var i = 0; d.parentLinks && i < d.parentLinks.length ; i++) {
 			var currLink = d.parentLinks[i];
-			currLink.linkObj.attr("d", createLinkPath(currLink));
+			currLink.d3Select.attr("d", createLinkPath(currLink));
 		}
 
-		for(var i = 0; i < d.childLinks.length; i++) {
+		for(var i = 0; d.childLinks && i < d.childLinks.length; i++) {
 			var currLink = d.childLinks[i];
-			currLink.linkObj.attr("d", createLinkPath(currLink));
-		}*/		
+			currLink.d3Select.attr("d", createLinkPath(currLink));
+		}		
+	});
+
+
+
+
+var refreshLinks = function(nodesArray, linksArray, linksClass) {
+
+	//Create nodes map and register parents and childs links arrays
+	var nodesMap = [];
+	for(var i = 0; i < nodesArray.length; i++) {
+		var cNode = nodesArray[i];
+
+		nodesMap[cNode.node_id] = cNode;
+
+		cNode.parentLinks = [];	//Define parent links array
+		cNode.childLinks = [];	//Define child links array
+	}
+
+	var linksMap = [];
+	for(var i = 0; i < linksArray.length; i++) {
+		var currLink = linksArray[i];
+
+		var sourceNode = nodesMap[currLink.source_id];
+		var targetNode = nodesMap[currLink.target_id];
+
+		//Create new link object
+		var newLink = { id: currLink.id, source: sourceNode, target: targetNode }
+		linksMap.push(newLink);
+
+		//Pass the link reference to the nodes
+		targetNode.parentLinks.push(newLink);
+		sourceNode.childLinks.push(newLink);
+	}
+
+	//console.log(linksMap);
+	//return;
+
+
+	var dataSelection = d3.select("#nodes-container").selectAll("." + linksClass)
+		.data(linksMap, function(d) {
+			//Match link maps member with the data bind in the selection of the classes
+			return d.id;
+		});
+
+			//Get the nodes which has node element appended and create them
+	var createSelection = dataSelection.enter();
+	createLinks(createSelection, linksClass);
+
+	//Get the nodes which has data appended and remove them
+	//var deleteSelection = dataSelection.exit();
+	//deleteNodes(deleteSelection);
+}
+
+var createLinks = function(createSelection, linksClass) {
+
+	var linksSelection = createSelection.insert("path", ":first-child")
+		.attr("class", linksClass)
+		.attr("d", function(link) {
+			link.d3Select = d3.select(this);	//get the link obj reference
+
+			//Return the path created by the source and target nodes
+			return createLinkPath(link);
+		})
+		.attr("fill", "none")
+		.attr("stroke", "#000")
+		.attr("stroke-width", 2);
+}
+
+
+
+//Function to create the path of a diagonal line (x and y are inverted for right line projection)
+var createLinkPath = d3.svg.diagonal()
+	.source(function(link) { 
+		return { x: link.source.y + 20, y: link.source.x + link.source.containerWidth }; 
+	})            
+	.target(function(link) { 
+		return { x: link.target.y + 20, y: link.target.x }; 
+	})
+	.projection(function(d) { 
+		return [d.y, d.x]; 
 	});
 
 

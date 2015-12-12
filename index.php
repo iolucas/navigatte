@@ -18,7 +18,7 @@ if (isset($_POST['action'])) {
 		{
 			//Set error and return the main page
 			$GLOBALS['loginError'] = 'Please fill in both fields';
-			include 'main_page.html.php';
+			include 'htmls/main_page.html.php';
 			exit();
 		}
 
@@ -34,7 +34,7 @@ if (isset($_POST['action'])) {
 		} else {
 			//Set error and return the main page
 			$GLOBALS['loginError'] = 'The specified email address or password was incorrect.';
-			include 'main_page.html.php';
+			include 'htmls/main_page.html.php';
 		}
 
 		exit();
@@ -53,18 +53,47 @@ if (isset($_POST['action'])) {
 
 		exit();
 	}
+}
 
-	//If the action is a signOut
-	if ($_POST['action'] == 'save_node_changes') {
-		include 'includes/save_node_changes.inc.php';
+//If a user profile request
+if (isset($_GET['user'])) {
 
-		$changesArray = json_decode($_POST['changes']);
-		save_nodes_changes($changesArray);
+	//Get the user name
+	$username = $_GET['user'];
 
-		//print_r($changesArray);
+	//If the username is empty
+	if($username == "") {
+		echo 'INVALID_USER';
 		exit();
 	}
+
+	//Connect to the database
+	include 'includes/db.inc.php';
+
+	//Try to get the user information
+	$sql = 'SELECT screen_name, screen_description, profile_pic FROM users WHERE page_name = :username';
+	$s = $pdo->prepare($sql);
+	$s->bindValue(':username', $username);
+	$s->execute();
+
+	$userinfo = $s->fetch();
+
+	//Disconnect DB
+	$pdo = null;
+
+	//If the user does not exists, return user not found
+	if(!$userinfo) {
+		echo 'USER_NOT_FOUND';
+		exit();
+	} 
+
+	include 'htmls/prof_page.html.php';
+
+	exit();
 }
+
+
+
 
 
 function recurseGetNodes($id, &$generalResult, $pdo) {
@@ -206,96 +235,6 @@ if (isset($_GET['search_query']) && $_GET['search_query']) {
 	exit();
 }
 
-//User profile request
-if (isset($_GET['user']) && $_GET['user']) {
-
-	include 'includes/db.inc.php'; //Connect to the database
-
-	//Get User Data
-
-	//Write query
-	$sql = 'SELECT * FROM users WHERE user_name = "' . $_GET['user'] . '"';
-
-	$result = $pdo->query($sql);	//Execute query
-
-	$row = $result->fetch();	//Get the first result
-
-	//If there is no result, return user no found
-	if(!$row) {
-		htmlout("USER NOT FOUND");
-		exit();
-	}
-
-	//Get user variables
-	$userid = $row['id'];
-	$username = $row['user_name'];
-	$fullname = $row['full_name'];
-	$userdesc = $row['description'];
-	$userpic = $row['profile_pic_file'];
-
-	//Get nodes of the current user
-
-	//Write query
-	$sql = 'SELECT * FROM nodes WHERE owner_id = ' . $userid ;
-	$result = $pdo->query($sql);	//Execute query
-
-	//Create array to store nodes
-	$nodesArr = array();
-
-	//Iterate thru the fetched rows and get the properties values
-	foreach($result as $row) {
-		
-		//Unset the owner_id
-		unset($row["owner_id"]);
-
-		//Unset all numeric indexes
-		foreach ($row as $key => $value) {
-			if (is_int($key))
-        		unset($row[$key]);
-		}
-
-		$nodesArr[] = $row;
-	}
-
-	//Parse json object from php object
-	$nodesJson = json_encode($nodesArr);
-
-
-	//Get node links of the current user
-
-	//Write query
-	$sql = 'SELECT * FROM node_links WHERE owner_id = ' . $userid ;
-	$result = $pdo->query($sql);	//Execute query
-
-		//Create array to store nodes
-	$linksArr = array();
-
-	//Iterate thru the fetched rows and get the properties values
-	foreach($result as $row) {
-		
-		//Unset the owner_id
-		unset($row["owner_id"]);
-
-		//Unset all numeric indexes
-		foreach ($row as $key => $value) {
-			if (is_int($key))
-        		unset($row[$key]);
-		}
-
-		$linksArr[] = $row;
-	}
-
-	//Parse json object from php object
-	$linksJson = json_encode($linksArr);
-
-
-	//Disconnect DB
-	$pdo = null;
-
-	include 'profile_page.html.php';
-
-	exit();
-}
 
 
 
@@ -304,14 +243,16 @@ if (isset($_GET['user']) && $_GET['user']) {
 //Check if the user is signed in
 if(!checkUserSignedIn()) {
 	//If not, return the welcome page and exit
-	include 'main_page.html.php';
+	include 'htmls/main_page.html.php';
 	exit();
 }
 
 //If so, get user info and return the user page
 getUserInfo($_SESSION['userId']);
 
-include 'user_page.html.php';
+
+
+include 'htmls/user_page.html.php';
 
 exit();
 
@@ -336,7 +277,6 @@ function getUserInfo($userId) {
 			$GLOBALS['userInfo']['screen_name'] = $row['screen_name'];
 			$GLOBALS['userInfo']['screen_description'] = $row['screen_description'];	
 			$GLOBALS['userInfo']['profile_pic'] = $row['profile_pic'];
-			$GLOBALS['userInfo']['nodes_json'] = json_encode(getUserNodes($pdo, $userId));
 			return;
 		}
 
@@ -351,28 +291,8 @@ function getUserInfo($userId) {
 	}
 }
 
-function getUserNodes($pdo, $userId) {
 
-	$sql = 'SELECT user_nodes.id, nodes_master.name, user_nodes.x, user_nodes.y, user_nodes.bgcolor, user_nodes.fgcolor FROM user_nodes INNER JOIN nodes_master ON user_nodes.node_id = nodes_master.id WHERE user_nodes.owner_id = :userId';
-
-	$s = $pdo->prepare($sql);
-	$s->bindValue(':userId', $userId);
-	$s->execute();
-
-	$nodes = array();
-
-	foreach ($s as $row) {
-		//Unset all numeric indexes
-		foreach ($row as $key => $value) {
-			if (is_int($key))
-        		unset($row[$key]);
-		}
-
-		$nodes[] = $row;
-	}
-
-	return $nodes;
-}
+exit();
 
 
 

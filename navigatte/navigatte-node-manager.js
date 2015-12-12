@@ -15,10 +15,10 @@ Navigatte.NodeManager = new function() {
 			y: nodeAttr.y,
 			bgcolor: nodeAttr.bgcolor,
 			fgcolor: nodeAttr.fgcolor,
-			id: "new" + nodeCreatedId
+			node_id: "new" + nodeCreatedId
 		}
 
-		Navigatte.ChangeManager.Push(newNode.id, "create", newNode);
+		Navigatte.ChangeManager.Push(newNode.node_id, "create", newNode);
 
 		//Increase the index for created nodes
 		nodeCreatedId++
@@ -37,7 +37,7 @@ Navigatte.NodeManager = new function() {
 		if(nodeIndex == -1)
 			return false;
 
-		Navigatte.ChangeManager.Push(nodeData.id, "delete");
+		Navigatte.ChangeManager.Push(nodeData.node_id, "delete");
 						
 		//Delete the node data from the user nodes array
 		userNodes.splice(nodeIndex, 1);
@@ -52,7 +52,7 @@ Navigatte.NodeManager = new function() {
 				nodeData[prop] = nodeAttr[prop];
 
 		//Push the change to the change manager
-		Navigatte.ChangeManager.Push(nodeData.id, "update", nodeAttr);
+		Navigatte.ChangeManager.Push(nodeData.node_id, "update", nodeAttr);
 	}
 
 }

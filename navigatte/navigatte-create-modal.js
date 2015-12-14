@@ -1,98 +1,107 @@
-function OpenCreateModal() {
+Navigatte.CreateModal = new function() {
 
-	NodeModal.Open({
-		startX: $("#createNodeButton").css("left").replace("px", "") || 0,
-		startY: $("#createNodeButton").css("top").replace("px", "") || 0,
-		startWidth: $("#createNodeButton").css("width").replace("px", "") || 0,
-		startHeight: $("#createNodeButton").css("height").replace("px", "") || 0,
-		endWidth: 500,
-		endHeight: 400,
-		title: "Create New Node",
-		topColor: "lightblue"
+	this.Open = function(e) {
+		var clickButton = $(this);
 
-	}, function(nodeModal) {
+		GrowModal.Show({
 
-		console.log(userNodes);
+			startX: clickButton.css("left").replace("px", "") || 0,
+			startY: clickButton.css("top").replace("px", "") || 0,
+			startWidth: clickButton.css("width").replace("px", "") || 0,
+			startHeight: clickButton.css("height").replace("px", "") || 0,
+			endWidth: 700,
+			endHeight: 400,
+			topColor: "lightblue"
 
-		//Create area to place options for creation
-		var modalArea = nodeModal.append("div")
-			.style("text-align", "center");
+		}, function(m) {
 
-		//Create div and input to write the node text
-		var nodeNameInput = modalArea.append("div").append("input")
-			.attr("type", "text")
-			.attr("placeholder", "Node Name")
-			.style("margin", "10px 0 10px 0")
-			.style("height", "30px")
-			.style("width", "200px");
+			//Create area to place options for creation
+			var modal = d3.select(m).append("div")
+				.style("text-align", "center");
 
-		//Focus the node input
-		nodeNameInput.node().focus();
+			//Set modal dialog title
+			modal.append("div")
+				.attr("class", "node-modal-title")
+				.text("Create New Node");
 
-		//Create div to choose the background color
-		var bgColorDiv = modalArea.append("div")
-			.style("margin", "10px 0 10px 0");
+			//Create div and input to write the node text
+			var nodeNameInput = modal.append("div").append("input")
+				.attr("type", "text")
+				.attr("placeholder", "Node Name")
+				.style("margin", "10px 0 10px 0")
+				.style("height", "30px")
+				.style("width", "200px");
 
-		bgColorDiv.text("Background Color: ");
+			//Focus the node input
+			nodeNameInput.node().focus();
 
-		var bgColorInput = bgColorDiv.append("input")
-			.attr("type", "color");
-		
-		bgColorInput.node().value = "#bbbbbb";
+			//Create div to choose the background color
+			var bgColorDiv = modal.append("div")
+				.style("margin", "10px 0 10px 0");
 
-		//Create div to choose the foreground color
-		var fgColorDiv = modalArea.append("div")
-			.style("margin", "10px 0 10px 0");
+			bgColorDiv.text("Background Color: ");
 
-		fgColorDiv.text("Foreground Color: ");
-
-		var fgColorInput = fgColorDiv.append("input")
-			.attr("type", "color");
+			var bgColorInput = bgColorDiv.append("input")
+				.attr("type", "color");
 			
-		fgColorInput.node().value = "#000000";
+			bgColorInput.node().value = "#bbbbbb";
 
-		//Create button to submit the node creation
-		modalArea.append("div").append("button")
-			.style("height", "50px")
-			.style("width", "200px")
-			.style("margin", "10px 0 10px 0")
-			.text("Create")
-			.on("click", function(){
+			//Create div to choose the foreground color
+			var fgColorDiv = modal.append("div")
+				.style("margin", "10px 0 10px 0");
 
-				if(nodeNameInput.node().value == "")
-					return;
+			fgColorDiv.text("Foreground Color: ");
 
-				var xPos = (360 - nodesContainerAttr.translate[0])/nodesContainerAttr.scale;
-				var yPos = (80 - nodesContainerAttr.translate[1])/nodesContainerAttr.scale;
-
-				//Create the new node
-				var newNode = Navigatte.NodeManager.Create({
-					name: nodeNameInput.node().value,
-					x: xPos,
-					y: yPos,
-					bgcolor: bgColorInput.node().value,
-					fgcolor: fgColorInput.node().value
-				});
-
-				//Refresh nodes
-				refreshNodes(userNodes, "user-nodes");
-
-				//Hide the new node
-				newNode.d3Select.style("display", "none");
+			var fgColorInput = fgColorDiv.append("input")
+				.attr("type", "color");
 				
-				//Update the modal screen attributes
-				NodeModal.Refresh({
-					startX: nodesContainerAttr.translate[0] + newNode.x * nodesContainerAttr.scale,
-					startY: nodesContainerAttr.translate[1] + newNode.y * nodesContainerAttr.scale,
-					startWidth: newNode.containerWidth * nodesContainerAttr.scale,
-					startHeight: newNode.containerHeight * nodesContainerAttr.scale,
+			fgColorInput.node().value = "#000000";
 
+			//Create button to submit the node creation
+			modal.append("div").append("button")
+				.style("height", "50px")
+				.style("width", "200px")
+				.style("margin", "10px 0 10px 0")
+				.text("Create")
+				.on("click", function() {
+
+					if(nodeNameInput.node().value == "")
+						return;
+
+					var xPos = (360 - Navigatte.Container.Position.X) / Navigatte.Container.Scale;
+					var yPos = (80 - Navigatte.Container.Position.Y) / Navigatte.Container.Scale;
+
+					//Create the new node
+					var newNode = Navigatte.Nodes.Create({
+						name: nodeNameInput.node().value,
+						x: xPos,
+						y: yPos,
+						bgcolor: bgColorInput.node().value,
+						fgcolor: fgColorInput.node().value
+					});
+
+					//Refresh nodes
+					Navigatte.Nodes.Refresh();
+
+					//Hide the new node
+					newNode.d3Select.style("display", "none");
+					
+					//Update the modal screen attributes
+					GrowModal.Refresh({
+						startX: Navigatte.Container.Position.X + newNode.x * Navigatte.Container.Scale,
+						startY: Navigatte.Container.Position.Y + newNode.y * Navigatte.Container.Scale,
+						startWidth: newNode.containerWidth * Navigatte.Container.Scale,
+						startHeight: newNode.containerHeight * Navigatte.Container.Scale,
+
+					});
+
+					GrowModal.Close(function(){
+						//On modal close, show the new node
+						newNode.d3Select.style("display", "");
+					});
 				});
 
-				NodeModal.Close(function(){
-					//On modal close, show the new node
-					newNode.d3Select.style("display", "");
-				});
-			});
-	});
+		});
+
+	};
 }

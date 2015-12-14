@@ -207,6 +207,7 @@ footer {
 	left: 0;
 }
 
+/*
 .node-rect {
 	stroke: #fff;
 	stroke-width: 2;
@@ -216,4 +217,45 @@ footer {
 .skill-node-container-selected {
 	stroke: #008;
 	stroke-width: 4;
+}*/
+
+
+
+/* NODES AND LINKS RELATED STYLES */
+
+.node-inner-rect-group {
+	cursor: pointer;
+}
+
+.node-inner-rect {
+	stroke: #fff;
+	stroke-width: 2;
+}
+
+.node-inner-rect-selected {
+	stroke: #008;
+	stroke-width: 4;	
+}
+
+.node-inner-rect-darker-margin {
+	stroke: none;
+	fill-opacity: 0.2;
+	fill: #000;
+}
+
+.node-inner-rect-text {
+
+
+}
+
+.node-io-symbol {
+	fill: #aaa;
+	stroke: #fff;
+	stroke-width: 2;
+	cursor: crosshair;
+}
+
+.node-io-symbol:hover {
+	stroke: #ff0;
+	stroke-width: 3;
 }

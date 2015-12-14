@@ -1,10 +1,8 @@
-//Module to handle node and link changes
-if(Navigatte == undefined)
-	var Navigatte = {}
+//Module to handle changes of any kind 
+Navigatte.Changes = new function() {
 
-Navigatte.ChangeManager = new function() {
 	//Array to store objects changes
-	var changes = {};
+	var notSavedChanges = {};
 
 	//flag to signalize whether a save is in progress
 	var saveInProgress = false;
@@ -19,11 +17,11 @@ Navigatte.ChangeManager = new function() {
 		//If the action is delete
 		if(action == "delete") {
 			//If a entry for this nodeId has already been setted and it was a create action
-			if(changes[nodeId] != undefined && changes[nodeId].action == "create") {
+			if(notSavedChanges[nodeId] != undefined && notSavedChanges[nodeId].action == "create") {
 				//Just remove the "to create" node entry and return
-				delete changes[nodeId];
+				delete notSavedChanges[nodeId];
 			} else { //If not, just create new object saying deletation , neverthless an entry for it exists or not
-				changes[nodeId] = { node_id: nodeId, action: action }
+				notSavedChanges[nodeId] = { node_id: nodeId, action: action }
 			}
 
 		} else {	//If any other action (create, update)
@@ -31,30 +29,30 @@ Navigatte.ChangeManager = new function() {
 			//Just update their "to change objects"
 
 			//If the node id is not computed, create a new object to store its changes
-			if(changes[nodeId] == undefined)
-				changes[nodeId] = { node_id: nodeId, action: action }
+			if(notSavedChanges[nodeId] == undefined)
+				notSavedChanges[nodeId] = { node_id: nodeId, action: action }
 
 
 			for(prop in changedAttr){
 				//If the propertie is allowed, set it to the change array
 				if(changebleProperties.indexOf(prop) != -1)
-					changes[nodeId][prop] = changedAttr[prop];	
+					notSavedChanges[nodeId][prop] = changedAttr[prop];	
 			}
 		}
 	}
 
-	this.SaveChanges = function() {
+	this.Save = function() {
 
 		//If there is nothing to change, return false
-		if(checkNoProperties(changes) || saveInProgress)
+		if(checkNoProperties(notSavedChanges) || saveInProgress)
 			return false;
 
 		saveInProgress = true;
 
 		//Getting post data
 		var changesArray = []
-		for(prop in changes) {
-			changesArray.push(changes[prop]);
+		for(prop in notSavedChanges) {
+			changesArray.push(notSavedChanges[prop]);
 		}
 
 		var changesString = JSON.stringify(changesArray);
@@ -74,15 +72,9 @@ Navigatte.ChangeManager = new function() {
 						//Get the id of the created node (of the format new#)
 						var createdNodeId = responseObj.createdIds[i].node_id;
 
-						//Find the user node which has it
-						for(var j = 0; j < userNodes.length; j++) {
-							if(userNodes[j].node_id == createdNodeId) {
-								userNodes[j].node_id = responseObj.createdIds[i].newId
-								break;
-							}
-						}	
+						Navigatte.Nodes.UpdateId(responseObj.createdIds[i].node_id, responseObj.createdIds[i].newId);
 
-						delete changes[responseObj.createdIds[i].node_id];
+						delete notSavedChanges[responseObj.createdIds[i].node_id];
 					}
 
 				} else {
@@ -90,7 +82,7 @@ Navigatte.ChangeManager = new function() {
 				}
 				
 				//Reset changes object storage
-				changes = {};
+				notSavedChanges = {};
 			})
 			.fail(function() {
 				alertify.delay(5000).error("Error while saving. Please try again.");

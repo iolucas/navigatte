@@ -107,12 +107,8 @@
 			$s->bindValue(':fgcolor', $changeData->fgcolor);
 			$s->execute();	
 
-			//Get the created id and to return it to the user page
-			$sql = 'SELECT LAST_INSERT_ID()';
-			$s = $pdo->prepare($sql);
-			$s->execute();
-
-			$createdIds[] = array('node_id' => $changeData->node_id, 'newId' => $s->fetch()[0]);
+			$createdIds[] = array('node_id' => $changeData->node_id, 'newId' => $nameId);
+		
 		} else if($changeData->action == "delete") {
 
 			//If no id is supplied, proceed next iteration

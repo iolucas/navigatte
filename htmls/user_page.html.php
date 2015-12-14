@@ -37,15 +37,14 @@
 
             <button id="createNodeButton" class="btn btn-info btn-lg" 
                 type="button" 
-                style="height:50px;width:300px;border-radius:0;position:absolute;left:0; top:180px;" 
-                onclick="OpenCreateModal();">
+                style="height:50px;width:300px;border-radius:0;position:absolute;left:0; top:180px;">
                 Create New Node
             </button>
 
             <button id="saveChangesButton" class="btn btn-success btn-lg" 
                 type="button" 
                 style="height:50px;width:300px;border-radius:0;position:absolute;left:0; top:250px;" 
-                onclick="Navigatte.ChangeManager.SaveChanges();">
+                onclick="Navigatte.Changes.Save();">
                 Save Changes
             </button>
 
@@ -75,16 +74,15 @@
                         <?php htmlout($userInfo['screen_name']); ?> <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="#">Profile</a></li>
+                    <li><a href="http://localhost/projects/navigatte/?user=<?php htmlout($userInfo['page_name']); ?>">Profile</a></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="javascript:void(0)" onclick="document.getElementById('signOutForm').submit();">Sign Out</a></li>
                     <form method="post" id="signOutForm"><input type="hidden" name="action" value="signout"></form>
                 </ul>
             </div>
-            <!--<div class="button-save"">Save Positions</div>-->
         </section>
-        <div class="dark-screen"></div>
         <script src="js/jquery-2.1.4.min.js"></script>
+        <script src="js/eventhandler.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.5/dist/js/alertify.js"></script>
         <script>
@@ -93,17 +91,24 @@
         </script>
 		<script src="js/d3.v3.min.js"></script>
         <script src="js/g-query.js"></script>
-        <script src="navigatte/navigatte-nodes-container.js"></script>
-        <script src="navigatte/navigatte-nodes-links.js"></script>
-        <script src="navigatte/navigatte-node-manager.js"></script>
-        <script src="navigatte/navigatte-changes-manager.js"></script>
-        <script src="navigatte/navigatte-modal.js"></script>
+        <script src="js/grow-modal.js"></script>
+
+        <script src="navigatte/navigatte.js"></script>
+        <script src="navigatte/navigatte-container.js"></script>
+        <script src="navigatte/navigatte-nodes.js"></script>
+        <script src="navigatte/navigatte-links.js"></script>
+        <script src="navigatte/navigatte-path.js"></script>
         <script src="navigatte/navigatte-content-modal.js"></script>
+        <script src="navigatte/navigatte-changes.js"></script>
+        <script src="navigatte/navigatte-changes-node.js"></script>
         <script src="navigatte/navigatte-create-modal.js"></script>
+        <script src="navigatte/navigatte-create-links.js"></script>
+
         <script src="app.js"></script>
         <script>
             initApp('<?php htmlout($userInfo['page_name']); ?>');
 
+            $("#createNodeButton").click(Navigatte.CreateModal.Open);
 
             //var userNodes = [];
             //var userLinks = [];

@@ -1,10 +1,11 @@
-var userNodes = [];
-var userLinks = [];
+//var userNodes = [];
+//var userLinks = [];
 
 function initApp(username) {
 
     //Init the nodes container appended to the general content section
-    initNodesContainer("#general-content");
+    Navigatte.Container.Init("#general-content");
+    //initNodesContainer("#general-content");
 
     //Get and project the user nodes and links
     $.get("gets/user_data.php", { user: username, nodes: true, links: true })
@@ -12,13 +13,10 @@ function initApp(username) {
         response = JSON.parse(response);    //parse json obj
 
         if(response.result == "SUCCESS") {
-            userNodes = response.nodes;
-            userLinks = response.links;
-
-            //Load the nodes DOM objects based on the user nodes array
-        	refreshNodes(userNodes, "user-nodes");
-            refreshLinks(userNodes, userLinks, "user-links");
-
+            //Init the nodes and links once the user data arrives
+            Navigatte.Nodes.Init(response.nodes);
+            Navigatte.Links.Init(response.links);
+            
         } else {
             console.log(response.result);
         }

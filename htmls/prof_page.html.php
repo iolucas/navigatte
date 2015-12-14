@@ -63,17 +63,25 @@
 
             <!--<div class="button-save"">Save Positions</div>-->
         </section>
-        <div class="dark-screen"></div>
-		<script src="js/jquery-2.1.4.min.js"></script>
+        <script src="js/jquery-2.1.4.min.js"></script>
+        <script src="js/eventhandler.js"></script>
         <script src="js/bootstrap.min.js"></script>
-		<script src="js/d3.v3.min.js"></script>
+        <script src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.5/dist/js/alertify.js"></script>
+        <script>
+            alertify.logPosition("bottom right");
+            alertify.maxLogItems(10);
+        </script>
+        <script src="js/d3.v3.min.js"></script>
         <script src="js/g-query.js"></script>
-        <script src="navigatte/navigatte-nodes-container.js"></script>
-        <script src="navigatte/navigatte-nodes-links.js"></script>
-        <script src="navigatte/navigatte-node-manager.js"></script>
-        <script src="navigatte/navigatte-changes-manager.js"></script>
-        <script src="navigatte/navigatte-modal.js"></script>
+        <script src="js/grow-modal.js"></script>
+
+        <script src="navigatte/navigatte.js"></script>
+        <script src="navigatte/navigatte-container.js"></script>
+        <script src="navigatte/navigatte-nodes.js"></script>
+        <script src="navigatte/navigatte-links.js"></script>
+        <script src="navigatte/navigatte-path.js"></script>
         <script src="navigatte/navigatte-content-modal.js"></script>
+
         <script src="app.js"></script>
         <script>    
             initApp('<?php htmlout($username); ?>');

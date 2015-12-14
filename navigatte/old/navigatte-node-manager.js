@@ -1,6 +1,4 @@
 //Module to handle and compute nodes creation, deletation and update
-if(Navigatte == undefined)
-	var Navigatte = {}
 
 Navigatte.NodeManager = new function() {
 
@@ -32,7 +30,7 @@ Navigatte.NodeManager = new function() {
 
 	this.Delete = function(nodeData) {
 
-		var nodeIndex = userNodes.indexOf(nodeData);
+		var nodeIndex = Navigatte.nodes.indexOf(nodeData);
 
 		if(nodeIndex == -1)
 			return false;
@@ -40,7 +38,7 @@ Navigatte.NodeManager = new function() {
 		Navigatte.ChangeManager.Push(nodeData.node_id, "delete");
 						
 		//Delete the node data from the user nodes array
-		userNodes.splice(nodeIndex, 1);
+		Navigatte.nodes.splice(nodeIndex, 1);
 
 		return true;
 	}

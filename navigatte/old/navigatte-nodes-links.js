@@ -11,15 +11,13 @@ function refreshNodes(nodesArray, nodesClass) {
 	createNodes(createSelection, nodesClass);
 
 	//Get the nodes which has data appended and remove them
-	var deleteSelection = dataSelection.exit();
-	deleteNodes(deleteSelection);
+	dataSelection.exit().remove();
 }
 
 function createNodes(createSelection, nodesClass) {
 
-	var nodesSelection = createSelection.append("g")
-		.attr("class", nodesClass)
-		.style("cursor", "pointer")
+	var nodeGroup = createSelection.append("g")
+		.classed(nodesClass, true)
 		.attr("transform", function(d) {
 			//Set node d3 selection reference
 			d.d3Select = d3.select(this);
@@ -28,15 +26,15 @@ function createNodes(createSelection, nodesClass) {
 			d.y = parseInt(d.y || "100");
 
 			return "translate(" + d.x + " " + d.y +")";
-		})
-		.on("click", selectNodePath)
-		;
+		});
 
-	//Append the node rectangle to the node group
-	var nodesRect = nodesSelection.append("rect")
-		.attr("class", "node-rect")
-		//.style("stroke-width", 2)
-		//.style("stroke", "#fff")
+	var innerRectGroup = nodeGroup.append("g")
+		.classed("node-inner-rect-group", true)
+		.on("click", selectNodePath);	
+
+	//Append the node rectangle to the inner rect group
+	var innerRect = innerRectGroup.append("rect")
+		.attr("class", "node-inner-rect", true)
 		.attr("height", function(d) {
 			//d.containerHeight = 12 * d.outputs.length + 28;
 		
@@ -46,22 +44,22 @@ function createNodes(createSelection, nodesClass) {
 		})
 		.attr("fill", function(d) {
 			return d.bgcolor;
-		});
+		})
+		;
 
-	nodesSelection.append("rect")
+	//Darker Margin to display the logo type
+	var innerRectDarkerMargin = innerRectGroup.append("rect")
+		.attr("class", "node-inner-rect-darker-margin", true)
 		.attr("x", 1)
 		.attr("y", 1)
 		.attr("width", 28)
 		.attr("height", function(d) {
 			return d.containerHeight - 2;	
-		})
-		.attr("stroke", "none")
-		.attr("fill-opacity", 0.2)
-		.attr("fill", "#000");
+		});
 
-
-	nodesSelection.append("text")
-		.attr("class", "skill-node-label")
+	//Node name text
+	var innerRectText = innerRectGroup.append("text")
+		.attr("class", "node-inner-rect-text")
 		.text(function(d) { return d.name; })
 		.attr("x", 38)
 		.attr("y", function(d) {
@@ -77,35 +75,38 @@ function createNodes(createSelection, nodesClass) {
 			return d.fgcolor;
 		});
 
-	//Set node container width now the text has been placed
-	nodesRect.attr("width", function(d) { return d.containerWidth; });
+	//Set node inner rect width now the text has been placed and we got its size
+	innerRect.attr("width", function(d) { return d.containerWidth; });
 
 	//Draw input symbol
-	nodesSelection.append("path")
+	nodeGroup.append("path")
+		.classed("node-io-symbol", true)
 		.attr("d", "M0,0 14,7 L0,14z")
-		.attr("fill", "#aaa")
-		.attr("stroke", "#fff")
-		.attr("stroke-width", 2)
 		.attr("transform", function(d) {
 			return "translate(-5 " + (d.containerHeight - 14) / 2 + ")";
 		});
 
 	//Draw output symbol
-	nodesSelection.append("path")
+	nodeGroup.append("path")
+		.classed("node-io-symbol", true)
 		.attr("d", "M0,0 14,7 L0,14z")
-		.attr("fill", "#aaa")
-		.attr("stroke", "#fff")
-		.attr("stroke-width", 2)
 		.attr("transform", function(d) {
 			return "translate(" + (d.containerWidth - 5) + " " + (d.containerHeight - 14) / 2 + ")";
+		})
+		.on("mousedown", function() {
+			//Cancel event bubble to avoid another actions to occurr on mouse this area
+			d3.event.cancelBubble = true;
+		})
+		.on("click", function() {
+
+			
 		});
 
 	//Enable nodes to be dragged
-	nodesSelection.call(enableNodeDrag);
+	nodeGroup.call(enableNodeDrag);
 
 	//Enable nodes to display content on double click
-	nodesSelection.call(enableNodeContentDisplay);
-
+	innerRectGroup.call(enableNodeContentDisplay);
 }
 
 function deleteNodes(deleteSelection) {
@@ -204,6 +205,7 @@ var refreshLinks = function(nodesArray, linksArray, linksClass) {
 }
 
 var createLinks = function(createSelection, linksClass) {
+
 
 	var linksSelection = createSelection.insert("path", ":first-child")
 		.attr("class", linksClass)

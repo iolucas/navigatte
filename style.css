@@ -259,3 +259,16 @@ footer {
 	stroke: #ff0;
 	stroke-width: 3;
 }
+
+
+.node-name-search-result {
+	padding: 2px 0 2px 5px;
+	font-size: 15px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.node-name-search-result:hover {
+	color: #fff;
+	background-color: #000;
+};

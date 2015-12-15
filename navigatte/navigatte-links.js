@@ -6,6 +6,10 @@ Navigatte.Links = new function() {
 
 	var eventHandler = new EventHandler();
 
+	this.on = function() {
+		eventHandler.on.apply(null, arguments);
+	}
+
 	//Variable to hold the next node create id
 	var nextLinkId = 1;
 
@@ -33,13 +37,9 @@ Navigatte.Links = new function() {
 		
 		//Create new link object
 		var newLink = {
-			id: "newLink" + nextLinkId,
 			source_id: linkAttr.source_id,
 			target_id: linkAttr.target_id
 		}
-
-		//Increase the next index for a created link
-		nextLinkId++
 
 		//Push the node to the user nodes
 		links.push(newLink);
@@ -81,7 +81,7 @@ Navigatte.Links = new function() {
 		var linksSelection = Navigatte.Container.Select().selectAll(".navi-links")
 			.data(links, function(d) {
 				//Match link maps member with the data bind in the selection of the classes
-				return d.id;
+				return d.source_id + d.target_id;
 			});
 
 		//Get the links data which has no DOM binded, create the DOMs and bind them
@@ -111,9 +111,15 @@ Navigatte.Links = new function() {
 
 	//Return the path created to link the source and target nodes
 	function createLinkPath(sourceId, targetId) {
+		var sourceNode = Navigatte.Nodes.Get(sourceId),
+			targetNode = Navigatte.Nodes.Get(targetId);
+
+		if(sourceNode == undefined || targetNode == undefined)
+			return "";
+
 		return drawLinkPath({
-			source: Navigatte.Nodes.Get(sourceId),
-			target: Navigatte.Nodes.Get(targetId)
+			source: sourceNode,
+			target: targetNode
 		});
 	}
 
@@ -128,20 +134,4 @@ Navigatte.Links = new function() {
 		.projection(function(d) { 
 			return [d.y, d.x]; 
 		});
-
-
-
-	/*var newLinkNextId = 0;
-
-
-	this.StartCreate = function(nodeData) {
-
-
-	}
-
-	this.FinishCreate = function(nodeData) {
-
-
-
-	}*/
 }

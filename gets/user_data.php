@@ -72,7 +72,7 @@
 
 		//Write sql query
 
-		$sql = 'SELECT id, source_id, target_id FROM user_links WHERE owner_id = :userId';
+		$sql = 'SELECT source_id, target_id FROM user_links WHERE owner_id = :userId';
 
 		$s = $pdo->prepare($sql);
 		$s->bindValue(':userId', $userId);

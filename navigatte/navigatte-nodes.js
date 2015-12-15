@@ -186,7 +186,7 @@ Navigatte.Nodes = new function() {
 		});
 
 	//Function to update nodes id when nodes are created
-	this.UpdateId = function(prevId, newId) {
+	/*this.UpdateId = function(prevId, newId) {
 
 		for(var i = 0; i < nodes.length; i++) {
 			if(nodes[i].node_id == prevId) {
@@ -194,22 +194,34 @@ Navigatte.Nodes = new function() {
 				break;
 			}
 		}
+	}*/
+
+	function indexOf(node_id){
+		for(var i = 0; i < nodes.length; i++) {
+			if(nodes[i].node_id == node_id)
+				return i;
+		}
+		return -1;
 	}
 
-	this.Create = function(nodeAttr) {
+	this.Create = function(newNode) {
+		if(indexOf(newNode.node_id) != -1) {
+			alertify.error("This node already exists!");
+			return null;
+		}
 		
 		//Create new node object
-		var newNode = {
+		/*var newNode = {
 			name: nodeAttr.name,
 			x: nodeAttr.x,
 			y: nodeAttr.y,
 			bgcolor: nodeAttr.bgcolor,
 			fgcolor: nodeAttr.fgcolor,
-			node_id: "new" + nextNodeId
-		}
+			node_id: "newNodeId" + nextNodeId
+		}*/
 
 		//Increase the next index for a created node
-		nextNodeId++
+		//nextNodeId++
 
 		//Push the node to the user nodes
 		nodes.push(newNode);

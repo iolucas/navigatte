@@ -2,87 +2,125 @@
 Navigatte.Changes = new function() {
 
 	//Array to store objects changes
-	var notSavedChanges = {};
+	var changes = [];
 
 	//flag to signalize whether a save is in progress
 	var saveInProgress = false;
 
-	//Array storing the properties allowed to be changed
-	var changebleProperties = [
-		"name","x","y","bgcolor","fgcolor"
-	];
+	this.Add = function(changeData) {
 
-	this.Push = function(nodeId, action, changedAttr) {
+		//Check if an entry for the specified object exists
+		var existIndex = indexOf(changeData);
 
-		//If the action is delete
-		if(action == "delete") {
-			//If a entry for this nodeId has already been setted and it was a create action
-			if(notSavedChanges[nodeId] != undefined && notSavedChanges[nodeId].action == "create") {
-				//Just remove the "to create" node entry and return
-				delete notSavedChanges[nodeId];
-			} else { //If not, just create new object saying deletation , neverthless an entry for it exists or not
-				notSavedChanges[nodeId] = { node_id: nodeId, action: action }
+
+		//If a change entry for this element exists
+		if(existIndex != -1) {
+			//If the existing entry is delete, return
+
+			if(changes[existIndex].action == "delete")
+				return;
+
+			switch(changeData.action) {
+
+				//If the action is create, just update the existing register for creation with the new attributes
+				case "create":
+					for(prop in changeData)
+						changes[existIndex][prop] = changeData[prop];
+					break;
+
+				case "delete":
+
+					//If we got a create entry and the next is delete, 
+					if(changes[existIndex].action == "create") {
+						delete changes[existIndex];	//just remove the prev entry
+					} else {
+						changes.push(changeData);	//Push the new entry
+						delete changes[existIndex];	//Remove the prev entry
+					}
+
+					break;
+
+				case "update":
+					//Copy the new attributes to the prev entry, avoiding change the create action
+					for(prop in changeData) {
+						if(prop == "action" && changes[existIndex][prop] == "create")
+							continue;
+
+						changes[existIndex][prop] = changeData[prop];
+					}
+
+					break;
+
 			}
 
-		} else {	//If any other action (create, update)
-
-			//Just update their "to change objects"
-
-			//If the node id is not computed, create a new object to store its changes
-			if(notSavedChanges[nodeId] == undefined)
-				notSavedChanges[nodeId] = { node_id: nodeId, action: action }
-
-
-			for(prop in changedAttr){
-				//If the propertie is allowed, set it to the change array
-				if(changebleProperties.indexOf(prop) != -1)
-					notSavedChanges[nodeId][prop] = changedAttr[prop];	
-			}
+		} else {
+			//If no prev register, just push the change attr
+			changes.push(changeData);
 		}
+
+		console.log(changes);
 	}
+
+
+	function indexOf(findData) {
+
+		for(var i = 0; i < changes.length; i++) {
+			var currChange = changes[i];
+
+			if(currChange == undefined)
+				continue;
+
+			if(currChange.id != findData.id)
+				continue;
+
+			if(currChange.element != findData.element)
+				continue;
+
+			return i;
+		}
+
+		return -1
+	}
+
+//MUST FIND AWAY TO AVOID BUG IN CASE CREATE NODES AND LINK THEM THAT THE ID GOES WRONG
+//MAYBE WE CAN REQUEST AN ID POOL OR A DYNAMIC ID TO ATTACH TO THESE ELEMENTS ON CREATION TO AVOID SUCH SITUATIONS
+//OR SAVE EVERY MOVEMENT
 
 	this.Save = function() {
 
-		//If there is nothing to change, return false
-		if(checkNoProperties(notSavedChanges) || saveInProgress)
-			return false;
+		//If a save is in progress, or there is no change, do nothing
+		if(saveInProgress || changes.getValidLength() == 0)
+			return;
 
-		saveInProgress = true;
+		//Remove all invalid members of the changes array
+		var changesArray = [];
+		for(var i = 0; i < changes.length; i++)
+			if(changes[i] != undefined)
+				changesArray.push(changes[i]);
 
-		//Getting post data
-		var changesArray = []
-		for(prop in notSavedChanges) {
-			changesArray.push(notSavedChanges[prop]);
-		}
 
 		var changesString = JSON.stringify(changesArray);
 
 		alertify.delay(5000).log("Saving changes...");
 
-		$.post("save_nodelinks_changes.php", { action: "save_node_changes", changes: changesString })
+		$.post("save_changes.php", { action: "save_node_changes", changes: changesString })
 			.done(function(responseObj) {
-				
+				console.log(responseObj);
+
 				responseObj = JSON.parse(responseObj);
 
-				if(responseObj.result == "success") {
-					alertify.delay(5000).success("Changes saved!");
 
-					for(var i = 0; responseObj.createdIds && i < responseObj.createdIds.length; i++) {
 
-						//Get the id of the created node (of the format new#)
-						var createdNodeId = responseObj.createdIds[i].node_id;
-
-						Navigatte.Nodes.UpdateId(responseObj.createdIds[i].node_id, responseObj.createdIds[i].newId);
-
-						delete notSavedChanges[responseObj.createdIds[i].node_id];
-					}
+				if(responseObj.result && responseObj.result == "SUCCESS") {
+					alertify.delay(5000).success("Changes saved!")
+					
+					//Reset changes object storage
+					changes = [];
 
 				} else {
-					alertify.delay(5000).error("Unknown error while saving.");
+					alertify.delay(5000).error("Unknown error while saving. Please try again.");
 				}
 				
-				//Reset changes object storage
-				notSavedChanges = {};
 			})
 			.fail(function() {
 				alertify.delay(5000).error("Error while saving. Please try again.");
@@ -90,14 +128,5 @@ Navigatte.Changes = new function() {
 			.always(function(){
 				saveInProgress = false;
 			});
-	}
-
-	function checkNoProperties(obj) {
-		for(var key in obj) {
-		      if (obj.hasOwnProperty(key)) {
-		         return false;
-		      }
-		   }
-		return true;
 	}
 }

@@ -24,13 +24,74 @@ Navigatte.CreateModal = new function() {
 				.attr("class", "node-modal-title")
 				.text("Create New Node");
 
+			var searchTimeout = null;
+
 			//Create div and input to write the node text
 			var nodeNameInput = modal.append("div").append("input")
 				.attr("type", "text")
 				.attr("placeholder", "Node Name")
-				.style("margin", "10px 0 10px 0")
+				.style("margin", "10px 0 0 0")
 				.style("height", "30px")
-				.style("width", "200px");
+				.style("width", "200px")
+           		.on("keyup", function(event) {
+
+           			nodeNameSearchResultDiv.selectAll("*").remove();           			
+           			nodeIdInput.node().value = "";
+
+               		if(searchTimeout)
+                    	clearTimeout(searchTimeout);
+
+	                //Must set timeout to give time for the field register its new value and avoid too many ajax requests
+	                searchTimeout = setTimeout(function() { 
+	                    searchTimeout = null;
+
+	                    var inputValue = nodeNameInput.node().value;
+
+	                    //If no input, hide result list and return
+	                    if(inputValue == "") {
+	                    	nodeNameSearchResultDiv.selectAll("*").remove();
+	                    	return;
+	                    }
+	                    	
+	                    Navigatte.Search.Query({ nodename: inputValue }, function(response, result) {
+	                    	if(result == "success") {
+	                    		console.log(response);
+
+	                    		var resultDataBind = nodeNameSearchResultDiv
+	                    			.selectAll(".node-name-search-result")
+	                    			.data(JSON.parse(response), 
+	                    				function(d){ return d.name });
+
+	                    		resultDataBind.enter().append("div")
+	                    			.classed("node-name-search-result", true)
+	                    			.text(function(d){ return d.name; })
+	                    			.on("click", function(d) {
+	                    				nodeNameInput.node().value = d.name;
+	                    				nodeIdInput.node().value = d.id;	
+	                    				nodeNameSearchResultDiv.selectAll("*").remove();
+	                    			});
+
+	                    		resultDataBind.exit().remove();
+	                    	}
+	                    });
+
+	                }, 500);    
+            	});
+
+			var nodeIdInput = modal.append("input")
+				.attr("type", "hidden")
+				.attr("value", "");
+
+           	var nodeNameSearchResultDiv = modal.append("div")
+           		.style({
+					"background-color": "#fff",
+					"border": "1px solid #bbb",
+					"margin-left": "250px",
+					"position": "fixed",
+					"text-align": "left",
+					"min-width": "200px"
+				})
+
 
 			//Focus the node input
 			nodeNameInput.node().focus();
@@ -65,7 +126,7 @@ Navigatte.CreateModal = new function() {
 				.text("Create")
 				.on("click", function() {
 
-					if(nodeNameInput.node().value == "")
+					if(nodeNameInput.node().value == "" || nodeIdInput.node().value == "")
 						return;
 
 					var xPos = (360 - Navigatte.Container.Position.X) / Navigatte.Container.Scale;
@@ -74,11 +135,15 @@ Navigatte.CreateModal = new function() {
 					//Create the new node
 					var newNode = Navigatte.Nodes.Create({
 						name: nodeNameInput.node().value,
+						node_id: nodeIdInput.node().value,
 						x: xPos,
 						y: yPos,
 						bgcolor: bgColorInput.node().value,
 						fgcolor: fgColorInput.node().value
 					});
+
+					if(newNode == null)
+						return;
 
 					//Refresh nodes
 					Navigatte.Nodes.Refresh();

@@ -6,3 +6,6 @@
 -in the save changes stuff, the server must return all the actions that were taken and delete them from the changes array 
 -must create something to avoid two consecutive saves in the database side
 -consider use angular js
+-only allow one combination of masternodeid and userid @ usernodes
+-be carefull to do not echo error messages displaying that columns were not found
+-must check whether the ids to create links exists in the master nodes list

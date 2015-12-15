@@ -103,6 +103,8 @@
         <script src="navigatte/navigatte-changes-node.js"></script>
         <script src="navigatte/navigatte-create-modal.js"></script>
         <script src="navigatte/navigatte-create-links.js"></script>
+        <script src="navigatte/navigatte-changes-link.js"></script>
+        <script src="navigatte/navigatte-search.js"></script>
 
         <script src="app.js"></script>
         <script>

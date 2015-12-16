@@ -10,6 +10,15 @@ Navigatte.Links = new function() {
 		eventHandler.on.apply(null, arguments);
 	}
 
+	//Set event to delete links attached to a deleted node
+	Navigatte.Nodes.on("delete", function(node) {
+		//Get the node attached links and delete them
+		var nodeLinks = Navigatte.Links.Get({ nodeId: node.node_id, source:true, target:true });
+		for(var i = 0; i < nodeLinks.length; i++)
+			Navigatte.Links.Delete(nodeLinks[i]);
+
+	});
+
 	//Variable to hold the next node create id
 	var nextLinkId = 1;
 
@@ -104,9 +113,9 @@ Navigatte.Links = new function() {
 
 				return createLinkPath(link.source_id, link.target_id);
 			})
-			.attr("fill", "none")
-			.attr("stroke", "#000")
-			.attr("stroke-width", 2);
+			.on("click", function(d) {
+				eventHandler.fire("click", d);
+			});
 	}
 
 	//Return the path created to link the source and target nodes

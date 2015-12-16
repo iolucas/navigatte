@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 	    <link rel="stylesheet" href="style.css"/>
         <link rel="stylesheet" href="css/bootstrap.min.css">
-        <title>Navigatte</title>        
+        <title>Navigatte</title>  
         <style>
             #side-menu {
                 /*background: linear-gradient(<?php //echo $gradientString ?>);*/
@@ -12,15 +12,6 @@
 
             .user-img {
                 background-image: url("<?php htmlout('img/' . $userInfo['profile_pic']); ?>");
-                width: 200px;
-                height: 200px;
-                background-size: cover;
-                background-repeat: no-repeat;
-                background-position: 50% 50%;
-                display: inline-block;
-                box-shadow: 0px 0px 5px #fff;
-                border: 2px solid #fff;
-                border-radius: 100px;
             }
         </style>
 	</head>
@@ -29,7 +20,7 @@
 
         <!--Side menu-->
         <nav id="side-menu">   
-            <div id="logo">Navigatte</div>
+            <a href="." id="logo">Navigatte</a>
 
             <input name="search" id="search-field" type="text" placeholder="Search..." />
 
@@ -80,6 +71,10 @@
                     <form method="post" id="signOutForm"><input type="hidden" name="action" value="signout"></form>
                 </ul>
             </div>
+            <div class="navi-content-window">
+                <div class="navi-content-close-button">x</div>
+                <div class="navi-content-data"></div>
+            </div>
         </section>
         <script src="js/jquery-2.1.4.min.js"></script>
         <script src="js/eventhandler.js"></script>
@@ -97,7 +92,7 @@
         <script src="navigatte/navigatte-container.js"></script>
         <script src="navigatte/navigatte-nodes.js"></script>
         <script src="navigatte/navigatte-links.js"></script>
-        <script src="navigatte/navigatte-path.js"></script>
+        <script src="navigatte/navigatte-select.js"></script>
         <script src="navigatte/navigatte-content-modal.js"></script>
         <script src="navigatte/navigatte-changes.js"></script>
         <script src="navigatte/navigatte-changes-node.js"></script>
@@ -105,6 +100,8 @@
         <script src="navigatte/navigatte-create-links.js"></script>
         <script src="navigatte/navigatte-changes-link.js"></script>
         <script src="navigatte/navigatte-search.js"></script>
+        <script src="navigatte/navigatte-keyactions.js"></script>
+        <script src="navigatte/navigatte-content.js"></script>
 
         <script src="app.js"></script>
         <script>

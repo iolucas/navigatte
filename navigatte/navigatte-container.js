@@ -8,13 +8,27 @@ Navigatte.Container = new function() {
 	this.Scale = 1;
 	this.Position = { X: 0, Y: 0 }
 
-	this.On;
-
 	var container;
 	var svgContainer;
 	var svgMouseArea;	
 
-	var containerZoom;
+	//Create object to handle nodes container zooming/draging
+	var containerZoom = d3.behavior.zoom()
+		.scaleExtent([0.1, 1])
+		.on("zoom", function() {
+
+			container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+
+			self.Position.X = d3.event.translate[0];
+			self.Position.Y = d3.event.translate[1];
+
+			self.Scale = d3.event.scale;
+		});
+
+	this.Translate = function() {
+		console.log("ae");
+		return containerZoom.translate.apply(null, arguments);		
+	}
 
 	var eventHandler = new EventHandler();
 	this.on = function(event, callback) {
@@ -51,18 +65,6 @@ Navigatte.Container = new function() {
 		//Append nodes main container
 		container = svgContainer.append("g");
 
-		//Create object to handle nodes container zooming/draging
-		containerZoom = d3.behavior.zoom()
-			.scaleExtent([0.1, 1])
-			.on("zoom", function() {
-
-				container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-
-				self.Position.X = d3.event.translate[0];
-				self.Position.Y = d3.event.translate[1];
-
-				self.Scale = d3.event.scale;
-			});
 
 		//Add the function to refresh the screen size to the event list of window resize
 		window.addEventListener("resize", function(){

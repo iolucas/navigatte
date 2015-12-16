@@ -57,8 +57,6 @@ Navigatte.Changes = new function() {
 			//If no prev register, just push the change attr
 			changes.push(changeData);
 		}
-
-		console.log(changes);
 	}
 
 
@@ -105,11 +103,8 @@ Navigatte.Changes = new function() {
 
 		$.post("save_changes.php", { action: "save_node_changes", changes: changesString })
 			.done(function(responseObj) {
-				console.log(responseObj);
 
 				responseObj = JSON.parse(responseObj);
-
-
 
 				if(responseObj.result && responseObj.result == "SUCCESS") {
 					alertify.delay(5000).success("Changes saved!")

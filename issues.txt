@@ -9,3 +9,5 @@
 -only allow one combination of masternodeid and userid @ usernodes
 -be carefull to do not echo error messages displaying that columns were not found
 -must check whether the ids to create links exists in the master nodes list
+-must create hierarqui for container elements to standard they actions for creation, update, deletation, selection etc
+-instead create an ajax request for all letter typing, send the request for the first letter and them inner filter the results for all the results

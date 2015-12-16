@@ -2,62 +2,21 @@ Navigatte.ContentModal = new function() {
 
 	Navigatte.Nodes.on("dblclick", function(node) {
 
-		GrowModal.Show({
-			startX: Navigatte.Container.Position.X + node.x * Navigatte.Container.Scale,
-			startY: Navigatte.Container.Position.Y + node.y * Navigatte.Container.Scale,
-			startWidth: node.containerWidth * Navigatte.Container.Scale,
-			startHeight: node.containerHeight * Navigatte.Container.Scale,
-			endWidth: 1200,
-			endHeight: 800,
-			title: node.name,
-			topColor: node.bgcolor
-		}, function(modalWindow) {
+		Navigatte.Content.Open(function(contentWindow) { 
 
-			d3.select(modalWindow).append("button")
-				.text("Delete")
-				.on("click", function() {
+			contentWindow.append("span")
+				.style({
+					"font-size": "40px"
 
-					Navigatte.Nodes.Delete(node);
+				})
+				.text(node.name);
 
-					//Get the node attached links and delete them
-					var nodeLinks = Navigatte.Links.Get({ nodeId: node.node_id, source:true, target:true });
-					for(var i = 0; i < nodeLinks.length; i++)
-						Navigatte.Links.Delete(nodeLinks[i]);
 
-					//Refresh the nodes and links
-					GrowModal.Close(function() {
-						Navigatte.Nodes.Refresh();
-						Navigatte.Links.Refresh();
-					});
-				});
-
+				
 		});
 	});
 }
 
-
-/*
-function OpenContentModal(nodeData) {
-
-	NodeModal.Open({
-
-
-	}, function(nodeModal) {
-
-		nodeModal.append("button")
-			.text("Delete")
-			.on("click", function() {
-
-				Navigatte.NodeManager.Delete(nodeData);
-
-				//Refresh the nodes based on the user nodes array
-				NodeModal.Close(function() {
-					refreshNodes(Navigatte.nodes, "user-nodes");
-				});
-
-			});
-	});
-}*/
 
 
 

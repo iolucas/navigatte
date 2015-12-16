@@ -16,6 +16,11 @@ function initApp(username) {
             //Init the nodes and links once the user data arrives
             Navigatte.Nodes.Init(response.nodes);
             Navigatte.Links.Init(response.links);
+
+            //var containerBox = Navigatte.Container.Select().node().getBBox();
+            //Navigatte.Container.Translate([-containerBox.x + 310, -containerBox.y + 10]);
+
+            //Navigatte.Container.Select().node().translate(-containerBox.x + 310, -containerBox.y + 10);
             
         } else {
             console.log(response.result);

@@ -55,7 +55,6 @@ Navigatte.CreateModal = new function() {
 	                    	
 	                    Navigatte.Search.Query({ nodename: inputValue }, function(response, result) {
 	                    	if(result == "success") {
-	                    		console.log(response);
 
 	                    		var resultDataBind = nodeNameSearchResultDiv
 	                    			.selectAll(".node-name-search-result")
@@ -119,51 +118,84 @@ Navigatte.CreateModal = new function() {
 			fgColorInput.node().value = "#000000";
 
 			//Create button to submit the node creation
-			modal.append("div").append("button")
+			var createButton = modal.append("div").append("button")
 				.style("height", "50px")
 				.style("width", "200px")
 				.style("margin", "10px 0 10px 0")
 				.text("Create")
 				.on("click", function() {
 
-					if(nodeNameInput.node().value == "" || nodeIdInput.node().value == "")
+					if(nodeNameInput.node().value == "")
 						return;
+
+					createButton.attr("disabled", "true")
+						.text("Creating...");
 
 					var xPos = (360 - Navigatte.Container.Position.X) / Navigatte.Container.Scale;
 					var yPos = (80 - Navigatte.Container.Position.Y) / Navigatte.Container.Scale;
 
-					//Create the new node
-					var newNode = Navigatte.Nodes.Create({
-						name: nodeNameInput.node().value,
-						node_id: nodeIdInput.node().value,
-						x: xPos,
-						y: yPos,
-						bgcolor: bgColorInput.node().value,
-						fgcolor: fgColorInput.node().value
-					});
+					//If there is no id for this node, get or create it
+					if(nodeIdInput.node().value == "") {
 
-					if(newNode == null)
-						return;
+						$.post("create_master_node.php", { nodename: nodeNameInput.node().value })
+							.done(function(response) {
+								response = JSON.parse(response);
 
-					//Refresh nodes
-					Navigatte.Nodes.Refresh();
+								if(response.result == "SUCCESS") {
+									createNode(response.value);
 
-					//Hide the new node
-					newNode.d3Select.style("display", "none");
-					
-					//Update the modal screen attributes
-					GrowModal.Refresh({
-						startX: Navigatte.Container.Position.X + newNode.x * Navigatte.Container.Scale,
-						startY: Navigatte.Container.Position.Y + newNode.y * Navigatte.Container.Scale,
-						startWidth: newNode.containerWidth * Navigatte.Container.Scale,
-						startHeight: newNode.containerHeight * Navigatte.Container.Scale,
+								} else {
+									alertify.error("Error while creating node: " + response.result);		
+								}
+							})
+							.fail(function(error){
+								alertify.error("Error while creating node: " + error);
+							})
+							.always(function(){
+								createButton.attr("disabled", "false")
+									.text("Create");
+							});
 
-					});
+					} else {	//If there is, create the node with it
+						createNode(nodeIdInput.node().value);
+						createButton.attr("disabled", "false")
+							.text("Create");					
+					}
 
-					GrowModal.Close(function(){
-						//On modal close, show the new node
-						newNode.d3Select.style("display", "");
-					});
+					function createNode(nodeId) {
+
+						//Create the new node
+						var newNode = Navigatte.Nodes.Create({
+							name: nodeNameInput.node().value,
+							node_id: nodeId,
+							x: xPos,
+							y: yPos,
+							bgcolor: bgColorInput.node().value,
+							fgcolor: fgColorInput.node().value
+						});
+
+						if(newNode == null)
+							return;
+
+						//Refresh nodes
+						Navigatte.Nodes.Refresh();
+
+						newNode.d3Select.attr("display", "none");
+											
+						//Update the modal screen attributes
+						GrowModal.Refresh({
+							startX: Navigatte.Container.Position.X + newNode.x * Navigatte.Container.Scale,
+							startY: Navigatte.Container.Position.Y + newNode.y * Navigatte.Container.Scale,
+							startWidth: newNode.containerWidth * Navigatte.Container.Scale,
+							startHeight: newNode.containerHeight * Navigatte.Container.Scale,
+						});
+
+						GrowModal.Close(function(){
+							newNode.d3Select.attr("display", "");
+						});
+					}
+
+
 				});
 
 		});

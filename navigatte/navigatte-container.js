@@ -45,13 +45,17 @@ Navigatte.Container = new function() {
 	//Function to init the navigatte container class
 	this.Init = function(parentId) {
 		//Append svg container
-		svgContainer = d3.select(parentId).append("svg")
-			.attr("id", "svg-container");	
+		/*svgContainer = d3.select(parentId).append("svg")
+			.attr("id", "svg-container");*/	
+
+		svgContainer = d3.select(".svg-container");
 
 		//Append rectangle to receive mouse events such void click or screen zooming/moving
-		svgMouseArea = svgContainer.append("rect")
+		/*svgMouseArea = svgContainer.append("rect")
 			.attr("id", "node-container-mouse-area")
-			.attr("fill", "transparent")
+			.attr("fill", "transparent")*/
+
+		svgMouseArea = d3.select("#node-container-mouse-area")
 			.on("mousedown", function() {
 				d3.select(this).style("cursor", "move");		
 			})

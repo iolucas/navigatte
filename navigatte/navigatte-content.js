@@ -26,7 +26,7 @@ Navigatte.Content = new function() {
 
 	function close() {
 		hide();
-		d3.select(".navi-content-data").selectAll("*").remove();
+		//d3.select(".navi-content-data").selectAll("*").remove();
 	}
 
 	//Private functions

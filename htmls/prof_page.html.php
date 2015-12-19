@@ -2,7 +2,9 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-	    <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="css/style.css"/>
+        <link rel="stylesheet" href="css/sidemenu.css"/>
+        <link rel="stylesheet" href="css/box-container.css"/>
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <title>Navigatte</title>        
         <style>
@@ -17,6 +19,10 @@
 	</head>
 
 	<body>
+        <svg class="svg-container">
+            <rect id="node-container-mouse-area">
+            </rect>
+        </svg>
 
         <!--Side menu-->
         <nav id="side-menu">   

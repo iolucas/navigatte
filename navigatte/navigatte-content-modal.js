@@ -1,20 +1,215 @@
 Navigatte.ContentModal = new function() {
 
+	var contentData = {
+		title: "Untitled",
+		description: "Content description",
+		courses: [1],
+		books: [1,2,3],
+		sites: [],
+		notes: "This is the owner notes",
+		owner: false
+	}
+
 	Navigatte.Nodes.on("dblclick", function(node) {
 
-		Navigatte.Content.Open(function(contentWindow) { 
+		Navigatte.Content.Open(function(contentWindow) {
 
-			contentWindow.append("span")
-				.style({
-					"font-size": "40px"
+			refreshPage(contentWindow, false);
 
-				})
-				.text(node.name);
+			//contentWindow.html('<div ng-include src="\'edit_content.php\'"></div>');
+
+			/*$.get("show_content.php", {})
+				.done(function(response) {
+					contentWindow.html(response);
+				});*/
 
 
 				
 		});
 	});
+
+	function refreshPage(contentWindow, edit) {
+		contentWindow.selectAll("*").remove();		
+
+		if(contentData.owner && !edit)
+			contentWindow.append("button")
+				.text("Edit")
+				.on("click", function(){
+					refreshPage(contentWindow, true);
+				});
+
+		//Append title
+		contentWindow.append("h1")
+			.text(contentData.title);
+
+		contentWindow.append("p")
+			.text(contentData.description);
+
+		contentWindow.append("br");
+
+		if(contentData.courses.length > 0 || edit) {
+			contentWindow.append("h2")
+				.text("Courses")
+
+			if(edit) {
+				var courseInput = contentWindow.append("input")
+					.attr("type", "text")
+					.attr("placeholder", "Course name...");
+
+				contentWindow.append("button")
+					.text("Insert")
+					.on("click", function() {
+						if(courseInput.node().value != "") {
+							contentData.courses.push(courseInput.node().value);	
+							refreshPage(contentWindow, true);
+						}
+					});
+
+				contentWindow.append("br");
+			}	
+
+			var courseItems = contentWindow.append("ul")
+				.selectAll("li").data(contentData.courses).enter()
+				.append("li");
+
+				courseItems.text(function(d) { return d + " "; });
+
+				if(edit)
+					courseItems.append("button").text("Delete").on("click", function(d) {
+						var dataIndex = contentData.courses.indexOf(d);
+
+						if(dataIndex == -1)
+							return;
+
+						contentData.courses.splice(dataIndex, 1);
+						refreshPage(contentWindow, true);
+					});
+
+			contentWindow.append("br");
+		}
+
+		if(contentData.books.length > 0 || edit) {
+			contentWindow.append("h2")
+				.text("Books")
+
+			if(edit) {
+				var bookInput = contentWindow.append("input")
+					.attr("type", "text")
+					.attr("placeholder", "Book title...");
+
+				contentWindow.append("button")
+					.text("Insert")
+					.on("click", function() {
+						if(bookInput.node().value != "") {
+							contentData.books.push(bookInput.node().value);	
+							refreshPage(contentWindow, true);
+						}
+					});
+
+				contentWindow.append("br");
+			}	
+
+			var booksItems = contentWindow.append("ul")
+				.selectAll("li").data(contentData.books).enter()
+				.append("li");
+
+				booksItems.text(function(d) { return d + " "; });
+
+				if(edit)
+					booksItems.append("button").text("Delete").on("click", function(d) {
+						var dataIndex = contentData.books.indexOf(d);
+
+						if(dataIndex == -1)
+							return;
+
+						contentData.books.splice(dataIndex, 1);
+						refreshPage(contentWindow, true);
+					});
+
+			contentWindow.append("br");
+		}
+
+		if(contentData.sites.length > 0 || edit) {
+			contentWindow.append("h2")
+				.text("Sites")
+
+			if(edit) {
+				var siteInput = contentWindow.append("input")
+					.attr("type", "text")
+					.attr("placeholder", "Course name...");
+
+				contentWindow.append("button")
+					.text("Insert")
+					.on("click", function() {
+						if(siteInput.node().value != "") {
+							contentData.sites.push(siteInput.node().value);	
+							refreshPage(contentWindow, true);
+						}
+					});
+
+				contentWindow.append("br");
+			}	
+
+			var siteItems = contentWindow.append("ul")
+				.selectAll("li").data(contentData.sites).enter()
+				.append("li");
+
+				siteItems.text(function(d) { return d + " "; });
+
+				if(edit)
+					siteItems.append("button").text("Delete").on("click", function(d) {
+						var dataIndex = contentData.sites.indexOf(d);
+
+						if(dataIndex == -1)
+							return;
+
+						contentData.sites.splice(dataIndex, 1);
+						refreshPage(contentWindow, true);
+					});
+
+			contentWindow.append("br");
+		}
+
+		if(contentData.notes != "" || edit) {
+			contentWindow.append("h2")
+				.text("Notes");
+
+			if(edit) {
+				var notesInput = contentWindow.append("textarea")
+					//.attr("type", "text")
+					//.attr("value", contentData.notes);
+					.style({
+						"width": "500px",
+						"height": "100px"
+					})
+					.text(contentData.notes);
+
+				contentWindow.append("br");
+
+				contentWindow.append("button")
+					.text("Save")
+					.on("click", function(){
+						contentData.notes = notesInput.node().value;
+					});
+
+			} else {
+				contentWindow.append("p")
+					.text(contentData.notes);
+			}
+		}
+
+		if(edit) {
+			contentWindow.append("br");
+			contentWindow.append("br");
+
+			contentWindow.append("button")
+				.text("Done")
+				.on("click", function(){
+					refreshPage(contentWindow, false);
+				});
+		}
+
+	}
 }
 
 

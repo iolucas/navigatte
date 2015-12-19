@@ -73,7 +73,7 @@ Navigatte.Nodes = new function() {
 			})
 			.on("dblclick", function(d) {
 				eventHandler.fire("dblclick", d);
-			})
+			});
 
 
 		//Append the node rectangle to the inner rect group

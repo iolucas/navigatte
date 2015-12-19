@@ -43,7 +43,18 @@ Navigatte.Links = new function() {
 	}
 
 	this.Create = function(linkAttr) {
-		
+
+		if(linkAttr.source_id == undefined || linkAttr.target_id == undefined)
+			return null;
+
+		//Check if the node exist 
+		for(var i = 0; i < links.length; i++) {
+			if(links[i].source_id == linkAttr.source_id && 
+				links[i].target_id == linkAttr.target_id)
+				return links[i];
+		}
+
+
 		//Create new link object
 		var newLink = {
 			source_id: linkAttr.source_id,

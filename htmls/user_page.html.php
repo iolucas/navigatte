@@ -114,7 +114,9 @@
 
         <script src="app.js"></script>
         <script>
-            initApp('<?php htmlout($userInfo['page_name']); ?>');
+            var pageName = '<?php htmlout($userInfo['page_name']); ?>';
+
+            initApp(pageName);
 
             $("#createNodeButton").click(Navigatte.CreateModal.Open);
 

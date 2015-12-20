@@ -85,7 +85,8 @@
 
         <script src="app.js"></script>
         <script>    
-            initApp('<?php htmlout($username); ?>');
+            var pageName = '<?php htmlout($username); ?>';
+            initApp(pageName);
         </script>
 	</body>
 </html>

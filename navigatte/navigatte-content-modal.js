@@ -1,41 +1,41 @@
 Navigatte.ContentModal = new function() {
 
-	var contentData = {
-		title: "Untitled",
-		description: "Content description",
-		courses: [1],
-		books: [1,2,3],
-		sites: [],
-		notes: "This is the owner notes",
-		owner: false
-	}
-
 	Navigatte.Nodes.on("dblclick", function(node) {
 
 		Navigatte.Content.Open(function(contentWindow) {
 
-			refreshPage(contentWindow, false);
+			contentWindow.selectAll("*").remove();	
 
-			//contentWindow.html('<div ng-include src="\'edit_content.php\'"></div>');
-
-			/*$.get("show_content.php", {})
+			$.get("get_content.php", { id: node.node_id, user: pageName })
 				.done(function(response) {
-					contentWindow.html(response);
-				});*/
 
+					var respObj = JSON.parse(response);
 
-				
+					var contentData = {
+						id: node.node_id,
+						title: node.name,
+						description: respObj.description || "",
+						courses: respObj.courses || [],
+						books: respObj.books || [],
+						sites: respObj.sites || [],
+						notes: respObj.notes || "",
+						owner: respObj.owner || false
+					}
+
+					refreshPage(contentWindow, contentData, false);
+				});				
 		});
 	});
 
-	function refreshPage(contentWindow, edit) {
-		contentWindow.selectAll("*").remove();		
+	function refreshPage(contentWindow, contentData, edit) {
+
+		contentWindow.selectAll("*").remove();
 
 		if(contentData.owner && !edit)
 			contentWindow.append("button")
 				.text("Edit")
 				.on("click", function(){
-					refreshPage(contentWindow, true);
+					refreshPage(contentWindow, contentData, true);
 				});
 
 		//Append title
@@ -46,6 +46,10 @@ Navigatte.ContentModal = new function() {
 			.text(contentData.description);
 
 		contentWindow.append("br");
+
+
+
+		//COURSES
 
 		if(contentData.courses.length > 0 || edit) {
 			contentWindow.append("h2")
@@ -61,7 +65,7 @@ Navigatte.ContentModal = new function() {
 					.on("click", function() {
 						if(courseInput.node().value != "") {
 							contentData.courses.push(courseInput.node().value);	
-							refreshPage(contentWindow, true);
+							refreshPage(contentWindow, contentData, true);
 						}
 					});
 
@@ -82,11 +86,13 @@ Navigatte.ContentModal = new function() {
 							return;
 
 						contentData.courses.splice(dataIndex, 1);
-						refreshPage(contentWindow, true);
+						refreshPage(contentWindow, contentData, true);
 					});
 
 			contentWindow.append("br");
 		}
+
+		//BOOKS
 
 		if(contentData.books.length > 0 || edit) {
 			contentWindow.append("h2")
@@ -102,7 +108,7 @@ Navigatte.ContentModal = new function() {
 					.on("click", function() {
 						if(bookInput.node().value != "") {
 							contentData.books.push(bookInput.node().value);	
-							refreshPage(contentWindow, true);
+							refreshPage(contentWindow, contentData, true);
 						}
 					});
 
@@ -123,11 +129,13 @@ Navigatte.ContentModal = new function() {
 							return;
 
 						contentData.books.splice(dataIndex, 1);
-						refreshPage(contentWindow, true);
+						refreshPage(contentWindow, contentData, true);
 					});
 
 			contentWindow.append("br");
 		}
+
+		//SITES
 
 		if(contentData.sites.length > 0 || edit) {
 			contentWindow.append("h2")
@@ -143,7 +151,7 @@ Navigatte.ContentModal = new function() {
 					.on("click", function() {
 						if(siteInput.node().value != "") {
 							contentData.sites.push(siteInput.node().value);	
-							refreshPage(contentWindow, true);
+							refreshPage(contentWindow, contentData, true);
 						}
 					});
 
@@ -154,7 +162,10 @@ Navigatte.ContentModal = new function() {
 				.selectAll("li").data(contentData.sites).enter()
 				.append("li");
 
-				siteItems.text(function(d) { return d + " "; });
+				siteItems.append("a")
+					.attr("href", function(d) { return d; })
+					.attr("target", "_blank")
+					.text(function(d) { return d + " "; });
 
 				if(edit)
 					siteItems.append("button").text("Delete").on("click", function(d) {
@@ -164,7 +175,7 @@ Navigatte.ContentModal = new function() {
 							return;
 
 						contentData.sites.splice(dataIndex, 1);
-						refreshPage(contentWindow, true);
+						refreshPage(contentWindow, contentData, true);
 					});
 
 			contentWindow.append("br");
@@ -205,7 +216,27 @@ Navigatte.ContentModal = new function() {
 			contentWindow.append("button")
 				.text("Done")
 				.on("click", function(){
-					refreshPage(contentWindow, false);
+					refreshPage(contentWindow, contentData, false);
+
+					var saveObj = {
+						courses: contentData.courses,
+						books: contentData.books,
+						sites: contentData.sites,
+						notes: contentData.notes
+					}
+
+					var saveString = JSON.stringify(saveObj);
+
+					$.post("set_content.php", { saveString: saveString, nodeId: contentData.id })
+						.done(function(response) {
+							if(response == "SUCCESS")
+								alertify.success("Editions saved!", 5000);
+							else {
+								alertify.error("Error while saving.", 5000);
+								console.log(response);
+							}	
+						});
+
 				});
 		}
 

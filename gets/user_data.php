@@ -1,5 +1,5 @@
 <?php
-	//Php page to retrieve the target user nodes as json object
+	//Php page to retrieve the target user nodes and link as json object
 	
 	//If the id var was no passed, return error
 	if(!isset($_GET['user']) || $_GET['user'] == "") {

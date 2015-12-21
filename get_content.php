@@ -12,8 +12,10 @@
 	include "includes/helpers.inc.php";
 
 	//Write sql query
-	$sql = 'SELECT content, owner_id FROM user_nodes 
+	$sql = 'SELECT user_nodes.content, user_nodes.owner_id, nodes_master.description 
+		FROM user_nodes 
 		INNER JOIN users ON user_nodes.owner_id = users.id 
+		INNER JOIN nodes_master ON nodes_master.id = user_nodes.node_id
 		WHERE users.page_name = :username AND user_nodes.node_id = :nodeId';
 
 	$s = $pdo->prepare($sql);
@@ -31,7 +33,11 @@
 	//Set the owner's flag if so
 	@session_start();
 
-	$nodeObj->owner = (isset($_SESSION['userId']) && $_SESSION['userId']) == $row['owner_id'] ? true : false;
+	//Set the owner flag
+	$nodeObj->owner = (isset($_SESSION['userId']) && $_SESSION['userId'] == $row['owner_id']) ? true : false;
+
+	//Set the description
+	$nodeObj->description = $row['description'] ? $row['description'] : "";
 
 	echo json_encode($nodeObj);
 

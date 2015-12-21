@@ -1,5 +1,7 @@
 <?php
 
+	//Module to get nodes names available for creation
+
 	if(isset($_GET['nodename'])) {
 		//If the node name is empty, return no data
 		if($_GET['nodename'] == "")

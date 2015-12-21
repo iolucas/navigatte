@@ -6,12 +6,12 @@
 	Navigatte.Nodes.on("output_click", function(d) {
 
 		//If there is no target id, just crate the source id
-		if(onCreationLink.target_id == undefined) {
-			onCreationLink.source_id = d.node_id;
+		if(onCreationLink.targetId == undefined) {
+			onCreationLink.sourceId = d.globalId;
 		
 		//If the existing target id is different from the new target
-		} else if(onCreationLink.target_id != d.node_id) {
-			onCreationLink.source_id = d.node_id;
+		} else if(onCreationLink.targetId != d.globalId) {
+			onCreationLink.sourceId = d.globalId;
 			Navigatte.Links.Create(onCreationLink);
 			Navigatte.Links.Refresh();
 			onCreationLink = {};					
@@ -26,12 +26,12 @@
 	Navigatte.Nodes.on("input_click", function(d) {
 
 		//If there is no source id, just crate the source id
-		if(onCreationLink.source_id == undefined) {
-			onCreationLink.target_id = d.node_id;
+		if(onCreationLink.sourceId == undefined) {
+			onCreationLink.targetId = d.globalId;
 		
 		//If the existing source id is different from the new target id
-		} else if(onCreationLink.source_id != d.node_id) {
-			onCreationLink.target_id = d.node_id;
+		} else if(onCreationLink.sourceId != d.globalId) {
+			onCreationLink.targetId = d.globalId;
 			Navigatte.Links.Create(onCreationLink);
 			Navigatte.Links.Refresh();
 			onCreationLink = {};					

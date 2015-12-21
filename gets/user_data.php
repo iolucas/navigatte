@@ -44,7 +44,7 @@
 	function getNodes($pdo, &$reqResponse, $userId) {
 
 		//Write sql query
-		$sql = 'SELECT user_nodes.node_id, nodes_master.name, user_nodes.x, user_nodes.y, user_nodes.bgcolor, user_nodes.fgcolor 
+		$sql = 'SELECT user_nodes.node_id AS globalId, user_nodes.id AS localId, nodes_master.name, user_nodes.x, user_nodes.y, user_nodes.bgcolor, user_nodes.fgcolor 
 				FROM user_nodes INNER JOIN nodes_master ON user_nodes.node_id = nodes_master.id WHERE user_nodes.owner_id = :userId';
 
 		$s = $pdo->prepare($sql);
@@ -72,7 +72,7 @@
 
 		//Write sql query
 
-		$sql = 'SELECT source_id, target_id FROM user_links WHERE owner_id = :userId';
+		$sql = 'SELECT source_id AS sourceId, target_id AS targetId FROM user_links WHERE owner_id = :userId';
 
 		$s = $pdo->prepare($sql);
 		$s->bindValue(':userId', $userId);

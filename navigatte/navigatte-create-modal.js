@@ -167,7 +167,7 @@ Navigatte.CreateModal = new function() {
 						//Create the new node
 						var newNode = Navigatte.Nodes.Create({
 							name: nodeNameInput.node().value,
-							node_id: nodeId,
+							globalId: nodeId,
 							x: xPos,
 							y: yPos,
 							bgcolor: bgColorInput.node().value,

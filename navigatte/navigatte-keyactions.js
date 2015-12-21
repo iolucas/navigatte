@@ -22,14 +22,14 @@ Navigatte.KeyActions = new function() {
 			return;
 
 		//if the selection is a node
-		if(selection.node_id != undefined) {
+		if(selection.globalId != undefined) {
 			Navigatte.Nodes.Delete(selection);
 			Navigatte.Nodes.Refresh();
 			Navigatte.Links.Refresh();
 		} 
 
 		//if the selection is a link
-		else if(selection.source_id != undefined) { 
+		else if(selection.sourceId != undefined) { 
 			Navigatte.Links.Delete(selection);
 			Navigatte.Links.Refresh();
 		}

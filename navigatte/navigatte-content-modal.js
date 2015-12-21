@@ -6,13 +6,14 @@ Navigatte.ContentModal = new function() {
 
 			contentWindow.selectAll("*").remove();	
 
-			$.get("get_content.php", { id: node.node_id, user: pageName })
+			//$.get("get_content.php", { id: node.globalId, user: pageName })
+			$.get("get_content.php", { local_id: node.localId })
 				.done(function(response) {
 
 					var respObj = JSON.parse(response);
 
 					var contentData = {
-						id: node.node_id,
+						id: node.globalId,
 						title: node.name,
 						description: respObj.description || "",
 						courses: respObj.courses || [],
@@ -226,6 +227,8 @@ Navigatte.ContentModal = new function() {
 					}
 
 					var saveString = JSON.stringify(saveObj);
+
+					alertify.log("Saving editions...", 5000);
 
 					$.post("set_content.php", { saveString: saveString, nodeId: contentData.id })
 						.done(function(response) {

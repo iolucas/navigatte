@@ -5,7 +5,7 @@
 	if(isset($_GET['node_name']) && $_GET['node_name'] != "") {
 		include '../includes/db.inc.php'; //Connect to the database
 		
-		$sql = 'SELECT user_nodes.id AS localId, nodes_master.name 
+		$sql = 'SELECT user_nodes.id AS localId, user_nodes.node_id AS globalId, nodes_master.name 
 		FROM nodes_master 
 		INNER JOIN user_nodes ON nodes_master.id = user_nodes.node_id
 		WHERE nodes_master.name LIKE :nodeName';

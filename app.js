@@ -32,7 +32,7 @@ function initApp(username) {
 
 }
 
-
+/*
     //Flag showing whether a node is selected
     var nodeSelected = false;
 
@@ -113,4 +113,4 @@ var selectNodePath = function(d) {
 
     //Recursivelly highlight clicked node and its parents
     highlightNodes(d);
-}
+}*/

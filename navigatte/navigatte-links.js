@@ -13,7 +13,7 @@ Navigatte.Links = new function() {
 	//Set event to delete links attached to a deleted node
 	Navigatte.Nodes.on("delete", function(node) {
 		//Get the node attached links and delete them
-		var nodeLinks = Navigatte.Links.Get({ nodeId: node.node_id, source:true, target:true });
+		var nodeLinks = Navigatte.Links.Get({ nodeId: node.globalId, source:true, target:true });
 		for(var i = 0; i < nodeLinks.length; i++)
 			Navigatte.Links.Delete(nodeLinks[i]);
 
@@ -24,12 +24,12 @@ Navigatte.Links = new function() {
 
 	//Set the event in case the nodes move, refresh the links attached to it
 	Navigatte.Nodes.on("drag", function(d) {
-		var nodeLinks = self.Get({ nodeId: d.node_id, source: true, target: true });
+		var nodeLinks = self.Get({ nodeId: d.globalId, source: true, target: true });
 
 		for(var i = 0; i < nodeLinks.length; i++){
 			var currLink = nodeLinks[i];
 			
-			currLink.d3Select.attr("d", createLinkPath(currLink.source_id, currLink.target_id));	
+			currLink.d3Select.attr("d", createLinkPath(currLink.sourceId, currLink.targetId));	
 		}
 	});
 
@@ -42,23 +42,40 @@ Navigatte.Links = new function() {
 		self.Refresh();
 	}
 
+	this.Find = function(linkAttr) {
+		return getLink(linkAttr);
+	}
+
+	function getLink(linkAttr) {
+		for(var i = 0; i < links.length; i++) {
+			if(links[i].sourceId == linkAttr.sourceId && 
+				links[i].targetId == linkAttr.targetId)
+				return links[i];
+		}
+		return null;		
+	}
+
 	this.Create = function(linkAttr) {
 
-		if(linkAttr.source_id == undefined || linkAttr.target_id == undefined)
+		if(linkAttr.sourceId == undefined || linkAttr.targetId == undefined)
 			return null;
 
 		//Check if the node exist 
-		for(var i = 0; i < links.length; i++) {
-			if(links[i].source_id == linkAttr.source_id && 
-				links[i].target_id == linkAttr.target_id)
+		var linkRef = getLink(linkAttr)
+		if(linkRef != null)
+			return linkRef;
+
+		/*for(var i = 0; i < links.length; i++) {
+			if(links[i].sourceId == linkAttr.sourceId && 
+				links[i].targetId == linkAttr.targetId)
 				return links[i];
-		}
+		}*/
 
 
 		//Create new link object
 		var newLink = {
-			source_id: linkAttr.source_id,
-			target_id: linkAttr.target_id
+			sourceId: linkAttr.sourceId,
+			targetId: linkAttr.targetId
 		}
 
 		//Push the node to the user nodes
@@ -86,9 +103,9 @@ Navigatte.Links = new function() {
 
 		if(getAttr.nodeId != undefined && (getAttr.source || getAttr.target)) {
 			for(var i = 0; i < links.length; i++) {
-				if(getAttr.source && links[i].source_id == getAttr.nodeId)
+				if(getAttr.source && links[i].sourceId == getAttr.nodeId)
 					nodeLinks.push(links[i]);
-				else if(getAttr.target && links[i].target_id == getAttr.nodeId)
+				else if(getAttr.target && links[i].targetId == getAttr.nodeId)
 					nodeLinks.push(links[i]);
 			}
 		}
@@ -101,7 +118,7 @@ Navigatte.Links = new function() {
 		var linksSelection = Navigatte.Container.Select().selectAll(".navi-links")
 			.data(links, function(d) {
 				//Match link maps member with the data bind in the selection of the classes
-				return d.source_id + d.target_id;
+				return d.sourceId + d.targetId;
 			});
 
 		//Get the links data which has no DOM binded, create the DOMs and bind them
@@ -122,7 +139,7 @@ Navigatte.Links = new function() {
 				link.d3Select = d3.select(this);	//get the link obj reference
 				//console.log(link);
 
-				return createLinkPath(link.source_id, link.target_id);
+				return createLinkPath(link.sourceId, link.targetId);
 			})
 			.on("click", function(d) {
 				eventHandler.fire("click", d);
@@ -154,4 +171,38 @@ Navigatte.Links = new function() {
 		.projection(function(d) { 
 			return [d.y, d.x]; 
 		});
+
+
+	//Link projection stuff
+	var projArray = null;
+	this.Project = function(linkArr) {
+		clearProjection();
+		self.Refresh();
+
+		projArray = linkArr;
+
+		for(var i = 0; i < projArray.length; i++) {
+			var cLink = projArray[i];
+
+			if(getLink(cLink) == null)
+				links.push(cLink);	
+		}	
+
+	}
+
+
+	this.ClearProjection = function() { return clearProjection() }
+
+	function clearProjection() {
+		if(projArray == null)
+			return;
+
+		for(var i = 0; i < projArray.length; i++) {
+			var linkIndex = links.indexOf(projArray[i]);
+			if(linkIndex >= 0)
+				links.splice(linkIndex, 1);
+		}
+
+		projArray = null;
+	}
 }

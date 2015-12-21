@@ -2,7 +2,8 @@
 
 	//	Controller for Node Content Data   //
 
-	if(!isset($_GET['user']) || !isset($_GET['id'])) {
+	//if(!isset($_GET['user']) || !isset($_GET['id'])) {
+	if(!isset($_GET['local_id'])) {
 		echo 'NO_ENOUGH_ARGS';
 		exit();
 	}
@@ -12,7 +13,7 @@
 	include "includes/helpers.inc.php";
 
 	//Write sql query
-	$sql = 'SELECT user_nodes.content, user_nodes.owner_id, nodes_master.description 
+	/*$sql = 'SELECT user_nodes.content, user_nodes.owner_id, nodes_master.description 
 		FROM user_nodes 
 		INNER JOIN users ON user_nodes.owner_id = users.id 
 		INNER JOIN nodes_master ON nodes_master.id = user_nodes.node_id
@@ -21,7 +22,18 @@
 	$s = $pdo->prepare($sql);
 	$s->bindValue(':username', $_GET['user']);
 	$s->bindValue(':nodeId', $_GET['id']);
+	$s->execute();*/
+
+	//Write sql query
+	$sql = 'SELECT user_nodes.content, user_nodes.owner_id, nodes_master.description 
+		FROM user_nodes 
+		INNER JOIN nodes_master ON nodes_master.id = user_nodes.node_id
+		WHERE user_nodes.id = :localId';
+
+	$s = $pdo->prepare($sql);
+	$s->bindValue(':localId', $_GET['local_id']);
 	$s->execute();
+
 
 	$row = $s->fetch();
 

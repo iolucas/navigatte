@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="css/sidemenu.css"/>
         <link rel="stylesheet" href="css/box-container.css"/>
         <link rel="stylesheet" href="css/bootstrap.min.css">
-        <title>Navigatte</title>        
+        <title>Navigatte - <?php htmlout($userinfo['screen_name']); ?></title>        
         <style>
             #side-menu {
                 /*background: linear-gradient(<?php //echo $gradientString ?>);*/
@@ -30,15 +30,21 @@
 
             <input name="search" id="search-field" type="text" placeholder="Search..." />
 
-            <div class="divisor"></div>  
+            <div class="divisor"></div> 
 
-            <div id="user-profile-container">
-                <div class="user-img"></div>
-                <div id="user-name" class="black-font"><?php htmlout($userinfo['screen_name']); ?></div>
-                <div id="user-trackers" class="black-font">Trackers 1000</div>
-                <div id="user-tracking" class="black-font">Tracking 1000</div>
-                <div id="user-description" class="black-font"><?php htmlout($userinfo['screen_description']); ?></div>
+            <div class="user-navigation">
+
+                <div id="user-profile-container">
+                    <div class="user-img"></div>
+                    <div id="user-name" class="black-font"><?php htmlout($userinfo['screen_name']); ?></div>
+                    <div id="user-trackers" class="black-font">Trackers 1000</div>
+                    <div id="user-tracking" class="black-font">Tracking 1000</div>
+                    <div id="user-description" class="black-font"><?php htmlout($userinfo['screen_description']); ?></div>
+                </div>
+
             </div>
+
+            <div class="search-results" style="display:none"></div>
 
             <!--<div id="user-profile-container">
                 <div class="user-img"></div>
@@ -82,6 +88,8 @@
         <script src="navigatte/navigatte-select.js"></script>
         <script src="navigatte/navigatte-content.js"></script>
         <script src="navigatte/navigatte-content-modal.js"></script>
+        <script src="navigatte/navigatte-node-finder.js"></script>
+        <script src="navigatte/navigatte-project.js"></script>
 
         <script src="app.js"></script>
         <script>    

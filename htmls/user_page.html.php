@@ -116,6 +116,7 @@
         <script src="navigatte/navigatte-keyactions.js"></script>
         <script src="navigatte/navigatte-content.js"></script>
         <script src="navigatte/navigatte-node-finder.js"></script>
+        <script src="navigatte/navigatte-project.js"></script>
 
         <script src="app.js"></script>
         <script>

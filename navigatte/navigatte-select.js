@@ -63,7 +63,7 @@ Navigatte.Select = new function() {
     function recurseHighLightNodes(node) {
         node.d3Select.style("opacity", 1);  
 
-        var nodeLinks = Navigatte.Links.Get({ nodeId: node.node_id, target: true });
+        var nodeLinks = Navigatte.Links.Get({ nodeId: node.globalId, target: true });
 
         //iterate thru all parent links
         for(var i = 0; i < nodeLinks.length; i++) {
@@ -71,7 +71,7 @@ Navigatte.Select = new function() {
 
             currLink.d3Select.style("opacity", 1);   
 
-            recurseHighLightNodes(Navigatte.Nodes.Get(currLink.source_id));//recurse this function on the node
+            recurseHighLightNodes(Navigatte.Nodes.Get(currLink.sourceId));//recurse this function on the node
         }
     }
 

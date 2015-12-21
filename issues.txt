@@ -12,3 +12,6 @@
 -must create hierarqui for container elements to standard they actions for creation, update, deletation, selection etc
 -instead create an ajax request for all letter typing, send the request for the first letter and them inner filter the results for all the results
 -must find away to detect circular references and block them
+-must create standard classes for everything, and use server data only to construct them
+-results should have indicators of how much forks, to guide users the best paths
+-check need for schema for database

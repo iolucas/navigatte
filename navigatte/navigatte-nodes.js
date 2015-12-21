@@ -27,7 +27,7 @@ Navigatte.Nodes = new function() {
 
 	this.Get = function(nodeId) {
 		for(var i = 0; i < nodes.length; i++) {
-			if(nodes[i].node_id == nodeId)
+			if(nodes[i].globalId == nodeId)
 				return nodes[i];
 		}
 
@@ -41,7 +41,7 @@ Navigatte.Nodes = new function() {
 		var nodesSelection = Navigatte.Container.Select().selectAll(".navi-nodes")
 		.data(nodes, function(d) {
 			//Match nodes array member with the data bind in the selection of the classes
-			return d.node_id;
+			return d.globalId;
 		});
 
 		//Get the nodes data which has no DOM binded, create the DOMs and bind them
@@ -185,44 +185,21 @@ Navigatte.Nodes = new function() {
 			eventHandler.fire("dragend", d);	
 		});
 
-	//Function to update nodes id when nodes are created
-	/*this.UpdateId = function(prevId, newId) {
 
+	function indexOf(globalId){
 		for(var i = 0; i < nodes.length; i++) {
-			if(nodes[i].node_id == prevId) {
-				nodes[i].node_id = newId;
-				break;
-			}
-		}
-	}*/
-
-	function indexOf(node_id){
-		for(var i = 0; i < nodes.length; i++) {
-			if(nodes[i].node_id == node_id)
+			if(nodes[i].globalId == globalId)
 				return i;
 		}
 		return -1;
 	}
 
 	this.Create = function(newNode) {
-		if(indexOf(newNode.node_id) != -1) {
+		if(indexOf(newNode.globalId) != -1) {
 			alertify.error("This node already exists!");
 			return null;
 		}
 		
-		//Create new node object
-		/*var newNode = {
-			name: nodeAttr.name,
-			x: nodeAttr.x,
-			y: nodeAttr.y,
-			bgcolor: nodeAttr.bgcolor,
-			fgcolor: nodeAttr.fgcolor,
-			node_id: "newNodeId" + nextNodeId
-		}*/
-
-		//Increase the next index for a created node
-		//nextNodeId++
-
 		//Push the node to the user nodes
 		nodes.push(newNode);
 
@@ -240,5 +217,38 @@ Navigatte.Nodes = new function() {
 		nodes.splice(nodeIndex, 1);
 
 		eventHandler.fire("delete", node);	
+	}
+
+
+	//Node projection stuff
+	var projArray = null;
+	this.Project = function(nodeArr) {
+		clearProjection();
+		self.Refresh();
+
+		projArray = nodeArr;
+
+		for(var i = 0; i < projArray.length; i++) {
+			var cNode = projArray[i];
+
+			if(self.Get(cNode.globalId) == null)
+				nodes.push(cNode);	
+		}	
+
+	}
+
+	this.ClearProjection = function() { return clearProjection() }
+
+	function clearProjection() {
+		if(projArray == null)
+			return;
+
+		for(var i = 0; i < projArray.length; i++) {
+			var nodeIndex = nodes.indexOf(projArray[i]);
+			if(nodeIndex >= 0)
+				nodes.splice(nodeIndex, 1);
+		}
+
+		projArray = null;
 	}
 }

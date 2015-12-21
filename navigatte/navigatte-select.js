@@ -84,6 +84,8 @@ Navigatte.Select = new function() {
 
     Navigatte.Nodes.on("click", function(d) {
 
+        //console.log("comment_to_avoid_select_fail_bug");
+
         if(nodeDragged) {
             nodeDragged = false;
             return;

@@ -107,7 +107,15 @@ Navigatte.Changes = new function() {
 				responseObj = JSON.parse(responseObj);
 
 				if(responseObj.result && responseObj.result == "SUCCESS") {
-					alertify.delay(5000).success("Changes saved!")
+					alertify.delay(5000).success("Changes saved!");
+
+					//Set created nodes ids
+					if(responseObj.createdNodes) {
+						for(var i = 0; i < responseObj.createdNodes.length; i++) {
+							var newNodeIds = responseObj.createdNodes[i];
+							Navigatte.Nodes.SetLocalId(newNodeIds.globalId, newNodeIds.localId);
+						}
+					}
 					
 					//Reset changes object storage
 					changes = [];

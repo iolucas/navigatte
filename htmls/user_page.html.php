@@ -77,7 +77,7 @@
                         <?php htmlout($userInfo['screen_name']); ?> <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="http://localhost/projects/navigatte/?user=<?php htmlout($userInfo['page_name']); ?>">Profile</a></li>
+                    <li><a href="./?user=<?php htmlout($userInfo['page_name']); ?>">Profile</a></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="javascript:void(0)" onclick="document.getElementById('signOutForm').submit();">Sign Out</a></li>
                     <form method="post" id="signOutForm"><input type="hidden" name="action" value="signout"></form>

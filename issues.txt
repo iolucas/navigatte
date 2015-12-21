@@ -15,3 +15,4 @@
 -must create standard classes for everything, and use server data only to construct them
 -results should have indicators of how much forks, to guide users the best paths
 -check need for schema for database
+-create system to avoid just created nodes to be placed over the previous created

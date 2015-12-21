@@ -8,8 +8,8 @@ Navigatte.Links.on("delete", function(link) {
 		id: link.sourceId + link.targetId,
 		element: "link", 
 		action: "delete",
-		sourceId: link.sourceId,
-		targetId: link.targetId
+		source_id: link.sourceId,
+		target_id: link.targetId
 	});
 });
 
@@ -21,7 +21,7 @@ Navigatte.Links.on("create", function(link) {
 		id: link.sourceId + link.targetId,
 		element: "link", 
 		action: "create",
-		sourceId: link.sourceId,
-		targetId: link.targetId
+		source_id: link.sourceId,
+		target_id: link.targetId
 	});
 });

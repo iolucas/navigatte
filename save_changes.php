@@ -43,14 +43,17 @@
 			continue;
 
 		if($changes->element == "node") {
-			saveNodeChanges($changes, $pdo);
+			$createdNodes = saveNodeChanges($changes, $pdo);
 
 		} else if($changes->element == "link") { 
 			saveLinkChanges($changes, $pdo);
 		}
 	}
 
-	$resultObj = array('result'=>'SUCCESS');
+	if(isset($createdNodes))
+		$resultObj = array('result'=>'SUCCESS', 'createdNodes'=>$createdNodes);
+	else
+		$resultObj = array('result'=>'SUCCESS');
 
 	echo json_encode($resultObj);
 
@@ -61,6 +64,8 @@
 		//If no id is supplied, proceed next iteration
 		if(!isset($changes->id))
 			return;
+
+		$createdNodes = array();
 
 		//If this change data wants to update an existing register...
 		if($changes->action == "update") {
@@ -113,7 +118,15 @@
 			$s->bindValue(':y', $changes->y);
 			$s->bindValue(':bgcolor', $changes->bgcolor);
 			$s->bindValue(':fgcolor', $changes->fgcolor);
-			$s->execute();	
+			$s->execute();
+
+			//Get the just inserted Id
+			$sql = 'SELECT LAST_INSERT_ID()';
+			$s = $pdo->prepare($sql);
+			$s->execute();
+
+			//Push it to the created nodes array
+			$createdNodes[] = array('localId'=>$s->fetch()[0], 'globalId' => $changes->id);
 		
 		} else if($changes->action == "delete") {
 
@@ -124,6 +137,8 @@
 			$s->bindValue(':owner_id', $_SESSION['userId']);
 			$s->execute();
 		}
+
+		return $createdNodes;
 	}
 
 	function saveLinkChanges($changes, $pdo) {

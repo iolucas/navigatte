@@ -194,6 +194,15 @@ Navigatte.Nodes = new function() {
 		return -1;
 	}
 
+	this.SetLocalId = function(globalId, localId) {
+		for(var i = 0; i < nodes.length; i++) {
+			if(nodes[i].globalId == globalId) {
+				nodes[i].localId = localId;
+				return;
+			}
+		}
+	}
+
 	this.Create = function(newNode) {
 		if(indexOf(newNode.globalId) != -1) {
 			alertify.error("This node already exists!");

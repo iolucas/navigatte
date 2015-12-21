@@ -4,7 +4,13 @@ Navigatte.ContentModal = new function() {
 
 		Navigatte.Content.Open(function(contentWindow) {
 
-			contentWindow.selectAll("*").remove();	
+			contentWindow.selectAll("*").remove();
+
+			if(node.localId == undefined) {
+				contentWindow.append("h3")
+					.text("(Save the changes to be able to edit new node content.)");
+					return;
+			}	
 
 			//$.get("get_content.php", { id: node.globalId, user: pageName })
 			$.get("get_content.php", { local_id: node.localId })

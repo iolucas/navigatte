@@ -41,12 +41,12 @@ Navigatte.Content = new function() {
 
 	function hide() {
 		d3.select(".navi-content-window").style({ "display": "none" });
-		d3.select("body").style({ "position": "fixed" });
+		//d3.select("body").style({ "position": "fixed" });
 	}
 
 	function show() {
 		d3.select(".navi-content-window").style({ "display": "" });
 
-		d3.select("body").style({ "position": "initial" });
+		//d3.select("body").style({ "position": "initial" });
 	}
 }

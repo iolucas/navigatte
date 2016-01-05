@@ -173,13 +173,17 @@ Navigatte.Nodes = new function() {
 		.origin(function(d) { return d; })
 		.on("drag", function(d) {
 
-			d.x = d3.event.x;
-			d.y = d3.event.y;
+			if(d.x != d3.event.x || d.y != d3.event.y) {
 
-			//Update node position
-			d.d3Select.attr("transform", "translate(" + d.x + " " + d.y + ")");	
+				d.x = d3.event.x;
+				d.y = d3.event.y;
 
-			eventHandler.fire("drag", d);
+				//Update node position
+				d.d3Select.attr("transform", "translate(" + d.x + " " + d.y + ")");	
+
+				eventHandler.fire("drag", d);
+			}
+
 		})
 		.on("dragend", function(d) {
 			eventHandler.fire("dragend", d);	

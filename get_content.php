@@ -25,7 +25,7 @@
 	$s->execute();*/
 
 	//Write sql query
-	$sql = 'SELECT user_nodes.content, user_nodes.owner_id, nodes_master.description 
+	$sql = 'SELECT nodes_master.name AS name, nodes_master.id AS globalId, user_nodes.content, user_nodes.owner_id, nodes_master.description 
 		FROM user_nodes 
 		INNER JOIN nodes_master ON nodes_master.id = user_nodes.node_id
 		WHERE user_nodes.id = :localId';
@@ -41,6 +41,9 @@
 	$nodeContent = ($row['content']) ? $row['content'] : '{}';
 
 	$nodeObj = json_decode($nodeContent);
+
+	$nodeObj->name = $row['name'];
+	$nodeObj->globalId = $row['globalId'];
 
 	//Set the owner's flag if so
 	@session_start();

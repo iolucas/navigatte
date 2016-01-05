@@ -2,13 +2,30 @@ Navigatte.ContentModal = new function() {
 
 	Navigatte.Nodes.on("dblclick", function(node) {
 
+		if(node.localId == undefined) {
+
+			alertify.error("Salve as alterações para editar o conteudo desse bloco.");
+			return;
+		}	
+
+		var tempLink = d3.select("body")
+			.append("a")
+			.attr("href", "#content/" + node.localId);
+
+		tempLink.node().click();
+		tempLink.remove();	
+
+		return;
+
+
 		Navigatte.Content.Open(function(contentWindow) {
 
 			contentWindow.selectAll("*").remove();
 
 			if(node.localId == undefined) {
 				contentWindow.append("h3")
-					.text("(Save the changes to be able to edit new node content.)");
+					//.text("(Save the changes to be able to edit new node content.)");
+					.text("(Salve as alterações para editar o conteudo desse bloco.)");
 					return;
 			}	
 
@@ -60,7 +77,8 @@ Navigatte.ContentModal = new function() {
 
 		if(contentData.courses.length > 0 || edit) {
 			contentWindow.append("h2")
-				.text("Courses")
+				//.text("Courses")
+				.text("Cursos");
 
 			if(edit) {
 				var courseInput = contentWindow.append("input")
@@ -103,7 +121,8 @@ Navigatte.ContentModal = new function() {
 
 		if(contentData.books.length > 0 || edit) {
 			contentWindow.append("h2")
-				.text("Books")
+				//.text("Books");
+				.text("Livros");
 
 			if(edit) {
 				var bookInput = contentWindow.append("input")
@@ -146,7 +165,7 @@ Navigatte.ContentModal = new function() {
 
 		if(contentData.sites.length > 0 || edit) {
 			contentWindow.append("h2")
-				.text("Sites")
+				.text("Sites");
 
 			if(edit) {
 				var siteInput = contentWindow.append("input")
@@ -190,7 +209,8 @@ Navigatte.ContentModal = new function() {
 
 		if(contentData.notes != "" || edit) {
 			contentWindow.append("h2")
-				.text("Notes");
+				//.text("Notes");
+				.text("Notas");
 
 			if(edit) {
 				var notesInput = contentWindow.append("textarea")

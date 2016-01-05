@@ -4,6 +4,7 @@
 
 	if(!isset($_POST['saveString']) || !isset($_POST['nodeId'])) {
 		echo 'NOT_ENOUGH_ARGS';
+		print_r($_REQUEST);
 		exit();
 	}
 

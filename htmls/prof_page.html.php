@@ -28,7 +28,7 @@
         <nav id="side-menu">   
             <a href="." id="logo">Navigatte</a>
 
-            <input name="search" id="search-field" type="text" placeholder="Search..." />
+            <input name="search" id="search-field" type="text" placeholder="Pesquisar..." />
 
             <div class="divisor"></div> 
 

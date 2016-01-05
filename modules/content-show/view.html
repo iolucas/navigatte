@@ -1,0 +1,137 @@
+<div class="nvgtt-content-window">
+
+	<div class="container-fluid">
+
+		<div class="row">
+			<div class="col-md-12">
+				<!-- Description Panel -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">{{contentData.name}}</h3>
+					</div>
+					<div class="panel-body">
+						<p>{{ contentData.description == '' ? 'No Description' : contentData.description }}</p>
+					</div>
+				</div>
+			</div><!-- End Column -->
+		</div><!-- End Row -->
+
+		<div class="row">
+			<div class="col-md-8">
+				<!-- Content Panel -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Contents
+					</div>
+					<div class="panel-body">
+						Description
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Notes
+					</div>
+					<div class="panel-body">
+						<textarea ng-if="contentData.owner" class="nvgtt-content-notes" placeholder="Write some notes..." 
+							ng-model="contentData.notes"></textarea>
+							<p ng-if="!contentData.owner">{{contentData.notes}}</p>
+					</div>
+				</div>
+			</div><!-- End Column -->
+
+			<div class="col-md-4">
+
+				<!-- Courses Panel -->
+				<div class="panel panel-default" ng-if="contentData.courses.length > 0 || contentData.owner">
+					<div class="panel-heading">
+						Courses
+					</div>
+
+					<div class="panel-body" ng-if="contentData.owner">
+						<div class="input-group">
+							<input type="text" class="form-control" ng-model="newCourse" placeholder="New course...">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button" ng-click="addItem(contentData.courses, newCourse)">
+									+Insert
+								</button>
+							</span>
+						</div><!-- /input-group -->
+					</div>
+
+					<ul class="list-group">
+					 	<li class="list-group-item" ng-repeat="course in contentData.courses">
+					 		{{ course }}
+					 		<button ng-if="contentData.owner" type="button" class="btn btn-xs btn-danger" 
+					 			ng-click="removeItem(contentData.courses, $index)">Delete</button>
+					 	</li>
+					</ul>
+				</div><!-- End Panel -->
+
+
+				<!-- Books Panel -->
+				<div class="panel panel-default" ng-if="contentData.books.length > 0 || contentData.owner">
+					<div class="panel-heading">
+						Books
+					</div>
+
+					<div class="panel-body" ng-if="contentData.owner">
+						<div class="input-group">
+							<input type="text" class="form-control" ng-model="newBook" placeholder="New book...">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button" ng-click="addItem(contentData.books, newBook)">
+									+Insert
+								</button>
+							</span>
+						</div><!-- /input-group -->
+					</div>
+
+					<ul class="list-group">
+						<li class="list-group-item" ng-repeat="book in contentData.books">
+							{{ book }}
+							<button ng-if="contentData.owner" type="button" class="btn btn-xs btn-danger" 
+								ng-click="removeItem(contentData.books, $index)">Delete</button>
+						</li>
+					</ul>
+					
+				</div><!-- End Panel -->
+
+
+				<!-- Sites Panel -->
+				<div class="panel panel-default" ng-if="contentData.sites.length > 0 || contentData.owner">
+					<div class="panel-heading">
+						Sites
+					</div>
+
+					<div class="panel-body" ng-if="contentData.owner">
+						<div class="input-group">
+							<input type="text" class="form-control" ng-model="newSite" placeholder="New site...">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button" ng-click="addItem(contentData.sites, newSite)">
+									+Insert
+								</button>
+							</span>
+						</div><!-- /input-group -->
+					</div>
+
+					<ul class="list-group">
+						<li class="list-group-item" ng-repeat="site in contentData.sites">
+							<a href="{{ site }}" target="_blank">{{ site }}</a>
+							<button ng-if="contentData.owner" type="button" class="btn btn-xs btn-danger" 
+								ng-click="removeItem(contentData.sites, $index)">Delete</button>
+						</li>
+					</ul>
+				</div><!-- End Panel -->
+
+				<div ng-if="contentData.owner" style="text-align:right;">
+					<button class="btn btn-success" type="button" ng-click="saveChanges()">Save Changes</button>
+					<br><br>
+				</div>
+
+			</div><!-- End Column -->
+
+		</div><!-- End Row -->
+
+	</div><!-- End Container -->
+
+</div><!-- End Content -->

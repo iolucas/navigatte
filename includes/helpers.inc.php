@@ -37,3 +37,11 @@
 	{
 		echo markdown2html($text);
 	}
+
+	function unsetIntIndex(&$array) {
+		//Unset all integer indexes
+		foreach ($array as $key => $value) {
+			if (is_int($key))
+        		unset($array[$key]);
+		}
+	}

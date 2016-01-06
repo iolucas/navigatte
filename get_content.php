@@ -34,11 +34,10 @@
 	$s->bindValue(':localId', $_GET['local_id']);
 	$s->execute();
 
-
 	$row = $s->fetch();
 
 	//If the node content is empty, set an empty json
-	$nodeContent = ($row['content']) ? $row['content'] : '{}';
+	$nodeContent = is_null($row['content']) ? '{}' : $row['content'];
 
 	$nodeObj = json_decode($nodeContent);
 

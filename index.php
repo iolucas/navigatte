@@ -55,6 +55,15 @@ if (isset($_POST['action'])) {
 	}
 }
 
+/*if (isset($_GET['test'])) {
+
+	print_r(getUserInfoBy('id', '2'));
+	exit();
+
+
+}*/
+
+
 //If a user profile request
 if (isset($_GET['user'])) {
 
@@ -67,8 +76,25 @@ if (isset($_GET['user'])) {
 		exit();
 	}
 
+	//Query user info by user name
+	$userInfo = getUserInfoBy('username', $username);
+
+	if($userInfo == null) {
+		echo 'USER_NOT_FOUND';
+		exit();		
+	}
+
+	//Get whether the user is signed in
+	$signedInFlag = checkUserSignedIn();
+
+	//include 'htmls/prof_page.html.php';
+	include 'htmls/user_page.html.php';
+
+	exit();
+
+
 	//Connect to the database
-	include 'includes/db.inc.php';
+	/*include 'includes/db.inc.php';
 
 	//Try to get the user information
 	$sql = 'SELECT screen_name, screen_description, profile_pic FROM users WHERE page_name = :username';
@@ -87,28 +113,114 @@ if (isset($_GET['user'])) {
 		exit();
 	} 
 
-	include 'htmls/prof_page.html.php';
+	//include 'htmls/prof_page.html.php';
+	include 'htmls/user_page.html.php';
 
-	exit();
+	exit();*/
 }
 
 //If no get or post request were made...
 
-//Check if the user is signed in
-if(!checkUserSignedIn()) {
-	//If not, return the welcome page and exit
-	include 'htmls/main_page.html.php';
+//Get whether the user is signed in
+$signedInFlag = checkUserSignedIn();
+
+//If the user is signed in
+if($signedInFlag) {
+	//Query user info by user id
+	$userInfo = getUserInfoBy('id', $_SESSION['userId']);
+	include 'htmls/user_page.html.php';
+
 	exit();
 }
 
-//If so, get user info and return the user page
-getUserInfo($_SESSION['userId']);
-
-
-
-include 'htmls/user_page.html.php';
+//If it is not signed in, return the main page
+include 'htmls/main_page.html.php';
 
 exit();
+
+
+//Function to get the user info by different manners
+function getUserInfoBy($by, $byValue) {
+	//Connect to database
+	include 'includes/db.inc.php';	
+
+	$sql = 'SELECT page_name, screen_name, screen_description, profile_pic FROM users WHERE ';
+
+	switch($by) {
+		case "id":
+			$s = $pdo->prepare($sql . 'id = :userId');
+			$s->bindValue(':userId', $byValue);
+			break;
+
+		case "username":
+			$s = $pdo->prepare($sql . 'page_name = :userName');
+			$s->bindValue(':userName', $byValue);
+			break;
+
+		default:
+			return null;
+			exit();
+	}
+
+	$s->execute();
+	$userInfo = $s->fetch();
+
+	//If user info was not defined
+	if(!$userInfo) {
+		return null;
+		exit();		
+	}
+
+	//Clear integer indexes
+	unsetIntIndex($userInfo);
+
+	return $userInfo;
+}
+
+
+/*function getUserInfoById($userId) {
+	//Write the where part of the sql query to get user info from its id
+	$whereQuery = 'id = :userId';
+	return queryUserInfo($whereQuery, $userId);
+}
+
+function getUserInfoByName($userName) {
+	//Write the where part of the sql query to get user info from its name
+	$whereQuery = 'page_name = :userName';
+	return queryUserInfo($whereQuery, $userName);
+}
+
+function queryUserInfo($whereQuery, $whereValue) {
+	//Connect to database
+	include 'includes/db.inc.php';	
+
+	try
+	{
+		$sql = 'SELECT page_name, screen_name, screen_description, profile_pic FROM users WHERE ' . $whereQuery;
+		$s = $pdo->prepare($sql);
+		$s->bindValue(':userId', $userId);
+		$s->execute();
+
+		//Foreach user gotten (expected only one)
+		foreach ($s as $row) {
+			$GLOBALS['userInfo']['page_name'] = $row['page_name'];
+			$GLOBALS['userInfo']['screen_name'] = $row['screen_name'];
+			$GLOBALS['userInfo']['screen_description'] = $row['screen_description'];	
+			$GLOBALS['userInfo']['profile_pic'] = $row['profile_pic'];
+			return;
+		}
+
+		throw new PDOException("Error Processing Request", 1);		
+	}
+
+	catch (PDOException $e)
+	{
+		$error = 'Error while getting user info';
+		include 'includes/error.html.php';
+		exit();
+	}
+
+}
 
 
 function getUserInfo($userId) {
@@ -143,4 +255,4 @@ function getUserInfo($userId) {
 		include 'includes/error.html.php';
 		exit();
 	}
-}
+}*/

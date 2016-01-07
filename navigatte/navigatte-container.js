@@ -25,9 +25,12 @@ Navigatte.Container = new function() {
 			self.Scale = d3.event.scale;
 		});
 
-	this.Translate = function() {
-		console.log("ae");
-		return containerZoom.translate.apply(null, arguments);		
+	this.Translate = function(x, y) {
+		return containerZoom.translate([x, y]).event(svgMouseArea);	
+	}
+
+	this.Scale = function(scaleFactor) {
+		return containerZoom.scale(scaleFactor).event(svgMouseArea);	
 	}
 
 	var eventHandler = new EventHandler();

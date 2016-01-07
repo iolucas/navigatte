@@ -7,6 +7,7 @@ include 'includes/magicquotes.inc.php'; //Disable magic quotes that are used to 
 include 'includes/helpers.inc.php';	//Functions used to avoid php,sql injection attacks, such htmlout to be used in place of echo
 include 'includes/access.inc.php';	
 
+
 //If an action has been posted...
 if (isset($_POST['action'])) {
 
@@ -91,32 +92,6 @@ if (isset($_GET['user'])) {
 	include 'htmls/user_page.html.php';
 
 	exit();
-
-
-	//Connect to the database
-	/*include 'includes/db.inc.php';
-
-	//Try to get the user information
-	$sql = 'SELECT screen_name, screen_description, profile_pic FROM users WHERE page_name = :username';
-	$s = $pdo->prepare($sql);
-	$s->bindValue(':username', $username);
-	$s->execute();
-
-	$userinfo = $s->fetch();
-
-	//Disconnect DB
-	$pdo = null;
-
-	//If the user does not exists, return user not found
-	if(!$userinfo) {
-		echo 'USER_NOT_FOUND';
-		exit();
-	} 
-
-	//include 'htmls/prof_page.html.php';
-	include 'htmls/user_page.html.php';
-
-	exit();*/
 }
 
 //If no get or post request were made...
@@ -176,83 +151,3 @@ function getUserInfoBy($by, $byValue) {
 
 	return $userInfo;
 }
-
-
-/*function getUserInfoById($userId) {
-	//Write the where part of the sql query to get user info from its id
-	$whereQuery = 'id = :userId';
-	return queryUserInfo($whereQuery, $userId);
-}
-
-function getUserInfoByName($userName) {
-	//Write the where part of the sql query to get user info from its name
-	$whereQuery = 'page_name = :userName';
-	return queryUserInfo($whereQuery, $userName);
-}
-
-function queryUserInfo($whereQuery, $whereValue) {
-	//Connect to database
-	include 'includes/db.inc.php';	
-
-	try
-	{
-		$sql = 'SELECT page_name, screen_name, screen_description, profile_pic FROM users WHERE ' . $whereQuery;
-		$s = $pdo->prepare($sql);
-		$s->bindValue(':userId', $userId);
-		$s->execute();
-
-		//Foreach user gotten (expected only one)
-		foreach ($s as $row) {
-			$GLOBALS['userInfo']['page_name'] = $row['page_name'];
-			$GLOBALS['userInfo']['screen_name'] = $row['screen_name'];
-			$GLOBALS['userInfo']['screen_description'] = $row['screen_description'];	
-			$GLOBALS['userInfo']['profile_pic'] = $row['profile_pic'];
-			return;
-		}
-
-		throw new PDOException("Error Processing Request", 1);		
-	}
-
-	catch (PDOException $e)
-	{
-		$error = 'Error while getting user info';
-		include 'includes/error.html.php';
-		exit();
-	}
-
-}
-
-
-function getUserInfo($userId) {
-	//Reset user info variable
-	$GLOBALS['userInfo'] = array();
-
-	//Connect to database
-	include 'includes/db.inc.php';
-
-	try
-	{
-		$sql = 'SELECT page_name, screen_name, screen_description, profile_pic FROM users WHERE id = :userId';
-		$s = $pdo->prepare($sql);
-		$s->bindValue(':userId', $userId);
-		$s->execute();
-
-		//Foreach user gotten (expected only one)
-		foreach ($s as $row) {
-			$GLOBALS['userInfo']['page_name'] = $row['page_name'];
-			$GLOBALS['userInfo']['screen_name'] = $row['screen_name'];
-			$GLOBALS['userInfo']['screen_description'] = $row['screen_description'];	
-			$GLOBALS['userInfo']['profile_pic'] = $row['profile_pic'];
-			return;
-		}
-
-		throw new PDOException("Error Processing Request", 1);		
-	}
-
-	catch (PDOException $e)
-	{
-		$error = 'Error while getting user info';
-		include 'includes/error.html.php';
-		exit();
-	}
-}*/

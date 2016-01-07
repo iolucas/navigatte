@@ -91,26 +91,38 @@ Navigatte.Nodes = new function() {
 			});
 
 		//Darker Margin to display the logo type
-		var innerRectDarkerMargin = innerRectGroup.append("rect")
+		/*var innerRectDarkerMargin = innerRectGroup.append("rect")
 			.attr("class", "node-inner-rect-darker-margin", true)
 			.attr("x", 1)
 			.attr("y", 1)
 			.attr("width", 28)
 			.attr("height", function(d) {
 				return d.containerHeight - 2;	
-			});
+			});*/
 
 		//Node name text
 		var innerRectText = innerRectGroup.append("text")
 			.attr("class", "node-inner-rect-text")
 			.text(function(d) { return d.name; })
-			.attr("x", 38)
+			.attr("x", function(d) {
+				var textBox = this.getBBox();
+				
+				if(textBox.width < 40) {
+					d.containerWidth = 100;	
+					return (d.containerWidth - textBox.width) / 2;
+				}
+
+				d.containerWidth = textBox.width + 60;
+				return 30;
+
+			})
 			.attr("y", function(d) {
 				//Set y position in function of container height
 				
 				var textBox = this.getBBox();
 				
-				d.containerWidth = textBox.width < 40 ? 100 : textBox.width + 60;
+				//d.containerWidth = textBox.width < 40 ? 100 : textBox.width + 60;
+				//d.containerWidth = textBox.width + 40;
 
 				return (d.containerHeight - textBox.height) / 2 - textBox.y;
 			})

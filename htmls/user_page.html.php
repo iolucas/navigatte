@@ -21,6 +21,8 @@
             <rect id="node-container-mouse-area"></rect>
         </svg>
 
+        <?php include 'navbar.html.php'; ?>
+
         <!--Node Content View-->
         <section ng-view class="nvgtt-content-window"></section>
 
@@ -39,8 +41,8 @@
                     <div id="user-profile-container">
                         <div class="user-img" style="background-image:url('<?php htmlout('img/' . $userInfo['profile_pic']); ?>');"></div>
                         <div id="user-name" class="black-font"><?php htmlout($userInfo['screen_name']); ?></div>
-                        <div id="user-trackers" class="black-font">Trackers 1000</div>
-                        <div id="user-tracking" class="black-font">Tracking 1000</div>
+                        <!--<div id="user-trackers" class="black-font">Trackers 1000</div>
+                        <div id="user-tracking" class="black-font">Tracking 1000</div>-->
                         <div id="user-description" class="black-font"><?php htmlout($userInfo['screen_description']); ?></div>
                     </div>
 

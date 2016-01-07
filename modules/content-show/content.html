@@ -10,7 +10,7 @@
 			<br>
 
 			<!-- Content Panel -->
-			<div class="panel panel-default">
+			<div class="panel panel-info">
 				<div class="panel-heading">
 					<h3 class="panel-title">Discussions</h3>
 				</div>
@@ -19,11 +19,11 @@
 					<img src="img/loading.gif">
 				</div>
 
-				<ul ng-if="discussions" class="list-group">
-				 	<li class="list-group-item" ng-repeat="discussion in discussions track by $index">
-				 		{{ discussion.title }}
-				 	</li>
-				</ul>
+				<div ng-if="discussions && false" class="list-group">
+					<a class="list-group-item" ng-repeat="discussion in discussions track by $index" href="#/discussion/1">
+						{{ discussion.title }}
+					</a>
+				</div>
 			</div>
 
 		</div><!-- End Column -->

@@ -180,7 +180,25 @@ angular.module('nvgttApp.content').service("blockDiscussions", function($timeout
     }
 });
 
-angular.module('nvgttApp.content').controller('DiscussionController', function() {
+angular.module('nvgttApp.content').controller('DiscussionController', function($scope) {
+
+    $scope.discussion = {
+        name: "Is there a way of doing something?",
+        author: "Lucas V. Oliveira",
+        content: "Is there a way of doing something? I mean, do anything.",
+        comments: [
+            {
+                author: "Luke Skywalker",
+                content: "Yes, I guess it is"
+            },
+            {
+                author: "Han Solo",
+                content: "Sure man, go ahead!"
+            }
+        ]
+    }
+
+
 
 });
 
@@ -215,7 +233,7 @@ angular.module('nvgttApp.content').controller('ContentController', function($sco
 
     //Function to remove an item from an array
     $scope.removeItem = function(array, index) {
-        array.splice(index, 1);
+        //array.splice(index, 1);
     }
 
     //Function to add an element to an array if it doesn't exists

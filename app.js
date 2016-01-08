@@ -23,17 +23,20 @@ function initApp(username) {
 
             var containerBox = Navigatte.Container.Select().node().getBBox();
             
-            var yScale = (window.innerHeight - 20) / containerBox.height;
-            var xScale = (window.innerWidth - 20) / containerBox.width;
+            var yScale = (window.innerHeight - 70) / containerBox.height;
+            //var xScale = (window.innerWidth) / containerBox.width;
 
-            var newScale = xScale < yScale ? xScale : yScale;
-            newScale = newScale > 1 ? 1 : newScale;
+            //var newScale = xScale < yScale ? xScale : yScale;
+            //newScale = newScale > 1 ? 1 : newScale;
 
-            var newXOffset = (window.innerWidth - 300 - containerBox.width*newScale) / 2;
-            newXOffset = 0;
+            var newScale = yScale > 1 ? 1 : yScale;
+
+            var newXOffset = (window.innerWidth - containerBox.width * newScale) / 2;
+            var newYOffset = 60;
 
             Navigatte.Container.Scale(newScale);
-            Navigatte.Container.Translate(-containerBox.x*newScale + 300 + 20*newScale + newXOffset, -containerBox.y*newScale + 10);
+            Navigatte.Container.Translate(-containerBox.x * newScale + newXOffset, 
+                -containerBox.y * newScale + newYOffset);
             
         } else {
             console.log(response.result);

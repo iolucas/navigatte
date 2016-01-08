@@ -98,8 +98,8 @@ Navigatte.Changes = new function() {
 
 
 		var changesString = JSON.stringify(changesArray);
-
-		alertify.delay(5000).log("Saving changes...");
+		console.log("Saving changes...");
+		//alertify.delay(5000).log("Saving changes...");
 
 		$.post("save_changes.php", { action: "save_node_changes", changes: changesString })
 			.done(function(responseObj) {
@@ -107,7 +107,8 @@ Navigatte.Changes = new function() {
 				responseObj = JSON.parse(responseObj);
 
 				if(responseObj.result && responseObj.result == "SUCCESS") {
-					alertify.delay(5000).success("Changes saved!");
+					console.log("Changes saved!");
+					//alertify.delay(5000).success("Changes saved!");
 
 					//Set created nodes ids
 					if(responseObj.createdNodes) {
@@ -121,12 +122,14 @@ Navigatte.Changes = new function() {
 					changes = [];
 
 				} else {
-					alertify.delay(5000).error("Unknown error while saving. Please try again.");
+					console.log("Unknown error while saving. Please try again.");	
+					//alertify.delay(5000).error("Unknown error while saving. Please try again.");
 				}
 				
 			})
 			.fail(function() {
-				alertify.delay(5000).error("Error while saving. Please try again.");
+				console.log("Error while saving. Please try again.");
+				//alertify.delay(5000).error("Error while saving. Please try again.");
 			})
 			.always(function(){
 				saveInProgress = false;

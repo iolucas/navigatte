@@ -2,6 +2,7 @@
 <html ng-app="nvgttApp">
 	<head>
 		<meta charset="UTF-8">
+        <link rel="stylesheet" href="css/nvgtt-navbar.css"/>
 	    <link rel="stylesheet" href="css/style.css"/>
         <link rel="stylesheet" href="css/sidemenu.css"/>
         <link rel="stylesheet" href="css/box-container.css"/>
@@ -11,109 +12,44 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-route.js"></script>    
 
         <title><?php if(isset($username)) htmlout($userInfo['screen_name'] . " | "); ?>Navigatte</title> 
+        <style>
+            table,td,tr {
+                border: 0px solid #000;
+            }
 
+        </style>
 	</head>
 
-	<body>
+	<body ng-controller="NvgttController">
 
-        <!--Nodes Container-->
-        <svg class="svg-container">
+        <!--Blocks Container-->
+        <svg class="svg-container" style="visibility:{{ contentActiveFlag ? 'hidden' : 'visible' }};">
             <rect id="node-container-mouse-area"></rect>
         </svg>
 
+        <!--Top Navigate Bar Container-->
         <?php include 'navbar.html.php'; ?>
 
-        <!--Node Content View-->
-        <section ng-view class="nvgtt-content-window"></section>
+        <!--Content and lateral menu container-->
+        <table style="position:relative;">
+            <tbody>
+                <tr style="vertical-align:top;" >
+                    <td>
+                        <?php include 'sidemenu.html.php'; ?>
+                    </td>
+                    
+                    <td ng-show="contentActiveFlag" style="text-align:center;vertical-align:top;width:100%;" 
+                        class="nvgtt-border">
+                        <!--Node Content View-->
+                        <section ng-view class="nvgtt-content-window"></section>
+                    </td>
 
-        <!--Side menu-->
-        <nav class="side-menu">
-            <a href="." id="logo">Navigatte</a>
-
-            <input name="search" id="search-field" type="text" placeholder="Pesquisar..." />
-
-            <div class="divisor"></div>  
-
-            <div class="user-navigation">
-
-                <?php if (isset($username)): ?>
-
-                    <div id="user-profile-container">
-                        <div class="user-img" style="background-image:url('<?php htmlout('img/' . $userInfo['profile_pic']); ?>');"></div>
-                        <div id="user-name" class="black-font"><?php htmlout($userInfo['screen_name']); ?></div>
-                        <!--<div id="user-trackers" class="black-font">Trackers 1000</div>
-                        <div id="user-tracking" class="black-font">Tracking 1000</div>-->
-                        <div id="user-description" class="black-font"><?php htmlout($userInfo['screen_description']); ?></div>
-                    </div>
-
-                <?php else: ?>
-
-                    <button id="createNodeButton" class="btn btn-info btn-lg" 
-                        type="button" 
-                        style="height:50px;width:300px;border-radius:0;position:absolute;left:0; top:180px;">
-                        Criar Bloco
-                    </button>
-
-                    <button id="saveChangesButton" class="btn btn-success btn-lg" 
-                        type="button" 
-                        style="height:50px;width:300px;border-radius:0;position:absolute;left:0; top:250px;" 
-                        onclick="Navigatte.Changes.Save();">
-                        Salvar
-                    </button>
-
-                <?php endif ?>
-            </div>
-
-            <div class="search-results" style="display:none"></div>
-
-            <footer>
-                <div id="pta" class="black-font">Privacy | Terms | About</div>
-                <div id="copyright" class="black-font">Copyright 2015 - Navigatte</div>
-            </footer>
-
-        </nav>
-
-        <!--Profile Button-->
-        <div class="btn-group btn-group-md" style="position:absolute;top:5px;right:5px;">
-            
-            <?php if ($signedInFlag): ?>
-                
-                <button type="button" 
-                        class="btn dropdown-toggle btn-primary" 
-                        data-toggle="dropdown" 
-                        aria-haspopup="true" 
-                        aria-expanded="false"> 
-                        <?php htmlout($userInfo['screen_name']); ?> <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-
-                    <?php if (isset($username)): ?>
-                        <li><a href="./">Home</a></li>
-                    <?php else: ?>
-                        <li><a href="./?user=<?php htmlout($userInfo['page_name']); ?>">Profile</a></li>
-                    <?php endif ?>
-
-                    <li role="separator" class="divider"></li>
-                    <li><a href="javascript:void(0)" onclick="document.getElementById('signOutForm').submit();">Sign Out</a></li>
-                    <form method="post" id="signOutForm"><input type="hidden" name="action" value="signout"></form>
-                </ul>                
-
-            <?php else: ?>
-                <button type="button" class="btn btn-primary" onclick="location.href='./';">Sign In</button>
-                <!--<button type="button" class="btn btn-info">Register</button>-->
-            <?php endif ?>
-
-        </div>
-
-        <!--General Content - Generated by PHP-->
-        <!--<section id="general-content">
-        
-            <div class="navi-content-window">
-                <div class="navi-content-close-button">x</div>
-                <div class="navi-content-data"></div>
-            </div>
-
-        </section>-->
+                    <td ng-show="contentActiveFlag">
+                        <div style="width:300px;"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>       
         
         <!---->
         <script src="js/jquery-2.1.4.min.js"></script>
@@ -134,7 +70,7 @@
         <script src="navigatte/navigatte-content-modal.js"></script>
         <script src="navigatte/navigatte-node-finder.js"></script>
         <script src="navigatte/navigatte-project.js"></script>
-        <!--<script src="navigatte/navigatte-search.js"></script>-->
+        <script src="navigatte/navigatte-search.js"></script>
 
         <?php if (!isset($username)): ?>
             <script src="navigatte/navigatte-changes.js"></script>
@@ -150,7 +86,28 @@
             'use strict';
 
             //Init nvgtt app with its dependent modules
-            angular.module('nvgttApp',['nvgttApp.content']);
+            angular.module('nvgttApp',['ngRoute','nvgttApp.content'])
+
+            .config(function($routeProvider) {
+                    $routeProvider.when('/content/:localId', {
+                        controller: 'ContentController',
+                        templateUrl: 'modules/content-show/content.html',
+                    }).when('/discussion/:id', {
+                        controller: 'DiscussionController',
+                        templateUrl: 'modules/content-show/discussion.html',
+                    });
+                })
+
+            .controller('NvgttController', function($scope, $location) {
+                    //Flag signalizing whether a content is being show
+                    $scope.contentActiveFlag = $location.path() != "";
+
+                    //Check routing changes and update the content active flag
+                    $scope.$on("$routeChangeSuccess", function() {
+                        $scope.contentActiveFlag = $location.path() != "";
+                    });
+
+                });
 
             var pageName = '<?php htmlout($userInfo['page_name']); ?>';   
 

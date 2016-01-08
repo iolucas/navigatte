@@ -19,7 +19,7 @@
 					<img src="img/loading.gif">
 				</div>
 
-				<div ng-if="discussions && false" class="list-group">
+				<div ng-if="discussions" class="list-group">
 					<a class="list-group-item" ng-repeat="discussion in discussions track by $index" href="#/discussion/1">
 						{{ discussion.title }}
 					</a>

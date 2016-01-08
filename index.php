@@ -8,6 +8,10 @@ include 'includes/helpers.inc.php';	//Functions used to avoid php,sql injection 
 include 'includes/access.inc.php';	
 
 
+//include 'htmls/teste.html.php';
+//exit();
+
+
 //If an action has been posted...
 if (isset($_POST['action'])) {
 

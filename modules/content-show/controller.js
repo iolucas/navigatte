@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('nvgttApp.content',['ngRoute', 'ngAlertify']).config(function($routeProvider) {
+angular.module('nvgttApp.content',['ngRoute', 'ngAlertify']);
+
+/*.config(function($routeProvider) {
     $routeProvider.when('/content/:localId', {
         controller: 'ContentController',
         templateUrl: 'modules/content-show/content.html',
@@ -8,7 +10,7 @@ angular.module('nvgttApp.content',['ngRoute', 'ngAlertify']).config(function($ro
         controller: 'DiscussionController',
         templateUrl: 'modules/content-show/discussion.html',
     });
-});
+});*/
 
 
 angular.module('nvgttApp.content').service("blockContent", function($http) {

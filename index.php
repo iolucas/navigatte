@@ -3,12 +3,16 @@
 //------------- NAVIGATTE MAIN CONTROLLER --------------
 //------------------------------------------------------
 
-include 'includes/magicquotes.inc.php'; //Disable magic quotes that are used to avoid php injection
-include 'includes/helpers.inc.php';	//Functions used to avoid php,sql injection attacks, such htmlout to be used in place of echo
-include 'includes/access.inc.php';	
+include 'php/includes/magicquotes.inc.php'; //Disable magic quotes that are used to avoid php injection
+
+//Functions used to avoid php,sql injection attacks, such htmlout to be used in place of echo
+include 'php/includes/helpers.inc.php';	
+
+include 'php/includes/access.inc.php';	
 
 
-//include 'htmls/teste.html.php';
+
+//include 'php/views/index2.html.php';
 //exit();
 
 
@@ -23,7 +27,7 @@ if (isset($_POST['action'])) {
 		{
 			//Set error and return the main page
 			$GLOBALS['loginError'] = 'Please fill in both fields';
-			include 'htmls/main_page.html.php';
+			include 'php/views/main_page.html.php';
 			exit();
 		}
 
@@ -39,7 +43,7 @@ if (isset($_POST['action'])) {
 		} else {
 			//Set error and return the main page
 			$GLOBALS['loginError'] = 'The specified email address or password was incorrect.';
-			include 'htmls/main_page.html.php';
+			include 'php/views/main_page.html.php';
 		}
 
 		exit();
@@ -93,7 +97,7 @@ if (isset($_GET['user'])) {
 	$signedInFlag = checkUserSignedIn();
 
 	//include 'htmls/prof_page.html.php';
-	include 'htmls/user_page.html.php';
+	include 'php/views/user_page.html.php';
 
 	exit();
 }
@@ -107,13 +111,13 @@ $signedInFlag = checkUserSignedIn();
 if($signedInFlag) {
 	//Query user info by user id
 	$userInfo = getUserInfoBy('id', $_SESSION['userId']);
-	include 'htmls/user_page.html.php';
+	include 'php/views/user_page.html.php';
 
 	exit();
 }
 
 //If it is not signed in, return the main page
-include 'htmls/main_page.html.php';
+include 'php/views/main_page.html.php';
 
 exit();
 
@@ -121,7 +125,7 @@ exit();
 //Function to get the user info by different manners
 function getUserInfoBy($by, $byValue) {
 	//Connect to database
-	include 'includes/db.inc.php';	
+	include 'php/includes/db.inc.php';	
 
 	$sql = 'SELECT page_name, screen_name, screen_description, profile_pic FROM users WHERE ';
 

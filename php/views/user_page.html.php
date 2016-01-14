@@ -2,6 +2,7 @@
 <html ng-app="nvgttApp">
 	<head>
 		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <link href='https://fonts.googleapis.com/css?family=Muli|Josefin+Sans|Maven+Pro|Righteous|Fredoka+One' rel='stylesheet' type='text/css'>
         
         <!-- Angular Material CSS now available via Google CDN; version 0.9.4 used here -->
@@ -20,7 +21,7 @@
         
 
         <!-- Angular Material Dependencies -->
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
 
@@ -50,6 +51,10 @@
         <script src="app/discussions/nvgttApp.discussions - services.js"></script>
         <script src="app/discussions/nvgttApp.discussions - controller.js"></script>
 
+        <script src="app/search/nvgttApp.search - module.js"></script>
+        <!--<script src="app/search/nvgttApp.search - services.js"></script>-->
+        <script src="app/search/nvgttApp.search - controller.js"></script>
+
         <!--    End Angular Modules -->
 
         <title><?php if(isset($username)) htmlout($userInfo['screen_name'] . " | "); ?>Navigatte</title> 
@@ -66,6 +71,10 @@
 
             .full-height {
                 height: 100%;
+            }
+
+            .user-img {
+                background-image:url('<?php htmlout('assets/img/' . $userInfo['profile_pic']); ?>');
             }
 
              /**

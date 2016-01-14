@@ -15,18 +15,44 @@ angular.module('nvgttApp')
 
         //Configuration of the theme
           $mdThemingProvider.theme('default')
-            .primaryPalette('green')
-            .accentPalette('brown');
+            .primaryPalette('blue-grey',{
+                'default': '900'
+            })
+            .accentPalette('teal')
+            .backgroundPalette('teal');
+/*
+Palette
+Primary:blue-grey 900
+Accent: Teal: 900, A200
+
+
+
+
+*/
+
+
 
 /* candidates 
 
+red
+pink
 purple
+deep-purple
+indigo
 blue
 light-blue
 cyan
+teal
 green
+light-green
+lime
+yellow
+amber
+orange
+deep-orange
 brown
-blue-gray
+grey
+blue-grey
 
 
 

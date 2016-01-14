@@ -9,12 +9,13 @@ body {
     overflow-x: hidden;*/
     word-wrap: break-word;
     padding: 60px 0px 0px 0px;
-    background-color: rgb(147,157,166);
+    /*background-color: rgb(147,157,166);
 
     background: linear-gradient(135deg, #a0a0a0, #d0d0d0);
-    background: linear-gradient(135deg, rgb(147,157,166), rgb(226,230,236),rgb(165,173,177));
+    background: linear-gradient(135deg, rgb(147,157,166), rgb(226,230,236),rgb(165,173,177));*/
 
     /*background: linear-gradient(90deg, rgb(18,27,36), rgb(43,60,68),rgb(20,53,68));*/
+
 }   
 
 

@@ -18,7 +18,7 @@
         <?php if (isset($username)): ?>
 
             <div id="user-profile-container">
-                <div class="user-img" style="background-image:url('<?php htmlout('assets/img/' . $userInfo['profile_pic']); ?>');"></div>
+                <div class="user-img"></div>
                 <div id="user-name" class="black-font"><?php htmlout($userInfo['screen_name']); ?></div>
                 <div id="user-trackers" class="black-font">Trackers 1000</div>
                 <div id="user-tracking" class="black-font">Tracking 1000</div>

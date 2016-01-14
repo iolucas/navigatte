@@ -11,7 +11,8 @@
 
 #node-container-mouse-area {
 	fill: transparent;
-	fill: #b2dfdb;
+	/*fill: #b2dfdb;*/
+	fill: #64ffda;
 }
 
 

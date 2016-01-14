@@ -1,5 +1,20 @@
 <md-sidenav ng-hide="contentActiveFlag" 
-    class="md-sidenav-left md-whiteframe-z2 full-height" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+    class="md-sidenav-left md-whiteframe-z2 full-height" md-component-id="left" 
+    md-is-locked-open="$mdMedia('gt-md') && true">
+
+    <div layout="column" layout-align="start center" 
+        style="width:100%;height:100%;background-color:rgb(121,85,72);background-color:#004d40;padding-top:20px;">
+
+        <div class="user-img" style="background-image:url('<?php htmlout('assets/img/' . $userInfo['profile_pic']); ?>');">
+        </div>
+
+        <div id="user-name" class="black-font"><?php htmlout($userInfo['screen_name']); ?></div>
+        <div id="user-trackers" class="black-font">Trackers 1000</div>
+        <div id="user-tracking" class="black-font">Tracking 1000</div>
+        <div id="user-description" class="black-font"><?php htmlout($userInfo['screen_description']); ?></div>
+
+
+    </div>
 
 	<!--<div layout="column" layout-align="center center" style="color:#000;">
 

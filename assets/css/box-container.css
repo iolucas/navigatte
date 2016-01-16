@@ -4,9 +4,10 @@
 
 	display: block;
 	/*margin: 0;*/
-	position: fixed;
+	
+	/*position: fixed;
 	top: 0;
-	left: 0;
+	left: 0;*/
 }
 
 #node-container-mouse-area {
@@ -144,6 +145,7 @@
 .navi-links-outer {
 	fill: none;
 	stroke: #fff;
+
 	stroke-width: 4;
 }
 
@@ -162,8 +164,9 @@
 
 .navi-links-inner {
 	fill: none;
-	stroke: #444;
-	stroke: rgb(34,34,34);
+	/*stroke: #444;
+	stroke: rgb(34,34,34);*/
+	stroke: #37474F;
 	stroke-width: 2;
 }
 

@@ -5,7 +5,7 @@ angular.module('nvgttApp')
 
         $routeProvider.when('/content/:localId', {
             controller: 'ContentDisplayController',
-            templateUrl: 'app/content-display/nvgttApp.content-display - view.html',
+            templateUrl: 'app/content-display/nvgttApp.content-display - view2.html',
         })
 
         .when('/discussion/:id', {
@@ -14,7 +14,7 @@ angular.module('nvgttApp')
         });
 
         //Configuration of the theme
-          $mdThemingProvider.theme('default')
+        $mdThemingProvider.theme('default')
             .primaryPalette('blue-grey',{
                 'default': '900'
             })

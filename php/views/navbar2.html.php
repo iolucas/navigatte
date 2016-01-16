@@ -1,12 +1,22 @@
-<md-toolbar layout="row" class="md-whiteframe-z3 fixed-top" layout-align="center">
-	<div class="md-toolbar-tools">
-		<div hide show-gt-md flex="20">
+<?php if(false): ?>
+<div style="width:100%;height:60px;background-color:blue;color:#fff;" layout="row" class="fixed-top md-whiteframe-z3" layout-align="center center">
+	Teste
+</div>
+
+
+<?php else: ?>
+
+
+<md-toolbar layout="row" class="md-whiteframe-z3 fixed-top" layout-align="center center">
+
+	
+		<div hide-gt-md show flex="20">oi
 			<!--<div class="user-img" style="width:50px;height:50px;"></div>-->
 		</div>
 
-		<img hide show-gt-md src="assets/img/boat-9-48.png">
+		<img src="assets/img/boat-9-48.png">
 
-		<h2 hide show-gt-md>
+		<h2>
 			<span style="font-family: 'Fredoka One', cursive;">Navigatte</span>
 		</h2>
 
@@ -16,12 +26,12 @@
 				md-search-text="searchText"
 				md-selected-item="selectedItem"
 				
-				md-search-text-change="searchTextChange()"
-				md-selected-item-change="selectedItemChange()"	
+				md-search-text-change="searchTextChange(searchText)"
+				md-selected-item-change="selectedItemChange(selectedItem)"	
 				
 				md-item-text="item.name"
 				
-				md-items="item in querySearch()"
+				md-items="item in querySearch(searchText)"
 
           		md-no-cache="false" 
 
@@ -36,7 +46,12 @@
 
 		</div>
 
-		<md-button hide show-gt-md>Your Account</md-button>
-		<div hide show-gt-md flex="20" class="md-accent"></div>
-	</div>
+		<!--<md-button hide show-gt-md>Your Account</md-button>-->
+		<?php include 'userbutton2.html.php'; ?>
+		<div flex="20" class="md-accent">oi</div>
+	
 </md-toolbar>
+
+<!--Toolbar reducing height betwen 960 and 542-->
+
+<?php endif ?>

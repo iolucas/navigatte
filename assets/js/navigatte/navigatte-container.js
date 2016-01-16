@@ -77,11 +77,11 @@ Navigatte.Container = new function() {
 
 		//Add the function to refresh the screen size to the event list of window resize
 		window.addEventListener("resize", function(){
-			refreshContainerSize(window.innerWidth, window.innerHeight);
+			//refreshContainerSize(window.innerWidth, window.innerHeight);
 		});
 
 		//Execute the function once to set the initial screen size
-		refreshContainerSize(window.innerWidth, window.innerHeight);
+		//refreshContainerSize(window.innerWidth, window.innerHeight);
 	
 		//Enable the nodes container to be zoomed/dragged
 		svgMouseArea.call(containerZoom);

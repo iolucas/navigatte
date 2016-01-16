@@ -17,6 +17,7 @@ function initApp(username) {
 
             SetNodesPositions(response.nodes, response.links);
 
+            //CreateHexagon2();
 
             Navigatte.Nodes.Init(response.nodes);
             Navigatte.Links.Init(response.links);
@@ -26,28 +27,27 @@ function initApp(username) {
             var containerBox = Navigatte.Container.Select().node().getBBox();
 
 
-            var xOffset = 310;
-            var yOffset = 70;
-
-            var xMargin = 20;
-            var yMargin = 20;              
+            var margin = {
+                top: 20,
+                bottom: 20,
+                left: 20,
+                right: 20
+            }           
             
-            var yScale = (window.innerHeight - yOffset - yMargin) / containerBox.height;
-            var xScale = (window.innerWidth - xOffset - xMargin) / containerBox.width;
+            var yScale = (window.innerHeight - margin.top - margin.bottom) / containerBox.height;
+            var xScale = (window.innerWidth*0.8 - margin.left - margin.right) / containerBox.width;
 
             var newScale = xScale < yScale ? xScale : yScale;   //Get the lower scale
 
             newScale = newScale > 1 ? 1 : newScale; //Ensure they are max of 1
             newScale = newScale < 0.1 ? 0.1 : newScale; //ensure they are min of 0.1
 
-            //newScale = 1;
-
             //Apply the scale to the chart
             Navigatte.Container.Scale(newScale);
 
             //Translate it to the better position
-            Navigatte.Container.Translate(-containerBox.x * newScale + xOffset + xMargin/2,
-                -containerBox.y * newScale + yOffset + yMargin/2);
+            Navigatte.Container.Translate(-containerBox.x * newScale + margin.left,
+                -containerBox.y * newScale + margin.top);
             
         } else {
             console.log(response.result);
@@ -56,6 +56,104 @@ function initApp(username) {
     .fail(function(response) {
         console.log(response);
     });
+
+}
+
+function CreateHexagon2() {
+    var hexbin = d3.hexbin();
+
+    
+
+        //Create object to handle nodes drag
+    var nodeDrag = d3.behavior.drag()
+        .origin(function(d) { return d; })
+        .on("drag", function(d) {
+
+            if(d.x != d3.event.x || d.y != d3.event.y) {
+
+                d.x = d3.event.x;
+                d.y = d3.event.y;
+
+                //Update node position
+                d3.select(this).attr("transform", "translate(" + d.x + " " + d.y + ")");
+            }      
+        });
+
+        var points = [];
+
+        for(var i = 0; i < 100;i++)
+            points.push([i,0]);
+
+
+
+//Draw the hexagons
+    Navigatte.Container.Select().append("g")
+        .selectAll(".hexagon")
+        .data(hexbin(points))
+        .enter().append("path")
+        .attr("stroke-linejoin","round")
+        .classed("hexagon", true)
+        .classed("node-inner-rect-group", true)
+        .attr("transform", function(d) { 
+            //console.log(d);
+            return "translate(" + d.x + "," + d.y + ")"; 
+
+        })
+        .attr("d", hexbin.hexagon(70))
+        //.attr("stroke", "white")
+        //.attr("stroke-width", "1px")
+        .style("fill", "teal")
+        .call(nodeDrag);
+}
+
+
+
+function CreateHexagon() {
+    //svg sizes and margins
+var margin = {
+    top: 50,
+    right: 20,
+    bottom: 20,
+    left: 50
+}, 
+width = 850,
+height = 350;
+
+//The number of columns and rows of the heatmap
+var MapColumns = 30,
+    MapRows = 20;
+ 
+//The maximum radius the hexagons can have to still fit the screen
+var hexRadius = d3.min([width/((MapColumns + 0.5) * Math.sqrt(3)),
+   height/((MapRows + 1/3) * 1.5)]);
+
+
+//Calculate the center positions of each hexagon 
+var points = [];
+for (var i = 0; i < MapRows; i++) {
+    for (var j = 0; j < MapColumns; j++) {
+        points.push([hexRadius * j * 1.75, hexRadius * i * 1.5]);
+    }//for j
+}//for i
+
+
+var hexbin = d3.hexbin()
+            .radius(hexRadius);
+
+
+
+//Draw the hexagons
+Navigatte.Container.Select().append("g")
+    .selectAll(".hexagon")
+    .data(hexbin(points))
+    .enter().append("path")
+    .attr("class", "hexagon")
+    .attr("d", function (d) {
+  return "M" + d.x + "," + d.y + hexbin.hexagon(20);
+ })
+    .attr("stroke", "white")
+    .attr("stroke-width", "1px")
+    .style("fill", "teal");
 
 }
 

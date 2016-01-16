@@ -83,8 +83,16 @@ Navigatte.Nodes = new function() {
 
 		var debugColors = ["#337ab7","#5cb85c","#5bc0de","#f0ad4e","#d9534f"];
 
+
+
+
+		var innerRect = innerRectGroup.append("path")
+			.attr("class", "node-inner-rect", true)
+			.attr("fill", function(d){ return d.bgcolor; });
+
+
 		//Append the node rectangle to the inner rect group
-		var innerRect = innerRectGroup.append("rect")
+		/*var innerRect = innerRectGroup.append("rect")
 			.attr("class", "node-inner-rect", true)
 			//.attr("rx", 5)
 			//.attr("ry", 5)
@@ -103,13 +111,13 @@ Navigatte.Nodes = new function() {
 				//return debugColors[(Math.random()*(debugColors.length-1)).toFixed(0)];
 
 				return d.bgcolor;
-			});
+			});*/
 
-		var innerRectGrad = innerRectGroup.append("rect")
+		/*var innerRectGrad = innerRectGroup.append("rect")
 			.attr("height", function(d) {
 				return d.containerHeight;
 			})
-			.attr("fill", "url(#linGrad)");
+			.attr("fill", "url(#linGrad)");*/
 
 		//Darker Margin to display the logo type
 		/*var innerRectDarkerMargin = innerRectGroup.append("rect")
@@ -133,14 +141,18 @@ Navigatte.Nodes = new function() {
 					return (d.containerWidth - textBox.width) / 2;
 				}
 
-				d.containerWidth = textBox.width + 60;
-				return 30;
+				var margin = 60;
+
+				d.containerWidth = textBox.width + margin;
+				return margin/2;
 
 			})
 			.attr("y", function(d) {
 				//Set y position in function of container height
 				
 				var textBox = this.getBBox();
+
+				d.containerHeight = 50;
 				
 				//d.containerWidth = textBox.width < 40 ? 100 : textBox.width + 60;
 				//d.containerWidth = textBox.width + 40;
@@ -152,9 +164,29 @@ Navigatte.Nodes = new function() {
 				return d.fgcolor;
 			});
 
+
+		//Hexagon path generator
+		var hexbin = d3.hexbin();
+
+		//Create block shape
+		innerRect.attr("d", function(d) {
+			//return "M" + d.containerWidth/2 + "," + d.containerHeight/2 + hexbin.hexagon(d.containerWidth/1.732050);
+
+			return "M0,0 h" + d.containerWidth + 
+				"v" + d.containerHeight + 
+				"h-" + d.containerWidth + "z";
+		});
+
 		//Set node inner rect width now the text has been placed and we got its size
 		innerRect.attr("width", function(d) { return d.containerWidth; });
 		//innerRectGrad.attr("width", function(d) { return d.containerWidth; });
+
+		/*innerHexagon.attr("d", function(d) {
+			return hexbin.hexagon(d.containerWidth/1.732050);
+		})
+		.attr("transform", function(d) {
+			return "translate(" + d.containerWidth/2 + " " + d.containerHeight/2 + ")";
+		});*/
 
 		//Draw input symbol
 		nodeGroup.append("path")

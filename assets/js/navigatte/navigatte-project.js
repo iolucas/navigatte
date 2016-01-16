@@ -68,7 +68,7 @@ Navigatte.Project = function(projObj) {
         if(levelPos[cNode.level] == undefined)
             levelPos[cNode.level] = 0;
         else
-            levelPos[cNode.level] += 50;    
+            levelPos[cNode.level] += 60;    
 
         cNode.x = parseInt(containerBox.x + containerBox.width + (cNode.level-levelObj.GetMax())*-250) + 50;
         cNode.y = parseInt(containerBox.y + containerBox.height*0 + levelPos[cNode.level]) + 50;

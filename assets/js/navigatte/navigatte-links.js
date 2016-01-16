@@ -149,7 +149,7 @@ Navigatte.Links = new function() {
 			.classed("navi-links-outer", true)
 			.attr("stroke-dasharray",function(link){
 				if(link.projection)
-					return "5 5";
+					return "15 15";
 
 				return null;
 			}) 
@@ -269,10 +269,10 @@ Navigatte.Links = new function() {
 	//Function to draw the path of a diagonal line (x and y are inverted for right line projection)
 	var drawLinkPath = d3.svg.diagonal()
 		.source(function(link) { 
-			return { x: link.source.y + 25, y: link.source.x + link.source.containerWidth }; 
+			return { x: link.source.y + link.source.containerHeight/2, y: link.source.x + link.source.containerWidth }; 
 		})            
 		.target(function(link) { 
-			return { x: link.target.y + 25, y: link.target.x }; 
+			return { x: link.target.y + link.source.containerHeight/2, y: link.target.x }; 
 		})
 		.projection(function(d) { 
 			return [d.y, d.x]; 

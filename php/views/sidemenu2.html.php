@@ -1,4 +1,4 @@
-<md-sidenav ng-hide="contentActiveFlag" 
+<md-sidenav ng-hide="contentActiveFlag"
     class="md-sidenav-left md-whiteframe-z2 full-height" md-component-id="left" 
     md-is-locked-open="$mdMedia('gt-md') && true">
 

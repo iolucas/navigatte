@@ -2,9 +2,12 @@
 
 angular.module('nvgttApp.chart')
 	
-.controller('ChartController', function($scope, $window, $location, chartData, alertify) {
+.controller('ChartController', function($scope, $window, $location, nvgttChart, alertify) {
 
-	$scope.chartHeight = $window.innerHeight;
+	
+
+
+	/*$scope.chartHeight = $window.innerHeight;
 	$scope.chartWidth = $window.innerWidth;
 
 	$window.onresize = function(){
@@ -12,7 +15,7 @@ angular.module('nvgttApp.chart')
 		$scope.chartHeight = $window.innerHeight;
 		$scope.chartWidth = $window.innerWidth;
 		console.log($scope.chartHeight);
-	}
+	}*/
 
 
 

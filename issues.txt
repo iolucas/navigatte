@@ -16,3 +16,4 @@
 -results should have indicators of how much forks, to guide users the best paths
 -check need for schema for database
 -create system to avoid just created nodes to be placed over the previous created
+-must fix gambiarra when filtering nodes results

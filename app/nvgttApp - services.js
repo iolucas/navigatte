@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('nvgttApp')
-	.service('searchValues', function($window) {
+	.service('queryStringMap', function($window) {
 
 		this.get = function() {
 			var values = {}
@@ -20,5 +20,16 @@ angular.module('nvgttApp')
 			}
 
 			return values;
+		}
+	})
+
+	//Service to encapsulates toasts to be shown on the application
+	.service('nvgttAlert', function($mdToast) {
+
+		this.show = function(message) {
+			$mdToast.show({
+				template: '<md-toast>' + message + '</md-toast>',
+				position: 'bottom right'
+			});
 		}
 	});

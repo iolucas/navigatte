@@ -20,9 +20,9 @@ angular.module('nvgttApp')
 
 	        $scope.loaded = false;
 
-	        $scope.loadURL = function(url) {
+	        /*$scope.loadURL = function(url) {
 	        	$window.location.href = url;
-	        }
+	        }*/
 
 	        $scope.signOut = function() {
 	        	document.getElementById('signOutForm').submit();

@@ -135,7 +135,7 @@ Navigatte.Nodes = new function() {
 			.text(function(d) { return d.name; })
 			.attr("x", function(d) {
 				var textBox = this.getBBox();
-				
+
 				if(textBox.width < 40) {
 					d.containerWidth = 100;	
 					return (d.containerWidth - textBox.width) / 2;
@@ -144,6 +144,7 @@ Navigatte.Nodes = new function() {
 				var margin = 60;
 
 				d.containerWidth = textBox.width + margin;
+
 				return margin/2;
 
 			})

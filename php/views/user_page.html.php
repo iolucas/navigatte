@@ -79,27 +79,25 @@
 
             body {
                 padding-top: 70px;
+                word-wrap: break-word;
             }
 
             .full-height {
                 height: 100%;
             }
 
+            .fixed {
+                position: fixed;
+            }
+
         </style>
 	</head>
 
 	<body layout="column" ng-controller="NvgttAppController" ng-cloak>
-        <div flex="none" class="md-whiteframe-3dp" style="width:100%;height:70px;position:fixed;top:0;" id="nvgtt-main-navbar">
-
-            <?php include 'navbar3.html.php'; ?>
-
-        </div>
 
         <div id="nvgtt-content-area" class="full-height" flex layout="row">
-            <div id="nvgtt-content-menu" hide show-gt-md class="full-height" flex="20" class="md-whiteframe-2dp">
-
+            <div id="nvgtt-content-menu" hide show-gt-md class="full-height md-whiteframe-2dp" flex="20">
                 <?php include 'sidemenu3.html.php'; ?>
-
             </div>
 
             <div id="nvgtt-content-display" class="full-height" flex>
@@ -108,11 +106,9 @@
             </div>
         </div>
 
-
-
-
-
-
+        <div flex="none" class="md-whiteframe-3dp fixed" style="width:100%;height:70px;top:0;" id="nvgtt-main-navbar">
+            <?php include 'navbar3.html.php'; ?>
+        </div>
 
 
         <?php if(false): ?>
@@ -176,7 +172,7 @@
                 $("#createNodeButton").click(Navigatte.CreateModal.Open);
             <?php endif ?>    
 
-            initApp(pageName);        
+            initApp(pageName); 
 
         </script>
 	</body>

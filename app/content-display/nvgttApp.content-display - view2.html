@@ -1,233 +1,127 @@
-<div class="container">
-
-<h1>{{contentData.name}}</h1>
-<p>{{ contentData.description == '' ? 'No Description' : contentData.description }}</p>
-<br>
-
 <div layout="row">
-	<div flex="60">
-		<md-card>
-			<md-card-title>
-				<md-card-title-text>
-					<span class="md-headline">Discussions</span>
-					<span class="md-subhead">Discussions about the current subject.</span>
-				</md-card-title-text>
-			</md-card-title>
 
+	<div layout="column" flex="70" style="margin:10px;">
+
+		<h1>{{contentData.name}}</h1>
+		<p>{{ contentData.description == '' ? 'No Description' : contentData.description }}</p>
+		<br>
+		<md-progress-linear ng-if="!contentData" md-mode="indeterminate"></md-progress-linear>
+
+		<!-- Content Panel -->
+		<div>
+			<h3>Discussions</h3>
+			<md-progress-linear ng-if="!discussions" md-mode="indeterminate"></md-progress-linear>
 			<md-list>
-				<md-list-item ng-repeat="discussion in discussions track by $index" ng-click="open()">
-			    	<p>{{ discussion.title }}</p>
-			    	<md-divider ng-if="!$last"></md-divider>
+				<md-list-item ng-repeat="discussion in discussions track by $index" ng-href="#/discussion/1">
+			    	{{ discussion.title }}
 				</md-list-item>
 			</md-list>
-		</md-card>
-	</div>
+		</div>
 
-	<div flex="40" layout="column">
-		<md-card>
-			<md-card-title>
-				<md-card-title-text>
-					<span class="md-headline">Base Blocks</span>
-				</md-card-title-text>
-			</md-card-title>
+	</div><!-- End Column -->
 
-			<md-list>
-				<md-list-item ng-repeat="baseBlock in baseBlocks track by $index" ng-click="open()">
-			    	<p>{{baseBlock.name}}</p>
-			    	<md-divider ng-if="!$last"></md-divider>
-				</md-list-item>
-			</md-list>
-		</md-card>
+	<div layout="column" flex="30" style="margin:10px;">
 
-		
+		<div ng-show="baseBlocks == undefined || baseBlocks.length > 0"><!--Base Blocks List Div-->
+			<h3>Base Blocks</h3>	
+			<md-progress-linear ng-if="!baseBlocks" md-mode="indeterminate"></md-progress-linear>
+			<div ng-show="baseBlocks"><!--Base Blocks List Div-->
+				<md-list>
+					<md-list-item ng-repeat="baseBlock in baseBlocks track by $index" 
+						ng-href="#/content/{{baseBlock.localId}}">
+				    	{{baseBlock.name}}
+					</md-list-item>
+					<md-divider ng-if="!$last"></md-divider>
+				</md-list>
 
+			</div><!--End Base Blocks ListDiv-->
+		</div><!--End Base Blocks ListDiv-->			
 
-	</div>
-</div>
+		<h3>References
+			<md-button ng-if="contentData.owner && !editing" ng-click="startChanges();" class="md-raised">Edit</md-button>
+		</h3>
 
+		<md-progress-linear ng-if="!contentData" md-mode="indeterminate"></md-progress-linear>
 
-	
+		<div ng-show="contentData"><!--References Div-->
 
+			<div ng-if="contentData.courses.length > 0 || editing">
+				<h4>Courses</h4>
 
+				<md-input-container ng-if="editing">
+						<label>Course Name</label>
+						<input type="text" ng-model="newCourse">
+						<md-button class="md-raised" ng-click="addItem(contentData.courses, newCourse)">Insert</md-button>
+				</md-input-container>
 
-	<div class="row">
-		<!--<div class="col-md-2 fixed" style="background-image: url('assets/img/paper.jpg');height:200px;">
-		</div>-->
+				<md-list>
+					<md-list-item ng-repeat="course in contentData.courses track by $index">
+				    	<span>{{ course }}</span>
+				    	<md-button ng-if="editing" ng-click="removeItem(contentData.courses, $index)" class="md-warn md-raised">Delete</md-button>
+					</md-list-item>
+				</md-list>
 
-		<!--<div class="col-md-2">
-			<div class="" style="position:fixed;">
-                <div style="background-image: url('assets/img/paper.jpg');height:200px;width: 500px;"></div>
-            </div>
-		</div>-->
-
-		<div class="col-md-8">
-
-			<h1>{{contentData.name}}</h1>
-			<p>{{ contentData.description == '' ? 'No Description' : contentData.description }}</p>
-			<br>
-			<img ng-hide="contentData" src="assets/img/loading.gif">
-
-			<!-- Content Panel -->
-			<div class="panel panel-info">
-				<div class="panel-heading">
-					<h3 class="panel-title">Discussions</h3>
-				</div>
-
-				<div ng-if="!discussions" class="panel-body">
-					<img src="assets/img/loading.gif">
-				</div>
-
-				<div ng-if="discussions" class="list-group">
-					<a class="list-group-item" ng-repeat="discussion in discussions track by $index" href="#/discussion/1">
-						{{ discussion.title }}
-					</a>
-				</div>
 			</div>
 
-		</div><!-- End Column -->
+			<div ng-if="contentData.books.length > 0 || editing">
+				<h4>Books</h4>
 
-		<div class="col-md-4">
+				<md-input-container ng-if="editing">
+						<label>Book Name</label>
+						<input type="text" ng-model="newBook">
+						<md-button class="md-raised" ng-click="addItem(contentData.books, newBook)">Insert</md-button>
+				</md-input-container>
 
-			<div ng-show="baseBlocks == undefined || baseBlocks.length > 0"><!--Base Blocks List Div-->
-				<h3>Base Blocks</h3>	
-				<img ng-hide="baseBlocks" src="assets/img/loading.gif">
-				<div ng-show="baseBlocks"><!--Base Blocks List Div-->
-					<div class="panel panel-default">
-  						<div class="list-group">
-							<a class="list-group-item" ng-repeat="baseBlock in baseBlocks track by $index" 
-								ng-href="#/content/{{baseBlock.localId}}">
-								{{baseBlock.name}}
-							</a>
-  						</div>
-					</div>
-				</div><!--End Base Blocks ListDiv-->
-			</div><!--End Base Blocks ListDiv-->			
+				<md-list>
+					<md-list-item ng-repeat="book in contentData.books track by $index">
+				    	<span>{{ book }}</span>
+				    	<md-button ng-if="editing" ng-click="removeItem(contentData.books, $index)" class="md-warn md-raised">Delete</md-button>
+					</md-list-item>
+				</md-list>
 
-			<h3>References
-				<button ng-if="contentData.owner && !editing" class="btn btn-info" type="button" 
-					ng-click="startChanges();">
-					<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-					 Edit
-				</button>
-			</h3>
+			</div>
 
-			<img ng-hide="contentData" src="assets/img/loading.gif">
-			<div ng-show="contentData"><!--References Div-->
+			<div ng-if="contentData.sites.length > 0 || editing">
+				<h4>Sites</h4>
 
-				<!-- Courses Panel -->
-				<div class="panel panel-default" ng-if="contentData.courses.length > 0 || editing">
-					<div class="panel-heading">
-						Courses
-					</div>
+				<md-input-container ng-if="editing">
+						<label>Site Name</label>
+						<input type="text" ng-model="newSite">
+						<md-button class="md-raised" ng-click="addItem(contentData.sites, newSite)">Insert</md-button>
+				</md-input-container>
+				
+				<md-list>
+					<md-list-item ng-repeat="site in contentData.sites track by $index">
+				    	<p><a ng-href="{{ site }}" target="_blank">{{ site }}</a></p>
+				    	<md-button ng-if="editing" ng-click="removeItem(contentData.sites, $index)" class="md-warn md-raised">Delete</md-button>
+				    	<md-divider ng-if="!$last"></md-divider>
+					</md-list-item>
+				</md-list>
 
-					<div class="panel-body" ng-if="editing">
-						<div class="input-group">
-							<input type="text" class="form-control" ng-model="newCourse" placeholder="New course...">
-							<span class="input-group-btn">
-								<button class="btn btn-info" type="button" 
-									ng-click="addItem(contentData.courses, newCourse)">
-									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Insert
-								</button>
-							</span>
-						</div><!-- /input-group -->
-					</div>
+			</div>
 
-					<ul class="list-group">
-					 	<li class="list-group-item" ng-repeat="course in contentData.courses track by $index">
-					 		{{ course }}
-					 		<button ng-if="editing" type="button" class="btn btn-xs btn-danger" 
-					 			ng-click="removeItem(contentData.courses, $index)">
-					 			<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete</button>
-					 	</li>
-					</ul>
-				</div><!-- End Panel -->
+			<div ng-if="contentData.notes || editing">
+				
+				<h4>Notes</h4>
 
+				<md-input-container ng-if="editing">
+					<textarea class="nvgtt-content-notes" placeholder="Write some notes..." 
+						ng-model="contentData.notes"></textarea>
+				</md-input-container>
+				
+				<p ng-if="!editing">{{contentData.notes}}</p>
 
-				<!-- Books Panel -->
-				<div class="panel panel-default" ng-if="contentData.books.length > 0 || editing">
-					<div class="panel-heading">
-						Books
-					</div>
+			</div>	
 
-					<div class="panel-body" ng-if="editing">
-						<div class="input-group">
-							<input type="text" class="form-control" ng-model="newBook" placeholder="New book...">
-							<span class="input-group-btn">
-								<button class="btn btn-info" type="button" ng-click="addItem(contentData.books, newBook)">
-									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Insert
-								</button>
-							</span>
-						</div><!-- /input-group -->
-					</div>
+			<div ng-if="editing">
+				<md-button class="md-primary md-raised" ng-click="saveChanges()">Save Changes</md-button>
 
-					<ul class="list-group">
-						<li class="list-group-item" ng-repeat="book in contentData.books track by $index">
-							{{ book }}
-							<button ng-if="editing" type="button" class="btn btn-xs btn-danger" 
-								ng-click="removeItem(contentData.books, $index)">
-								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete</button>
-						</li>
-					</ul>
-					
-				</div><!-- End Panel -->
+				<md-button class="md-warn md-raised" ng-click="cancelChanges()">Cancel</md-button>
+				<br><br>
+			</div>
 
+		</div><!-- End Reference Div -->
 
-				<!-- Sites Panel -->
-				<div class="panel panel-default" ng-if="contentData.sites.length > 0 || editing">
-					<div class="panel-heading">
-						Sites
-					</div>
+	</div><!-- End Column -->
 
-					<div class="panel-body" ng-if="editing">
-						<div class="input-group">
-							<input type="text" class="form-control" ng-model="newSite" placeholder="New site...">
-							<span class="input-group-btn">
-								<button class="btn btn-info" type="button" ng-click="addItem(contentData.sites, newSite)">
-									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Insert
-								</button>
-							</span>
-						</div><!-- /input-group -->
-					</div>
-
-					<ul class="list-group">
-						<li class="list-group-item" ng-repeat="site in contentData.sites track by $index">
-							<a href="{{ site }}" target="_blank">{{ site }}</a>
-							<button ng-if="editing" type="button" class="btn btn-xs btn-danger" 
-								ng-click="removeItem(contentData.sites, $index)">
-								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete</button>
-						</li>
-					</ul>
-				</div><!-- End Panel -->
-
-				<!-- Notes Panel -->
-				<div class="panel panel-default" ng-if="contentData.notes || editing">
-					<div class="panel-heading">
-						Notes
-					</div>
-					<div class="panel-body">
-						<textarea ng-if="editing" class="nvgtt-content-notes" placeholder="Write some notes..." 
-							ng-model="contentData.notes"></textarea>
-							<p ng-if="!editing">{{contentData.notes}}</p>
-					</div>
-				</div><!-- End notes Panel -->
-
-				<div ng-if="editing">
-					<button class="btn btn-success" type="button" ng-click="saveChanges()">
-						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Save Changes
-					</button>
-
-					<button class="btn btn-danger" type="button" ng-click="cancelChanges()">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
-					</button>
-					<br><br>
-				</div>
-
-			</div><!-- End Reference Div -->
-
-		</div><!-- End Column -->
-
-		<!--<div class="col-md-1"></div><!-- End Column -->
-
-	</div><!-- End Row -->
-
-</div><!-- End Container -->
+</div><!-- End Row -->

@@ -7,11 +7,11 @@
 	<md-menu-content width="4">
 			<md-menu-item>
 	        <?php if (isset($username)): ?>
-	        	<md-button ng-click="loadURL('./');">
+	        	<md-button ng-href="./">
 					Home
 				</md-button>
             <?php else: ?>
-            	<md-button ng-click="loadURL('./?user=<?php htmlout($userInfo['page_name']); ?>');">
+            	<md-button ng-href="?user=<?php htmlout($userInfo['page_name']); ?>">
 					Profile
 				</md-button>
             <?php endif ?>

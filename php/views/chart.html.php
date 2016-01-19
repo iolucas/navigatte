@@ -1,4 +1,4 @@
-<svg class="svg-container" width="100%" height="{{ contentActiveFlag ? '0' : '100%' }}" ng-controller="ChartController">
+<svg class="svg-container" width="100%" ng-attr-height="{{ contentActiveFlag ? '0' : '100%' }}" ng-controller="ChartController">
     <defs>
         <!--<filter id="f3" x="0" y="0" width="200%" height="200%">
             <feOffset result="offOut" in="SourceAlpha" dx="0" dy="0" />
@@ -59,7 +59,13 @@
 
     <rect id="node-container-mouse-area" width="100%" height="100%"></rect>
     <g id="block-container">
-        <!--<rect class="nvgtt-block" x="400" y="100" height="50" width="100"></rect>
+        <!--<nvgtt-block ng-repeat="block in blocks" name="{{block.name}}"/>
+
+
+        <g class=""
+
+
+        <rect class="nvgtt-block" x="400" y="100" height="50" width="100"></rect>
 
         <g class="navi-nodes" ng-repeat="node in nodes track by node.globalId" 
         transform="translate({{node.x || 100}} {{node.y || 100}})">

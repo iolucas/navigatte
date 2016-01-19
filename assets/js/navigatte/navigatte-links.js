@@ -32,7 +32,7 @@ Navigatte.Links = new function() {
 			var newLinkPath = createLinkPath(currLink.sourceId, currLink.targetId)
 
 			currLink.outerPath.attr("d", newLinkPath);
-			currLink.innerPath.attr("d", newLinkPath);		
+			//currLink.innerPath.attr("d", newLinkPath);		
 		}
 	});
 
@@ -160,7 +160,7 @@ Navigatte.Links = new function() {
 				return link.initPath;
 			});
 
-		linksSelection.append("path")
+		/*linksSelection.append("path")
 			.classed("navi-links-inner", true)
 			.attr("stroke-dasharray",function(link){
 				if(link.projection)
@@ -176,7 +176,7 @@ Navigatte.Links = new function() {
 
 				return initPath;
 			})
-			.attr("transform", "translate(0 0)");
+			.attr("transform", "translate(0 0)");*/
 
 		/*var linksSelection = createSelection.insert("path", ":first-child")
 			.classed("navi-links", true)

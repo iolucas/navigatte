@@ -1,6 +1,26 @@
 .nvgtt-block {
+	filter: url(#md-shadow1);
+}
+
+.nvgtt-block:hover {
+	filter: url(#md-shadow3);
+	cursor: pointer;
+}
+
+
+.nvgtt-block-rect {
 	fill: rgb(27,0,53);
+}
 
+.nvgtt-block-text {
+	fill: #fff;
+	font-family: Calibri;
+	font-size: 20px;
 
-
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

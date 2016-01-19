@@ -2,7 +2,32 @@
 
 angular.module('nvgttApp.chart')
 	
-.controller('ChartController', function($scope, $window, $location, nvgttChart, alertify) {
+.controller('ChartController', function($scope, $window, $location, nvgttChart, nvgttBlocks, alertify) {
+	
+	/*var columns = [];
+
+	$scope.blocks = [
+		{
+			name: "Teste",
+			column: 0
+		},
+		{
+			name:"teste2",
+			column: 1
+		}
+	];
+
+	var refreshBlocks = function() {
+
+
+	}*/
+
+
+	/*nvgttBlocks.get($scope.username)
+		.then(function(response) {
+			if(response.data.result == "SUCCESS")
+				$scope.blocks = response.data.nodes;
+		});*/
 
 	
 

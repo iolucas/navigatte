@@ -8,8 +8,10 @@
         <div id="user-description" class="black-font"><?php htmlout($userInfo['screen_description']); ?></div>
 
     <?php else: ?>
-
-    	<md-button ng-click="createBlock($event);" class="md-accent md-raised">Create Block</md-button>
+        <div layout="row">
+    	    <md-button ng-click="createBlock($event);" class="md-accent md-raised">Create Block</md-button>
+            <md-button ng-click="" class="md-accent md-raised">Create Link</md-button>
+        </div>
     	<br>
     	<md-button ng-click="saveChanges();" class="md-accent md-raised">Save Changes</md-button>
         <br>

@@ -11,8 +11,7 @@
 	    <!--<link rel="stylesheet" href="assets/css/style.css"/>-->
         <link rel="stylesheet" href="assets/css/sidemenu.css"/>
         <link rel="stylesheet" href="assets/css/box-container.css"/>
-        <!--<link rel="stylesheet" href="app/chart/style.css"/>-->
-        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
+        <link rel="stylesheet" href="app/chart/style.css"/>
 
         <!--    Begin Angular Modules -->
 
@@ -37,6 +36,7 @@
         <script src="app/chart/nvgttApp.chart - module.js"></script>
         <script src="app/chart/nvgttApp.chart - services.js"></script>
         <script src="app/chart/nvgttApp.chart - controller.js"></script>
+        <!--<script src="app/chart/nvgttApp.chart - directives.js"></script>-->
 
         <script src="app/content-display/nvgttApp.content-display - module.js"></script>
         <script src="app/content-display/nvgttApp.content-display - services.js"></script>
@@ -54,17 +54,6 @@
 
         <title><?php if(isset($username)) htmlout($userInfo['screen_name'] . " | "); ?>Navigatte</title> 
         <style>
-            /*table,td,tr {
-                border: 0px solid #000;
-                height: 100%;
-            }
-
-            .fixed-top {
-                position: fixed;
-                top:0;
-            }
-
-*/
 
             .user-img {
                 background-image:url('<?php htmlout('assets/img/' . $userInfo['profile_pic']); ?>');
@@ -93,7 +82,7 @@
         </style>
 	</head>
 
-	<body layout="column" ng-controller="NvgttAppController" ng-cloak>
+	<body layout="column" ng-controller="NvgttAppController">
 
         <div id="nvgtt-content-area" class="full-height" flex layout="row">
             <div id="nvgtt-content-menu" hide show-gt-md class="full-height md-whiteframe-2dp" flex="20">
@@ -134,7 +123,6 @@
         <!---->
         <script src="assets/js/jquery-2.1.4.min.js"></script>
         <script src="assets/js/eventhandler.js"></script>
-        <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>-->
 		<script src="assets/js/d3.v3.min.js"></script>
         <script src="assets/js/hexbin.js"></script>
         <script src="assets/js/g-query.js"></script>

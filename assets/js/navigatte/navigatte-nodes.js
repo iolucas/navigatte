@@ -169,13 +169,25 @@ Navigatte.Nodes = new function() {
 		//Hexagon path generator
 		var hexbin = d3.hexbin();
 
+
+		var createCircle = d3.svg.arc().innerRadius(0)
+			.outerRadius(function(d){return d;})
+			.startAngle(0)
+			.endAngle(3.15*2);
+
 		//Create block shape
 		innerRect.attr("d", function(d) {
+
+			//return createCircle(d.containerWidth/2);
+
 			//return "M" + d.containerWidth/2 + "," + d.containerHeight/2 + hexbin.hexagon(d.containerWidth/1.732050);
 
 			return "M0,0 h" + d.containerWidth + 
 				"v" + d.containerHeight + 
 				"h-" + d.containerWidth + "z";
+
+		}).attr("transform", function(d) {
+			//return "translate(" + d.containerWidth/2 + " " + d.containerHeight/2 +")";
 		});
 
 		//Set node inner rect width now the text has been placed and we got its size

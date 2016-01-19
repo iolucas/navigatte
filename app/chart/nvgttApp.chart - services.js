@@ -1,6 +1,17 @@
 'use strict';
 
 angular.module('nvgttApp.chart')
+	.service("nvgttBlocks", function($http) {
+
+		var nvgttBlocks = this;
+
+		nvgttBlocks.get = function(username) {
+			return $http.get("rest/user_data.php?user=" + username + "&nodes&links");		
+		}
+
+
+	})
+
 	.service("nvgttChart", function($http, $q, alertify) {
 
 		var nvgttChart = this;

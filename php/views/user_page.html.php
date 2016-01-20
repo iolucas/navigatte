@@ -15,7 +15,8 @@
 
         <!--    Begin Angular Modules -->
 
-
+        <script src="assets/js/jquery-2.1.4.min.js"></script>
+        <script src="assets/js/d3.v3.min.js"></script>
         <!-- Angular Material Dependencies -->
         <script src="assets/js/angular.js"></script>
         <script src="assets/js/angular-animate.js"></script>
@@ -36,7 +37,7 @@
         <script src="app/chart/nvgttApp.chart - module.js"></script>
         <script src="app/chart/nvgttApp.chart - services.js"></script>
         <script src="app/chart/nvgttApp.chart - controller.js"></script>
-        <!--<script src="app/chart/nvgttApp.chart - directives.js"></script>-->
+        <script src="app/chart/nvgttApp.chart - directives.js"></script>
 
         <script src="app/content-display/nvgttApp.content-display - module.js"></script>
         <script src="app/content-display/nvgttApp.content-display - services.js"></script>
@@ -121,9 +122,8 @@
   
         
         <!---->
-        <script src="assets/js/jquery-2.1.4.min.js"></script>
+        
         <script src="assets/js/eventhandler.js"></script>
-		<script src="assets/js/d3.v3.min.js"></script>
         <script src="assets/js/hexbin.js"></script>
         <script src="assets/js/g-query.js"></script>
         <script src="assets/js/grow-modal.js"></script>
@@ -150,17 +150,17 @@
             <script src="assets/js/navigatte/navigatte-keyactions.js"></script>
         <?php endif ?>         
 
-        <script src="assets/js/app.js"></script>
+        <!--<script src="assets/js/app.js"></script>-->
         <script>
             'use strict';
 
             var pageName = '<?php htmlout($userInfo['page_name']); ?>';   
 
             <?php if (!isset($username)): ?>
-                $("#createNodeButton").click(Navigatte.CreateModal.Open);
-            <?php endif ?>    
+                //$("#createNodeButton").click(Navigatte.CreateModal.Open);
+            <?php endif ?> 
 
-            initApp(pageName); 
+            //initApp(pageName); 
 
         </script>
 	</body>

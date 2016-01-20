@@ -1,3 +1,73 @@
+/*-First we need to create a way to store the inputs and outputs references in the nodes,maybe store only the links
+-Then use the inputs references to recursively get the block column (or degree)
+-use the input/outputs reference to calculate the nodes format base on number of i/o s*/
+
+
+
+function NvgttBlock(blockData) {
+	var nvgttBlock = this;
+
+	nvgttBlock.name = blockData.name;
+
+	nvgttBlock.globalId = blockData.globalId;
+	nvgttBlock.localId = blockData.localId;
+
+	nvgttBlock.bgcolor = blockData.bgcolor;
+	nvgttBlock.fgcolor = blockData.fgcolor;
+
+	nvgttBlock.x = blockData.x;
+	nvgttBlock.y = blockData.y;
+
+	nvgttBlock.inputs = [];
+	nvgttBlock.outputs = [];
+
+	nvgttBlock.GetColumn = function() {
+		var column = 0;
+
+		for(var i = 0; i < nvgttBlock.inputs.length; i++) {
+			var inputColumn = nvgttBlock.inputs[i].GetColumn();
+
+			if(column <= inputColumn)
+				column = inputColumn + 1;
+		}
+
+		return column;
+	}
+
+	//Getters
+
+	/*var _name = blockData.name;
+	nvgttBlock.GetName = function() {
+		return _name;
+	}
+
+	var _globalId = blockData.globalId;
+	nvgttBlock.GetGlobalId = function() {
+		return _globalId;
+	}
+
+	var _localId = blockData.localId;
+	nvgttBlock.GetLocalId = function() {
+		return _localId;
+	}
+
+	var _bgColor = blockData.bgcolor;
+	nvgttBlock.GetBgColor = function() {
+		return _bgColor;
+	}
+
+	var _fgColor = blockData.fgcolor;
+	nvgttBlock.GetFgColor = function() {
+		return _fgColor;
+	}
+
+	var _position = { x: blockData.x, y: blockData.y }
+	nvgttBlock.GetPosition = function() {
+		return { X:_position.x, Y:_position.y };
+	}*/
+}
+
+
 //Module to Handle nodes management
 Navigatte.Nodes = new function() {
 
@@ -19,19 +89,31 @@ Navigatte.Nodes = new function() {
 	this.Init = function(nodesArray) {
 		//Copy nodes array members
 		for(var i = 0; i < nodesArray.length; i++)
-			nodes.push(nodesArray[i]);
+			//nodes.push(nodesArray[i]);
+			nodes.push(new NvgttBlock(nodesArray[i]));
 
 		//Refresh the nodes
 		self.Refresh();
 	}
 
-	this.Get = function(nodeId) {
-		for(var i = 0; i < nodes.length; i++) {
-			if(nodes[i].globalId == nodeId)
-				return nodes[i];
+	this.Get = function(searchObject) {
+
+		if(searchObject.hasOwnProperty('localId')) {
+			
+			for(var i = 0; i < nodes.length; i++) {
+				if(nodes[i].localId == searchObject.localId)
+					return nodes[i];
+			}
+
+		} else if(searchObject.hasOwnProperty('globalId')) {
+
+			for(var i = 0; i < nodes.length; i++) {
+				if(nodes[i].globalId == searchObject.globalId)
+					return nodes[i];
+			}
 		}
 
-		//If the id where not found, return null
+		//If the search object is invalid, or no block were found, return null
 		return null;
 	}
 
@@ -39,10 +121,10 @@ Navigatte.Nodes = new function() {
 
 		//Get the nodes selection and match it with the nodes array
 		var nodesSelection = Navigatte.Container.Select().selectAll(".navi-nodes")
-		.data(nodes, function(d) {
-			//Match nodes array member with the data bind in the selection of the classes
-			return d.globalId;
-		});
+			.data(nodes, function(d) {
+				//Match nodes array member with the data bind in the selection of the classes
+				return d.globalId;
+			});
 
 		//Get the nodes data which has no DOM binded, create the DOMs and bind them
 		var createSelection = nodesSelection.enter();
@@ -50,6 +132,33 @@ Navigatte.Nodes = new function() {
 
 		//Get the nodes DOMs which has not data binded and remove them
 		nodesSelection.exit().remove();
+
+		var nextY = [];
+
+		Navigatte.Container.Select().selectAll(".navi-nodes")
+			.each(function(d) {
+
+				var column = d.GetColumn();
+
+				if(nextY[column] == undefined)
+					nextY[column] = 10;
+
+				var newX = column*500 + 10;
+				var newY = nextY[column];
+
+				nextY[column] += 60;
+					
+				if(d.x != newX || d.y != newY) {
+
+					d.x = newX;
+					d.y = newY;
+
+					//Update node position
+					d.d3Select.attr("transform", "translate(" + d.x + " " + d.y + ")");	
+
+					eventHandler.fire("drag", d);
+				}
+			});
 	}
 
 	function createNodes(createSelection) {
@@ -192,14 +301,7 @@ Navigatte.Nodes = new function() {
 
 		//Set node inner rect width now the text has been placed and we got its size
 		innerRect.attr("width", function(d) { return d.containerWidth; });
-		//innerRectGrad.attr("width", function(d) { return d.containerWidth; });
 
-		/*innerHexagon.attr("d", function(d) {
-			return hexbin.hexagon(d.containerWidth/1.732050);
-		})
-		.attr("transform", function(d) {
-			return "translate(" + d.containerWidth/2 + " " + d.containerHeight/2 + ")";
-		});*/
 
 		//Draw input symbol
 		nodeGroup.append("path")
@@ -295,12 +397,14 @@ Navigatte.Nodes = new function() {
 			return null;
 		}
 		
+		var newBlock = new NvgttBlock(newNode);
+
 		//Push the node to the user nodes
-		nodes.push(newNode);
+		nodes.push(newBlock);
 
-		eventHandler.fire("create", newNode);
+		eventHandler.fire("create", newBlock);
 
-		return newNode;
+		return newBlock;
 	}
 
 	this.Delete = function(node) {
@@ -327,7 +431,7 @@ Navigatte.Nodes = new function() {
 			var cNode = projArray[i];
 
 			if(self.Get(cNode.globalId) == null)
-				nodes.push(cNode);	
+				nodes.push(new NvgttBlock(cNode));	
 		}	
 
 	}

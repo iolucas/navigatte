@@ -1,11 +1,8 @@
-//var userNodes = [];
-//var userLinks = [];
 
 function initApp(username) {
 
     //Init the nodes container appended to the general content section
-    Navigatte.Container.Init("#general-content");
-    //initNodesContainer("#general-content");
+    Navigatte.Container.Init();
 
     //Get and project the user nodes and links
     $.get("rest/user_data.php", { user: username, nodes: true, links: true })
@@ -17,10 +14,11 @@ function initApp(username) {
 
             SetNodesPositions(response.nodes, response.links);
 
-            //CreateHexagon2();
-
             Navigatte.Nodes.Init(response.nodes);
             Navigatte.Links.Init(response.links);
+
+
+            //return;
 
             //Move the nodes to fit scale and position
 

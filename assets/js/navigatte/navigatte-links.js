@@ -1,3 +1,20 @@
+function NvgttLink(linkData) {
+	var nvgttLink = this;
+
+	nvgttLink.sourceId = linkData.sourceId;
+	nvgttLink.targetId = linkData.targetId;
+
+	nvgttLink.sourceBlock = Navigatte.Nodes.Get({ globalId: nvgttLink.sourceId });	
+	nvgttLink.targetBlock = Navigatte.Nodes.Get({ globalId: nvgttLink.targetId });	
+
+	nvgttLink.targetBlock.inputs.push(nvgttLink.sourceBlock);
+	nvgttLink.sourceBlock.outputs.push(nvgttLink.targetBlock);
+}
+
+
+
+
+
 //Module to handle and compute links creation, deletation and update
 Navigatte.Links = new function() {
 	var self = this;
@@ -16,7 +33,6 @@ Navigatte.Links = new function() {
 		var nodeLinks = Navigatte.Links.Get({ nodeId: node.globalId, source:true, target:true });
 		for(var i = 0; i < nodeLinks.length; i++)
 			Navigatte.Links.Delete(nodeLinks[i]);
-
 	});
 
 	//Variable to hold the next node create id
@@ -29,21 +45,62 @@ Navigatte.Links = new function() {
 		for(var i = 0; i < nodeLinks.length; i++){
 			var currLink = nodeLinks[i];
 				
-			var newLinkPath = createLinkPath(currLink.sourceId, currLink.targetId)
+			var newLinkPath = createLinkPath(currLink);
 
-			currLink.outerPath.attr("d", newLinkPath);
-			//currLink.innerPath.attr("d", newLinkPath);		
+			currLink.outerPath.attr("d", newLinkPath);		
 		}
 	});
 
 	this.Init = function(linksArray) {
+
 		//Copy nodes array members
 		for(var i = 0; i < linksArray.length; i++)
-			links.push(linksArray[i]);
+			links.push(new NvgttLink(linksArray[i]));
+
+		//console.log(links);
 
 		//Refresh the links
 		self.Refresh();
 	}
+
+
+	//TO BE IMPLEMENTED
+	/*this.Gett = function(searchObject) {
+		if(searchObject.hasOwnProperty('sourceId')) {
+
+			for(var i = 0; i < links.length; i++) {
+				if(links[i].sourceId == searchObject.sourceId)
+					return links[i];
+			}
+
+		} else if(searchObject.hasOwnProperty('targetId')) {
+
+			for(var i = 0; i < links.length; i++) {
+				if(links[i].targetId == searchObject.targetId)
+					return links[i];
+			}
+
+		} else if(searchObject.hasOwnProperty('sourceBlock')) {
+
+			for(var i = 0; i < links.length; i++) {
+				if(links[i].sourceBlock == searchObject.sourceBlock)
+					return links[i];
+			}
+
+		} else if(searchObject.hasOwnProperty('targetBlock')) {
+
+			for(var i = 0; i < links.length; i++) {
+				if(links[i].targetBlock == searchObject.targetBlock)
+					return links[i];
+			}
+
+		}
+
+		//If the search object is invalid, or no link were found, return null
+		return null;
+	}*/
+
+
 
 	this.Find = function(linkAttr) {
 		return getLink(linkAttr);
@@ -61,6 +118,9 @@ Navigatte.Links = new function() {
 	this.Create = function(linkAttr) {
 
 		if(linkAttr.sourceId == undefined || linkAttr.targetId == undefined)
+			return null;
+
+		if(linkAttr.sourceId == linkAttr.targetId)
 			return null;
 
 		//Check if the node exist 
@@ -82,7 +142,7 @@ Navigatte.Links = new function() {
 		}
 
 		//Push the node to the user nodes
-		links.push(newLink);
+		links.push(new NvgttLink(newLink));
 
 		eventHandler.fire("create", newLink);
 
@@ -94,6 +154,12 @@ Navigatte.Links = new function() {
 		
 		if(linkIndex == -1)
 			return;
+
+		//Clear the link sourceBlock output reference
+		link.sourceBlock.outputs.splice(link.sourceBlock.outputs.indexOf(link.targetBlock), 1);
+
+		//Clear the link targetBlock input reference
+		link.targetBlock.inputs.splice(link.targetBlock.inputs.indexOf(link.sourceBlock), 1);
 
 		links.splice(linkIndex, 1);
 
@@ -155,7 +221,7 @@ Navigatte.Links = new function() {
 			}) 
 			.attr("d", function(link) {
 				link.outerPath = d3.select(this);	//get the link obj reference
-				link.initPath = createLinkPath(link.sourceId, link.targetId);
+				link.initPath = createLinkPath(link);
 
 				return link.initPath;
 			});
@@ -192,12 +258,23 @@ Navigatte.Links = new function() {
 	}
 
 	//Return the path created to link the source and target nodes
-	function createLinkPath(sourceId, targetId) {
-		var sourceNode = Navigatte.Nodes.Get(sourceId),
-			targetNode = Navigatte.Nodes.Get(targetId);
+	function createLinkPath(link) {
+
+		return drawLinkPath({
+			source: link.sourceBlock,
+			target: link.targetBlock
+		});
+
+
+		var sourceNode = Navigatte.Nodes.Get({ globalId: sourceId }),
+			targetNode = Navigatte.Nodes.Get({ globalId: targetId });
 
 		if(sourceNode == undefined || targetNode == undefined)
 			return "";
+
+		
+
+
 
 		return drawLinkPath({
 			source: sourceNode,
@@ -291,7 +368,7 @@ Navigatte.Links = new function() {
 			var cLink = projArray[i];
 
 			if(getLink(cLink) == null)
-				links.push(cLink);	
+				links.push(new NvgttLink(cLink));	
 		}	
 
 	}

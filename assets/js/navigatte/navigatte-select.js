@@ -71,7 +71,8 @@ Navigatte.Select = new function() {
 
             currLink.d3Select.style("opacity", 1);   
 
-            recurseHighLightNodes(Navigatte.Nodes.Get(currLink.sourceId));//recurse this function on the node
+            recurseHighLightNodes(Navigatte.Nodes.Get({ globalId: currLink.sourceId }));
+            //recurse this function on the node
         }
     }
 

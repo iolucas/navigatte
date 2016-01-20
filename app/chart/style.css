@@ -1,19 +1,20 @@
 .nvgtt-block {
+	cursor: pointer;
 	filter: url(#md-shadow1);
+	outline:0;
 }
 
 .nvgtt-block:hover {
 	filter: url(#md-shadow3);
-	cursor: pointer;
 }
 
 
 .nvgtt-block-rect {
-	fill: rgb(27,0,53);
+
 }
 
 .nvgtt-block-text {
-	fill: #fff;
+
 	font-family: Calibri;
 	font-size: 20px;
 
@@ -23,4 +24,15 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.nvgtt-link {
+	cursor: pointer;
+	outline:0;
+}
+
+.nvgtt-link-path {
+	stroke: #37474F;
+	stroke-width: 4;
+	fill: none;
 }

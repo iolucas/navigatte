@@ -25,10 +25,14 @@ Navigatte.CreateModal = new function() {
 
 		GrowModal.Show({
 
-			startX: clickButton.css("left").replace("px", "") || 0,
+			/*startX: clickButton.css("left").replace("px", "") || 0,
 			startY: clickButton.css("top").replace("px", "") || 0,
 			startWidth: clickButton.css("width").replace("px", "") || 0,
-			startHeight: clickButton.css("height").replace("px", "") || 0,
+			startHeight: clickButton.css("height").replace("px", "") || 0,*/
+			startX: 10,
+			startY: 10,
+			startWidth: 10,
+			startHeight: 10,
 			endWidth: 700,
 			endHeight: 400,
 			topColor: "lightblue"
@@ -184,8 +188,8 @@ Navigatte.CreateModal = new function() {
 					createButton.attr("disabled", "true")
 						.text("Creating...");
 
-					var xPos = (360 - Navigatte.Container.Position.X) / Navigatte.Container.Scale;
-					var yPos = (80 - Navigatte.Container.Position.Y) / Navigatte.Container.Scale;
+					var xPos = (360 - Navigatte.Container.Position.X) / Navigatte.Container.Scale();
+					var yPos = (80 - Navigatte.Container.Position.Y) / Navigatte.Container.Scale();
 
 					//If there is no id for this node, get or create it
 					if(nodeIdInput.node().value == "") {

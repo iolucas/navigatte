@@ -17,12 +17,12 @@
         <br>
         <md-button ng-click="toast();" class="md-accent md-raised">Test Toast</md-button>
 
-        <button id="createNodeButton" class="btn btn-info btn-lg" 
+        <!--<button id="createNodeButton" class="btn btn-info btn-lg" 
             type="button" 
             style="height:50px;width:290px;border-radius:0;position:initial;left:0; top:180px;">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             Criar Bloco
-        </button>
+        </button>-->
 
 
     <?php endif ?>

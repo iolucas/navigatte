@@ -58,9 +58,20 @@
     </defs>
 
     <rect id="node-container-mouse-area" width="100%" height="100%"></rect>
-    <g id="block-container">
-        <!--<nvgtt-block ng-repeat="block in blocks" name="{{block.name}}"/>
+    <g id="block-container" nvgtt-block-container>
+        <g class="nvgtt-link" ng-click="testClick();" x1="0" x2="200" y1="0" y2="200"></g>
+        <g class="nvgtt-block" 
+            ng-repeat="block in blocks" 
+            ng-click="testClick();"
+            name="{{block.name}}"
+            background-color="{{block.bgcolor}}"  
+            text-color="{{block.fgcolor}}"  
+            x="{{block.x}}" 
+            y="{{block.y}}">
+        </g>
 
+        <!--<nvgtt-link x1="0" x2="{{ teste.x2 }}" y1="0" y2="200"></nvgtt-link>-->
+<!--
 
         <g class=""
 

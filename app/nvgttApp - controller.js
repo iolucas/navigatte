@@ -8,7 +8,7 @@ angular.module('nvgttApp')
 			alertify.logPosition("bottom right");
 
 			//Get page username
-			$scope.username = queryStringMap.get().user;
+			$scope.username = queryStringMap.get().user || pageName;
 
 	        //Flag signalizing whether a content is being show
 	        $scope.contentActiveFlag = $location.path() != "";
@@ -34,19 +34,24 @@ angular.module('nvgttApp')
 
 	        $scope.createBlock = function(ev) {
 
+	        	Navigatte.CreateModal.Open();
+	        	/*return;
+
 	        	var dialog = $mdDialog.confirm().title("Create Block...")
-	        		.textContent("<strong>Oi</strong>")
+	        		.textContent("<strong>{{testText}}</strong>")
 	        		.ok("Create")
 	        		.cancel("Cancel")
 	        		.theme("default")
 	        		.targetEvent(ev);
+
+	        	console.log(dialog);
 
 
 	        	$mdDialog.show(dialog).then(function(success){
 	        		console.log(success);
 	        	}, function(error) {
 	        		console.log(error);
-	        	});
+	        	});*/
 
 
 

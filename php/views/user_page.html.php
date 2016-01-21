@@ -24,20 +24,12 @@
         <script src="assets/js/angular-material.js"></script>
         <script src="assets/js/angular-route.js"></script>
 
-
-        
-
         <script src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.6/dist/js/ngAlertify.js"></script>        
 
         <script src="app/nvgttApp - module.js"></script>
         <script src="app/nvgttApp - controller.js"></script>
         <script src="app/nvgttApp - config.js"></script>
         <script src="app/nvgttApp - services.js"></script>
-
-        <script src="app/chart/nvgttApp.chart - module.js"></script>
-        <script src="app/chart/nvgttApp.chart - services.js"></script>
-        <script src="app/chart/nvgttApp.chart - controller.js"></script>
-        <script src="app/chart/nvgttApp.chart - directives.js"></script>
 
         <script src="app/content-display/nvgttApp.content-display - module.js"></script>
         <script src="app/content-display/nvgttApp.content-display - services.js"></script>
@@ -129,25 +121,32 @@
         <script src="assets/js/grow-modal.js"></script>
         <!--<script src="modules/content-show/controller.js"></script>-->
 
-        <script src="assets/js/navigatte/navigatte.js"></script>
-        <script src="assets/js/navigatte/navigatte-container.js"></script>
-        <script src="assets/js/navigatte/navigatte-nodes.js"></script>
-        <script src="assets/js/navigatte/navigatte-links.js"></script>
-        <script src="assets/js/navigatte/navigatte-select.js"></script>
-        <script src="assets/js/navigatte/navigatte-content.js"></script>
-        <script src="assets/js/navigatte/navigatte-content-modal.js"></script>
+        <script src="app/chart/navigatte.js"></script>
+        <script src="app/chart/navigatte-container.js"></script>
+        <!--<script src="app/chart/navigatte-nodes.js"></script>-->
+        <script src="app/chart/nvgtt-blocks.js"></script>
+        <!--<script src="app/chart/navigatte-links.js"></script>-->
+        <script src="app/chart/nvgtt-links.js"></script>
+        
+        <script src="app/chart/navigatte-select.js"></script>
+        <!--<script src="app/chart/navigatte-content.js"></script>
+        <script src="app/chart/navigatte-content-modal.js"></script>-->
+        <script src="app/chart/nvgtt-content.js"></script>
 
-        <script src="assets/js/navigatte/navigatte-project.js"></script>
+        <script src="app/chart/navigatte-project.js"></script>
 
         <?php if (!isset($username)): ?>
+            <script src="app/chart/nvgtt-create.js"></script>
+            <script src="app/chart/navigatte-search.js"></script>
+            <script src="app/chart/navigatte-changes.js"></script>
+            <script src="app/chart/navigatte-changes-node.js"></script>
+            <script src="app/chart/navigatte-create-modal.js"></script>
+
             <!--<script src="assets/js/navigatte/navigatte-node-finder.js"></script>-->
-            <script src="assets/js/navigatte/navigatte-search.js"></script>
-            <script src="assets/js/navigatte/navigatte-changes.js"></script>
-            <script src="assets/js/navigatte/navigatte-changes-node.js"></script>
-            <script src="assets/js/navigatte/navigatte-create-modal.js"></script>
-            <script src="assets/js/navigatte/navigatte-create-links.js"></script>
-            <script src="assets/js/navigatte/navigatte-changes-link.js"></script>
-            <script src="assets/js/navigatte/navigatte-keyactions.js"></script>
+
+            <script src="app/chart/navigatte-create-links.js"></script>
+            <script src="app/chart/navigatte-changes-link.js"></script>
+            <script src="app/chart/navigatte-keyactions.js"></script>
         <?php endif ?>         
 
         <!--<script src="assets/js/app.js"></script>-->
@@ -156,9 +155,16 @@
 
             var pageName = '<?php htmlout($userInfo['page_name']); ?>';   
 
-            <?php if (!isset($username)): ?>
-                //$("#createNodeButton").click(Navigatte.CreateModal.Open);
-            <?php endif ?> 
+            NvgttChart.load(pageName);
+
+
+            -MUST OBSOLETE THINGS NOT USED
+            -use the input/outputs reference to calculate the nodes format base on number of i/o s
+            -must generate outputs and inputs numbers and container width and height
+            -read about unit test and write them for this app to avoid keep checking stuff all the time
+            -maybe add something like medium to the content
+            -add lot of filters to organize blocks by level, subject, area and keep the levels (this would be usefull for mobile, although it took out some of the core funcionality)
+            -rethink the name navigatte
 
             //initApp(pageName); 
 

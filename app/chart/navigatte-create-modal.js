@@ -188,8 +188,8 @@ Navigatte.CreateModal = new function() {
 					createButton.attr("disabled", "true")
 						.text("Creating...");
 
-					var xPos = (360 - Navigatte.Container.Position.X) / Navigatte.Container.Scale();
-					var yPos = (80 - Navigatte.Container.Position.Y) / Navigatte.Container.Scale();
+					var xPos = (360 - NvgttChart.Container.position().X) / NvgttChart.Container.scale();
+					var yPos = (80 - NvgttChart.Container.position().Y) / NvgttChart.Container.scale();
 
 					//If there is no id for this node, get or create it
 					if(nodeIdInput.node().value == "") {
@@ -224,7 +224,8 @@ Navigatte.CreateModal = new function() {
 					function createNode(nodeId) {
 
 						//Create the new node
-						var newNode = Navigatte.Nodes.Create({
+						//var newNode = Navigatte.Nodes.Create({
+						var newNode = NvgttChart.Create.newBlock({
 							name: nodeNameInput.node().value,
 							globalId: nodeId,
 							x: xPos,
@@ -237,17 +238,17 @@ Navigatte.CreateModal = new function() {
 							return;
 
 						//Refresh nodes
-						Navigatte.Nodes.Refresh();
+						NvgttChart.Blocks.refresh();
 
 						newNode.d3Select.attr("display", "none");
 											
 						//Update the modal screen attributes
-						GrowModal.Refresh({
+						/*GrowModal.Refresh({
 							startX: Navigatte.Container.Position.X + newNode.x * Navigatte.Container.Scale,
 							startY: Navigatte.Container.Position.Y + newNode.y * Navigatte.Container.Scale,
 							startWidth: newNode.containerWidth * Navigatte.Container.Scale,
 							startHeight: newNode.containerHeight * Navigatte.Container.Scale,
-						});
+						});*/
 
 						GrowModal.Close(function(){
 							newNode.d3Select.attr("display", "");

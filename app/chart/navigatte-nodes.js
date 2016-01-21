@@ -1,10 +1,5 @@
-/*-First we need to create a way to store the inputs and outputs references in the nodes,maybe store only the links
--Then use the inputs references to recursively get the block column (or degree)
--use the input/outputs reference to calculate the nodes format base on number of i/o s*/
 
-
-
-function NvgttBlock(blockData) {
+var NvgttBlock = function(blockData) {
 	var nvgttBlock = this;
 
 	nvgttBlock.name = blockData.name;
@@ -15,13 +10,13 @@ function NvgttBlock(blockData) {
 	nvgttBlock.bgcolor = blockData.bgcolor;
 	nvgttBlock.fgcolor = blockData.fgcolor;
 
-	nvgttBlock.x = blockData.x;
-	nvgttBlock.y = blockData.y;
+	nvgttBlock.x = parseInt(blockData.x) || 0;
+	nvgttBlock.y = parseInt(blockData.y) || 0;
 
 	nvgttBlock.inputs = [];
 	nvgttBlock.outputs = [];
 
-	nvgttBlock.GetColumn = function() {
+	/*nvgttBlock.GetColumn = function() {
 		var column = 0;
 
 		for(var i = 0; i < nvgttBlock.inputs.length; i++) {
@@ -32,7 +27,7 @@ function NvgttBlock(blockData) {
 		}
 
 		return column;
-	}
+	}*/
 
 	//Getters
 
@@ -66,6 +61,22 @@ function NvgttBlock(blockData) {
 		return { X:_position.x, Y:_position.y };
 	}*/
 }
+
+NvgttBlock.prototype.GetColumn = function() {
+	var column = 0;
+
+	for(var i = 0; i < this.inputs.length; i++) {
+		var inputColumn = this.inputs[i].GetColumn();
+
+		if(column <= inputColumn)
+			column = inputColumn + 1;
+	}
+
+	return column;
+} 
+
+
+
 
 
 //Module to Handle nodes management

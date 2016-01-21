@@ -1,3 +1,7 @@
+
+
+
+
 function NvgttLink(linkData) {
 	var nvgttLink = this;
 

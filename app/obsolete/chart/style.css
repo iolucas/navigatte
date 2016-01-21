@@ -10,13 +10,8 @@
 }
 
 
-.nvgtt-block-path {
+.nvgtt-block-rect {
 
-}
-
-.nvgtt-block-path-selected {
-	stroke: #77f;
-	stroke-width: 4;	
 }
 
 .nvgtt-block-text {
@@ -32,22 +27,6 @@
     user-select: none;
 }
 
-.nvgtt-block-input, .nvgtt-block-output {
-	fill: #aaa;
-	fill: #fff;
-	fill: #444;
-	fill: #fff;
-	stroke: #fff;
-	stroke-width: 0;
-	cursor: crosshair;	
-} 
-
-.nvgtt-block-input:hover, .nvgtt-block-output:hover {
-	stroke: #ff0;
-	stroke-width: 3;
-}
-
-
 .nvgtt-link {
 	cursor: pointer;
 	outline:0;
@@ -57,9 +36,4 @@
 	stroke: #37474F;
 	stroke-width: 4;
 	fill: none;
-}
-
-.nvgtt-link-path-selected {
-	stroke: #77f;
-	stroke-width: 4;
 }

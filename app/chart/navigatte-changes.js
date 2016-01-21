@@ -80,7 +80,7 @@ Navigatte.Changes = new function() {
 		return -1
 	}
 
-//MUST FIND AWAY TO AVOID BUG IN CASE CREATE NODES AND LINK THEM THAT THE ID GOES WRONG
+//TODO: MUST FIND AWAY TO AVOID BUG IN CASE CREATE NODES AND LINK THEM THAT THE ID GOES WRONG
 //MAYBE WE CAN REQUEST AN ID POOL OR A DYNAMIC ID TO ATTACH TO THESE ELEMENTS ON CREATION TO AVOID SUCH SITUATIONS
 //OR SAVE EVERY MOVEMENT
 
@@ -114,7 +114,8 @@ Navigatte.Changes = new function() {
 					if(responseObj.createdNodes) {
 						for(var i = 0; i < responseObj.createdNodes.length; i++) {
 							var newNodeIds = responseObj.createdNodes[i];
-							Navigatte.Nodes.SetLocalId(newNodeIds.globalId, newNodeIds.localId);
+							//Navigatte.Nodes.SetLocalId(newNodeIds.globalId, newNodeIds.localId);
+							NvgttChart.Blocks.setLocalId(newNodeIds.globalId, newNodeIds.localId);
 						}
 					}
 					

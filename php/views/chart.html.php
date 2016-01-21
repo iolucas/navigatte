@@ -1,4 +1,4 @@
-<svg class="svg-container" width="100%" ng-attr-height="{{ contentActiveFlag ? '0' : '100%' }}" ng-controller="ChartController">
+<svg class="svg-container" width="100%" ng-attr-height="{{ contentActiveFlag ? '0' : '100%' }}">
     <defs>
         <!--<filter id="f3" x="0" y="0" width="200%" height="200%">
             <feOffset result="offOut" in="SourceAlpha" dx="0" dy="0" />
@@ -59,10 +59,19 @@
 
     <rect id="node-container-mouse-area" width="100%" height="100%"></rect>
     <g id="block-container" nvgtt-block-container>
-        <g class="nvgtt-link" ng-click="testClick();" x1="0" x2="200" y1="0" y2="200"></g>
+        <!--<g class="nvgtt-link" 
+            ng-repeat="link in links" 
+            ng-click="testClick();" 
+            x1="{{link.sourceBlock.x + link.sourceBlock.width}}" 
+            y1="{{link.sourceBlock.y + link.sourceBlock.height/2}}" 
+            x2="{{link.targetBlock.x}}" 
+            y2="{{link.targetBlock.y + link.targetBlock.height/2}}">
+        </g>
+        
         <g class="nvgtt-block" 
             ng-repeat="block in blocks" 
-            ng-click="testClick();"
+            ng-click="deleteBlock($index);"
+            ng-dblclick="loadContent($index);"
             name="{{block.name}}"
             background-color="{{block.bgcolor}}"  
             text-color="{{block.fgcolor}}"  

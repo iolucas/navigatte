@@ -3,7 +3,8 @@
 
 	var onCreationLink = {};
 
-	Navigatte.Nodes.on("output_click", function(d) {
+	//Navigatte.Nodes.on("output_click", function(d) {
+	NvgttChart.Blocks.on("output_click", function(d) {
 
 		//If there is no target id, just crate the source id
 		if(onCreationLink.targetId == undefined) {
@@ -11,9 +12,13 @@
 		
 		//If the existing target id is different from the new target
 		} else if(onCreationLink.targetId != d.globalId) {
+
 			onCreationLink.sourceId = d.globalId;
-			Navigatte.Links.Create(onCreationLink);
-			Navigatte.Links.Refresh();
+			NvgttChart.Create.newLink(onCreationLink);
+			NvgttChart.Blocks.refresh();
+
+			//Navigatte.Links.Create(onCreationLink);
+			//Navigatte.Links.Refresh();
 			onCreationLink = {};					
 
 		//If the target id and source id is the same, clear all, cause a recursive link is not allowed		
@@ -23,7 +28,8 @@
 
 	});
 
-	Navigatte.Nodes.on("input_click", function(d) {
+	//Navigatte.Nodes.on("input_click", function(d) {
+	NvgttChart.Blocks.on("input_click", function(d) {
 
 		//If there is no source id, just crate the source id
 		if(onCreationLink.sourceId == undefined) {
@@ -31,9 +37,12 @@
 		
 		//If the existing source id is different from the new target id
 		} else if(onCreationLink.sourceId != d.globalId) {
+
 			onCreationLink.targetId = d.globalId;
-			Navigatte.Links.Create(onCreationLink);
-			Navigatte.Links.Refresh();
+			NvgttChart.Create.newLink(onCreationLink);
+			NvgttChart.Blocks.refresh();
+			//Navigatte.Links.Create(onCreationLink);
+			//Navigatte.Links.Refresh();
 			onCreationLink = {};					
 
 		//If the siurce id and source id is the same, clear all, cause a recursive link is not allowed		
@@ -44,7 +53,7 @@
 	});
 
 	//On container click, clear all on creation links
-	Navigatte.Container.on("click", function() {
+	NvgttChart.Container.on("click", function() {
 		onCreationLink = {};	
 	});
 });

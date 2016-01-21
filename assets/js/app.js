@@ -4,6 +4,12 @@ function initApp(username) {
     //Init the nodes container appended to the general content section
     Navigatte.Container.Init();
 
+    d3.json("rest/user_data.php?nodes&links&user=" + username, function(error, response) {
+        console.log(arguments);
+
+    });
+
+
     //Get and project the user nodes and links
     $.get("rest/user_data.php", { user: username, nodes: true, links: true })
     .done(function(response) {

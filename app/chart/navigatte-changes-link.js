@@ -1,6 +1,7 @@
 //Module to compute link changes
 
-Navigatte.Links.on("delete", function(link) {
+//Navigatte.Links.on("delete", function(link) {
+NvgttChart.Links.on("delete", function(link) {
 
 	//Push the change to the change manager
 
@@ -13,7 +14,8 @@ Navigatte.Links.on("delete", function(link) {
 	});
 });
 
-Navigatte.Links.on("create", function(link) {
+//Navigatte.Links.on("create", function(link) {
+NvgttChart.Create.on("createLink", function(link) {
 
 	//Push the change to the change manager
 

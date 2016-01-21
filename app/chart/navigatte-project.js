@@ -1,5 +1,106 @@
+'use strict';
+
+//TODO: MUST FIX BUG THAT ALLOW US TO DELETE PROJECTIONS NODES AND LINKS AND COMPUTE THEM
+
+//Module to enable and handle projections
+NvgttChart.Project = new function() {
+
+    //Private variables
+    var projBlocks = [];
+    var projLinks = [];
+
+    //Private methods
+
+    var createProjection = function(projBlock) {
+        //Request the projection block path
+        d3.json("rest/node_path.php?id=" + projBlock.localId, function(error, response) {
+            if(error) {
+                console.log("Error while gathering projection data");
+                console.log(error);
+                return;
+            }
+
+            //Clear any projection on going
+            clearProjection();
+
+            //Filter nodes which we already have
+            for(var i = 0; i < response.nodes.length; i++){
+                //If the block exist, proceed next iteration, if not, put it into the result array
+
+                if(NvgttChart.Blocks.get({ globalId:response.nodes[i].globalId }))
+                    continue;
+
+                projBlocks.push(response.nodes[i]);
+            }
+
+            //Filter links which the target is one of the already filtered items
+            for(var i = 0; i < response.links.length; i++) {
+                var currLink = response.links[i];
+
+                for(var j = 0; j < projBlocks.length; j++) {
+                    if(currLink.targetId == projBlocks[j].globalId) {
+                        currLink.projection = true;
+                        projLinks.push(currLink);
+                        break;        
+                    }
+                }
+            }
+
+            NvgttChart.Blocks.add(projBlocks);
+            NvgttChart.Links.add(projLinks);
+            NvgttChart.Blocks.refresh();
+
+            NvgttChart.Select.selectBlock(NvgttChart.Blocks.get({ localId: projBlock.localId }));
+        });
+
+    }
+
+
+    //Links dont need to be removed thru here, since they are removed when nodes are deleted
+    //TODO: Maybe in the future we should remove links too to avoid bugs that might happen
+    //TODO: keep better management of links since we are adding them and letting the links module discard the existing ones
+    
+    var clearProjection = function() {
+        //Remove projection blocks
+        if(projBlocks.length > 0) {
+
+            for(var i = 0; i < projBlocks.length; i++) {
+                var projBlockRef = NvgttChart.Blocks.get({ localId: projBlocks[i].localId });
+            
+                if(projBlockRef)
+                    NvgttChart.Blocks.delete(projBlockRef);    
+            }
+
+            NvgttChart.Blocks.refresh();
+            projBlocks = [];
+        }
+
+        //Remove projection links (in a normal operation would be none left)
+        if(projLinks.length > 0) {
+
+            projLinks = [];
+        }              
+
+    }
+
+
+    //Public methods
+
+    this.create = function(projBlock) {
+        return createProjection(projBlock);
+    }
+
+    this.clear = function() {
+        return clearProjection();
+    }
+}
+
+
+
+
+
 //Module to handle nodes projections
-Navigatte.Project = function(projObj) {
+/*Navigatte.Project2 = function(projObj) {
 
     //console.log(projObj);
 
@@ -75,13 +176,13 @@ Navigatte.Project = function(projObj) {
     }
 
 
-    /*console.log(levelObj.GetMax());
+    //console.log(levelObj.GetMax());
 
 
-    console.log(containerBox);   
+    //console.log(containerBox);   
     
-    console.log(projNodes);
-    console.log(projLinks);*/
+    //console.log(projNodes);
+    //console.log(projLinks);
 
 
     Navigatte.Nodes.Project(projNodes);
@@ -172,4 +273,4 @@ Navigatte.Project = function(projObj) {
 
         levelObj.Dec();
     }
-}
+}*/

@@ -2,7 +2,7 @@
 
 angular.module('nvgttApp.chart')
 	
-.controller('ChartController', function($scope, $window, $location, nvgttChart, nvgttBlocks, alertify) {
+.controller('ChartController', function($scope, $window, $location, nvgttChart, nvgttBlocks, alertify, nvgttHref) {
 	
 	$scope.teste = {
 		name: "Lucasssdgsdfsdf",
@@ -15,8 +15,14 @@ angular.module('nvgttApp.chart')
 		alertify.log("teste");
 	}
 
-	$scope.blocks = [];
-	$scope.links = [];
+	$scope.deleteBlock = function(index) {
+		//console.log($scope.blocks);
+		//$scope.blocks.splice(index, 1);
+	}
+
+	$scope.loadContent = function(blockIndex) {
+		nvgttHref.Open("#/content/" + $scope.blocks[blockIndex].localId);
+	}
 
 
 	nvgttBlocks.get($scope.username)
@@ -29,14 +35,55 @@ angular.module('nvgttApp.chart')
 
 	            Navigatte.Container.Init();
 
-	            $scope.blocks = response.nodes;
+	            //SetNodesPositions(response.nodes, response.links);
 
-	            return;
+	            var preparedBlocks = [];
+	            var preparedLinks = [];
 
-	            SetNodesPositions(response.nodes, response.links);
+	            for(var i = 0; i < response.nodes.length; i++)
+	            	preparedBlocks.push(new NvgttBlock(response.nodes[i]));	
+
+	            for(var i = 0; i < response.links.length; i++) {
+	            	var nvgttLink = new NvgttLink(response.links[i]);
+
+	            	//Set source and target blocks
+	            	for(var j = 0; j < preparedBlocks.length; j++) {
+
+	            		if(!nvgttLink.hasOwnProperty('sourceBlock') &&
+	            			nvgttLink.sourceId == preparedBlocks[j].globalId) 
+	            		{
+	            			nvgttLink.sourceBlock = preparedBlocks[j];
+	            		}
+
+	            		if(!nvgttLink.hasOwnProperty('targetBlock') &&
+	            			nvgttLink.targetId == preparedBlocks[j].globalId) 
+	            		{
+	            			nvgttLink.targetBlock = preparedBlocks[j];
+	            		}
+
+	            		//If both properties are set, exit iteration
+	            		if(nvgttLink.hasOwnProperty('sourceBlock') && 
+	            			nvgttLink.hasOwnProperty('targetBlock')) break;
+	            	}
+
+	            	nvgttLink.targetBlock.inputs.push(nvgttLink.sourceBlock);
+					nvgttLink.sourceBlock.outputs.push(nvgttLink.targetBlock);
+
+	            	preparedLinks.push(nvgttLink);
+	            }	
+
+	            //Set blocks and links to the scope
+	            $scope.blocks = preparedBlocks;
+				$scope.links = preparedLinks;
+
+	            console.log(response.links);
+
+	            return;	            
 
 	            Navigatte.Nodes.Init(response.nodes);
 	            Navigatte.Links.Init(response.links);
+
+	            Navigatte.Nodes.Refresh();
 
 	            Navigatte.Links.on("create", function(){
 	            	Navigatte.Nodes.Refresh();
@@ -46,13 +93,15 @@ angular.module('nvgttApp.chart')
 	            	Navigatte.Nodes.Refresh();
 	            });
 
+	            return;
+
 
 	            /*Navigatte.Nodes.on('click', function(d){
 	            	console.log(d.GetColumn());
 	            	//console.log(d);
 	            });*/
 
-	            return;
+	            //return;
 
 	            //Move the nodes to fit scale and position
 

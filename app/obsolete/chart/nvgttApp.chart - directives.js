@@ -85,25 +85,27 @@ angular.module('nvgttApp.chart')
 
 .directive('nvgttBlock', function($timeout) {
 	return {
-		scope: false,
+		//scope: true,
 		restrict: 'C',
+		//templateNamespace: 'svg',
 		compile: function(tElem, tAttrs) {
 
 			//Append elements of the navigatte block
 
-			var blockText = $(makeSvgNode('text'))
+			var blockText = $('<text></text>')
 				.attr("class", "nvgtt-block-text")
 				.attr("fill", tAttrs.textColor || "#fff")
 				.attr("text-anchor", "middle")
 				.text(tAttrs.name || "");
 
-			var blockRect = $(makeSvgNode('rect'))
+			var blockRect = $('<rect></rect>')
 				.attr("fill", tAttrs.backgroundColor || "#5cb85c")
 				.attr("class", "nvgtt-block-rect");	
 
 			tElem.append([blockRect, blockText]);
 
 			return function(scope, lElem, lAttr) {
+
 				//Timeout to avoid bug in compilation
 				$timeout(function(){
 					//Get the text length and adjust the text position and rectangle size
@@ -127,6 +129,10 @@ angular.module('nvgttApp.chart')
 						.attr("width", blockWidth)
 						.attr("height", blockHeight);
 
+					//Register the width and height on the directive scope block
+					scope.block.width = blockWidth;
+					scope.block.height = blockHeight;
+
 					//Function to translate the DOM in case X or Y values changes
 					var translate = function() {
 						lElem.attr("transform", "translate(" + 
@@ -145,38 +151,50 @@ angular.module('nvgttApp.chart')
 	};
 })
 
-.directive('nvgttLink', function() {
+.directive('nvgttLink', function($timeout) {
 	return {
-		scope: false,
+		scope: true,
 		restrict: 'C',
 		compile: function(tElem, tAttrs) {
 
-			var linkPath = $(makeSvgNode('path'))
+			var linkPath = $('<path></path>')
 				.attr("class", "nvgtt-link-path");
 
 			tElem.append(linkPath);
 
 			return function(scope, lElem, lAttrs) {
 
-				//Function to draw the path of a diagonal line (x and y are inverted for right line projection)
-				var drawLinkPath = d3.svg.diagonal()
-					.source(function(link) { 
-						return { x: link.y1, y: link.x1 }; 
-					})            
-					.target(function(link) { 
-						return { x: link.y2, y: link.x2 }; 
-					})
-					.projection(function(d) { 
-						return [d.y, d.x]; 
-					});
+				/*console.log(drawLinkPath({
+					x1: '0',
+					y1: '-1276',
+					x2: '60',
+					y2: '298'
+				}));*/
 
+				scope.refreshTimeout = null;	
+
+				//ADD TIME OUT TO PREVENT SEQUENTIAL CHANGES OF THE PATH
 				var refreshPath = function() {
-					lElem.find('.nvgtt-link-path').attr("d", drawLinkPath({ 
-						x1: lAttrs.x1 || 0, 
-						y1: lAttrs.y1 || 0, 
-						x2: lAttrs.x2 || 0, 
-						y2: lAttrs.y2 || 0
-					}));	
+					//Cancel a refresh queued if any
+					if(scope.refreshTimeout)
+						$timeout.cancel(scope.refreshTimeout);
+
+					scope.refreshTimeout = $timeout(function() {
+
+						var sourceX = parseInt(lAttrs.x1) || 0,
+							sourceY = parseInt(lAttrs.y1) || 0,
+							targetX = parseInt(lAttrs.x2) || 0,
+							targetY = parseInt(lAttrs.y2) || 0;
+
+
+						var newPath = drawLinkPath({ 
+							source: { x: sourceX, y: sourceY },
+							target: { x: targetX, y: targetY }
+						});
+
+						lElem.find('.nvgtt-link-path').attr("d", newPath);	
+
+					}, 10);
 				}
 
 				//Keep track of the attribute values of link coordinates to trigger refresh path
@@ -191,7 +209,17 @@ angular.module('nvgttApp.chart')
 	}
 });
 
-
+//Function to draw the path of a diagonal line (x and y are inverted for right line projection)
+var drawLinkPath = d3.svg.diagonal()
+	.source(function(link) {
+		return { x: link.source.y, y: link.source.x }
+	})            
+	.target(function(link) { 
+		return { x: link.target.y, y: link.target.x } 
+	})
+	.projection(function(d) { 
+		return [d.y, d.x]; 
+	});
 
 
 

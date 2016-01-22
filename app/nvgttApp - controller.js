@@ -34,7 +34,7 @@ angular.module('nvgttApp')
 
 	        $scope.createBlock = function(ev) {
 
-	        	Navigatte.CreateModal.Open();
+	        	NvgttChart.CreateModal.Open();
 	        	/*return;
 
 	        	var dialog = $mdDialog.confirm().title("Create Block...")
@@ -93,7 +93,7 @@ angular.module('nvgttApp')
 
 	        $scope.saveChanges = function() {
 	        	nvgttAlert.show("Saving changes...")
-	        	Navigatte.Changes.Save();
+	        	NvgttChart.Changes.Save();
 	        }
 
 

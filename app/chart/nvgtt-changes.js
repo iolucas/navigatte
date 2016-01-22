@@ -1,5 +1,5 @@
 //Module to handle changes of any kind 
-Navigatte.Changes = new function() {
+NvgttChart.Changes = new function() {
 
 	//Array to store objects changes
 	var changes = [];
@@ -114,7 +114,6 @@ Navigatte.Changes = new function() {
 					if(responseObj.createdNodes) {
 						for(var i = 0; i < responseObj.createdNodes.length; i++) {
 							var newNodeIds = responseObj.createdNodes[i];
-							//Navigatte.Nodes.SetLocalId(newNodeIds.globalId, newNodeIds.localId);
 							NvgttChart.Blocks.setLocalId(newNodeIds.globalId, newNodeIds.localId);
 						}
 					}

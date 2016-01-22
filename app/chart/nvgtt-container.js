@@ -31,6 +31,12 @@ NvgttChart.Container = new function() {
 		.scaleExtent([0.1, 5])
 		.on("zoom", function() {
 
+			/*if(d3.event.translate[0] < 0)
+				d3.event.translate[0] = 0;
+
+			if(d3.event.translate[1] < 0)
+				d3.event.translate[1] = 0;*/
+
 			container//.transition().delay(2000).duration(100)
 				.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 

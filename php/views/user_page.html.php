@@ -113,43 +113,33 @@
 
   
         
-        <!---->
-        
         <script src="assets/js/eventhandler.js"></script>
         <script src="assets/js/hexbin.js"></script>
         <script src="assets/js/g-query.js"></script>
         <script src="assets/js/grow-modal.js"></script>
         <!--<script src="modules/content-show/controller.js"></script>-->
 
-        <script src="app/chart/navigatte.js"></script>
-        <script src="app/chart/navigatte-container.js"></script>
-        <!--<script src="app/chart/navigatte-nodes.js"></script>-->
+        <script src="app/chart/nvgtt.js"></script>
+        <script src="app/chart/nvgtt-container.js"></script>
         <script src="app/chart/nvgtt-blocks.js"></script>
-        <!--<script src="app/chart/navigatte-links.js"></script>-->
         <script src="app/chart/nvgtt-links.js"></script>
-        
-        <script src="app/chart/navigatte-select.js"></script>
-        <!--<script src="app/chart/navigatte-content.js"></script>
-        <script src="app/chart/navigatte-content-modal.js"></script>-->
+        <script src="app/chart/nvgtt-select.js"></script>
         <script src="app/chart/nvgtt-content.js"></script>
-
-        <script src="app/chart/navigatte-project.js"></script>
+        <script src="app/chart/nvgtt-project.js"></script>
+        
 
         <?php if (!isset($username)): ?>
             <script src="app/chart/nvgtt-create.js"></script>
-            <script src="app/chart/navigatte-search.js"></script>
-            <script src="app/chart/navigatte-changes.js"></script>
-            <script src="app/chart/navigatte-changes-node.js"></script>
-            <script src="app/chart/navigatte-create-modal.js"></script>
+            <script src="app/chart/nvgtt-search.js"></script>
+            <script src="app/chart/nvgtt-changes.js"></script>
+            <script src="app/chart/nvgtt-changes-node.js"></script>
+            <script src="app/chart/nvgtt-create-modal.js"></script>
 
-            <!--<script src="assets/js/navigatte/navigatte-node-finder.js"></script>-->
+            <script src="app/chart/nvgtt-create-links.js"></script>
+            <script src="app/chart/nvgtt-changes-link.js"></script>
+            <script src="app/chart/nvgtt-keyactions.js"></script>
+        <?php endif ?>   
 
-            <script src="app/chart/navigatte-create-links.js"></script>
-            <script src="app/chart/navigatte-changes-link.js"></script>
-            <script src="app/chart/navigatte-keyactions.js"></script>
-        <?php endif ?>         
-
-        <!--<script src="assets/js/app.js"></script>-->
         <script>
             'use strict';
 
@@ -158,15 +148,21 @@
             NvgttChart.load(pageName);
 
 
-            -MUST OBSOLETE THINGS NOT USED
+            /*-MUST OBSOLETE THINGS NOT USED
             -use the input/outputs reference to calculate the nodes format base on number of i/o s
             -must generate outputs and inputs numbers and container width and height
             -read about unit test and write them for this app to avoid keep checking stuff all the time
-            -maybe add something like medium to the content
+            -maybe add something like medium to the content or scoop it(although you dont know much what it is)
             -add lot of filters to organize blocks by level, subject, area and keep the levels (this would be usefull for mobile, although it took out some of the core funcionality)
-            -rethink the name navigatte
+            -must implement way to refresh only a set of blocks
 
-            //initApp(pageName); 
+
+            -rethink the name navigatte to ensure the vision and idea is clear to everyone
+            -recompile everything a decide best next steps to avoid waste time and gather results, maybe is start study how data will be gathered (maybe start craw wikipedia)
+            -filter best contents
+
+
+            */
 
         </script>
 	</body>

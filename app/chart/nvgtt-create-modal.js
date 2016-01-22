@@ -1,4 +1,4 @@
-Navigatte.CreateModal = new function() {
+NvgttChart.CreateModal = new function() {
 
 	var availableColors = [
 		["#400040","#ffffff"],
@@ -80,7 +80,7 @@ Navigatte.CreateModal = new function() {
 	                    	return;
 	                    }
 	                    	
-	                    Navigatte.Search.Query({ nodename: inputValue }, function(response, result) {
+	                    NvgttChart.Search.Query({ nodename: inputValue }, function(response, result) {
 	                    	if(result == "success") {
 
 	                    		var resultDataBind = nodeNameSearchResultDiv

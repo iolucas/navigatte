@@ -117,7 +117,7 @@ NvgttChart.Links = new function() {
 		})            
 		.target(function(link) { 
 			return { 
-				x: link.targetBlock.y + link.sourceBlock.height/2, 
+				x: link.targetBlock.y + link.targetBlock.height/2, 
 				y: link.targetBlock.x 
 			}; 
 		})

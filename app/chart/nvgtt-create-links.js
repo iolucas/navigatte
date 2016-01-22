@@ -3,7 +3,6 @@
 
 	var onCreationLink = {};
 
-	//Navigatte.Nodes.on("output_click", function(d) {
 	NvgttChart.Blocks.on("output_click", function(d) {
 
 		//If there is no target id, just crate the source id
@@ -17,8 +16,6 @@
 			NvgttChart.Create.newLink(onCreationLink);
 			NvgttChart.Blocks.refresh();
 
-			//Navigatte.Links.Create(onCreationLink);
-			//Navigatte.Links.Refresh();
 			onCreationLink = {};					
 
 		//If the target id and source id is the same, clear all, cause a recursive link is not allowed		
@@ -28,7 +25,6 @@
 
 	});
 
-	//Navigatte.Nodes.on("input_click", function(d) {
 	NvgttChart.Blocks.on("input_click", function(d) {
 
 		//If there is no source id, just crate the source id
@@ -41,8 +37,6 @@
 			onCreationLink.targetId = d.globalId;
 			NvgttChart.Create.newLink(onCreationLink);
 			NvgttChart.Blocks.refresh();
-			//Navigatte.Links.Create(onCreationLink);
-			//Navigatte.Links.Refresh();
 			onCreationLink = {};					
 
 		//If the siurce id and source id is the same, clear all, cause a recursive link is not allowed		

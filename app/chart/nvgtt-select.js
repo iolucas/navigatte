@@ -86,18 +86,17 @@ NvgttChart.Select = new function() {
 
 
     //Register drag event to not select in case node is dragged
-    //DISABLE UNTIL IS NEEDED
-    /*var nodeDragged = false;
-    NvgttChart.Blocks.on("move", function() {
-        nodeDragged = true;
-    });*/
+    var blockDragged = false;
+    NvgttChart.Blocks.on("drag", function() {
+        blockDragged = true;
+    });
 
     NvgttChart.Blocks.on("click", function(d) {
 
-        /*if(nodeDragged) {
-            nodeDragged = false;
+        if(blockDragged) {
+            blockDragged = false;
             return;
-        }*/
+        }
 
         selectBlock(d);
     });

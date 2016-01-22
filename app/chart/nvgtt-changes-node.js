@@ -3,14 +3,14 @@
 NvgttChart.Blocks.on("dragend", function(node) {
 
 	//Push the change to the change manager
-	Navigatte.Changes.Add({ id: node.globalId, element: "node", action: "update", x: node.x, y: node.y });
+	NvgttChart.Changes.Add({ id: node.globalId, element: "node", action: "update", x: node.x, y: node.y });
 });
 
 //Navigatte.Nodes.on("delete", function(node) {
 NvgttChart.Blocks.on("delete", function(node) {
 
 	//Push the change to the change manager
-	Navigatte.Changes.Add({ id: node.globalId, element: "node", action: "delete" });
+	NvgttChart.Changes.Add({ id: node.globalId, element: "node", action: "delete" });
 });
 
 //Navigatte.Nodes.on("create", function(node) {
@@ -18,7 +18,7 @@ NvgttChart.Create.on("createBlock", function(node) {
 
 	//Push the change to the change manager
 
-	Navigatte.Changes.Add({ 
+	NvgttChart.Changes.Add({ 
 		id: node.globalId, 
 		action: "create",
 		element: "node", 

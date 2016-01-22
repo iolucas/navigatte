@@ -24,13 +24,13 @@ var NvgttChart = new function() {
 
             NvgttChart.Container.fitScreen();
 
-            NvgttChart.Blocks.on("click", function(d) {
+            /*NvgttChart.Blocks.on("click", function(d) {
                 console.log(d);
-            });
+            });*/
 
     	});
 
 	}
 }
 
-var Navigatte = NvgttChart;
+//var Navigatte = NvgttChart;

@@ -5,7 +5,7 @@ NvgttChart.Links.on("delete", function(link) {
 
 	//Push the change to the change manager
 
-	Navigatte.Changes.Add({ 
+	NvgttChart.Changes.Add({ 
 		id: link.sourceId + link.targetId,
 		element: "link", 
 		action: "delete",
@@ -19,7 +19,7 @@ NvgttChart.Create.on("createLink", function(link) {
 
 	//Push the change to the change manager
 
-	Navigatte.Changes.Add({ 
+	NvgttChart.Changes.Add({ 
 		id: link.sourceId + link.targetId,
 		element: "link", 
 		action: "create",

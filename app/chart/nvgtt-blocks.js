@@ -110,7 +110,16 @@ NvgttChart.Blocks = new function() {
 					d.textBox.width = 40;
 
 				d.width = d.textBox.width + margin*2;
-				d.height = 50;
+
+				d.leftHeight = 50 + d.inputs.length*10;
+				//if(d.inputs.length > 0)	
+					//d.leftHeight += (d.inputs.length - 1) * 10;
+
+				d.rightHeight = 50 + d.outputs.length*10;
+				//if(d.outputs.length > 0)	
+					//d.rightHeight += (d.outputs.length - 1) * 10;
+
+				d.height = d.leftHeight > d.rightHeight ? d.leftHeight : d.rightHeight;
 
 				return d.width/2;
 			})
@@ -134,9 +143,30 @@ NvgttChart.Blocks = new function() {
 				if(!d.textChanged)
 					return this.getAttribute("d");
 
-				return "M0,0 h" + d.width + 
+				/*var x0 = 0;
+				var y0 = ((d.leftHeight - d.rightHeight) / 2);
+
+				var x1 = d.width;
+				var y1 = 0;
+
+				var y2 = d.rightHeight;
+
+				var x3 = 0;
+				var y3 = -(d.leftHeight - y0);*/
+				if(d.leftHeight > d.rightHeight) {
+					return "M0,0 L" + d.width + "," + ((d.leftHeight - d.rightHeight) / 2) + " v" + 
+						d.rightHeight + " L0," + d.leftHeight + "z";
+				} else {
+					var heightsGap = (d.rightHeight - d.leftHeight) / 2;
+
+					return "M0," + heightsGap + " L" + d.width + ",0" + " v" +
+						d.rightHeight + " L0," + (d.leftHeight + heightsGap) + "z";
+				}
+
+
+				/*return "M0,0 h" + d.width + 
 				"v" + d.height + 
-				"h-" + d.width + "z";
+				"h-" + d.width + "z";*/
 			})
 			.attr("fill", function(d) {
 				return d.bgcolor || "#fff";
@@ -160,9 +190,66 @@ NvgttChart.Blocks = new function() {
 			});
 
 
-		//Translate DOM according to its columns
-		var nextY = [];
+		var posColumns = [];
+		var blocksYGap = 20;
+		var xPos = 10;
+
 		blocksSelection.each(function(d) {
+			var column = d.GetColumn();
+
+			if(posColumns[column] == undefined)
+				posColumns[column] = {
+					members: [],
+					width: 0,
+					height: 0
+				}
+
+			posColumns[column].height += d.height + blocksYGap;
+
+			posColumns[column].members.push(d);
+
+			if(d.width > posColumns[column].width)
+				posColumns[column].width = d.width; 
+		});
+
+		//Get the highest col
+		var higherCol = 0;
+		for(var i = 0; i < posColumns.length; i++) {
+			if(posColumns[i].height > higherCol)
+				higherCol = posColumns[i].height;
+		}
+
+		for(var i = 0; i < posColumns.length; i++) {
+
+			var yPos = (higherCol - posColumns[i].height) / 2 + 10;
+
+			var column = posColumns[i];
+
+			for(var j = 0; j < column.members.length; j++) {
+				var cBlock = column.members[j];
+
+				if(cBlock.x != xPos || cBlock.y != yPos) {
+
+					cBlock.x = xPos;
+					cBlock.y = yPos;
+
+					//Update node position
+					cBlock.d3Select//.transition().duration(1000)
+						.attr("transform", "translate(" + xPos + " " + yPos + ")");	
+
+					eventHandler.fire("move", cBlock);
+				}
+
+				yPos += cBlock.height + 20;
+			}
+
+			xPos += column.width + 150;
+		}
+
+
+		//Translate DOM according to its columns
+		//var nextY = [];
+		/*blocksSelection.each(function(d) {
 			var column = d.GetColumn();
 
 			if(nextY[column] == undefined)
@@ -179,12 +266,12 @@ NvgttChart.Blocks = new function() {
 				d.y = newY;
 
 				//Update node position
-				d3.select(this)//.transition().duration(1000)
+				d.d3Select//.transition().duration(1000)
 					.attr("transform", "translate(" + d.x + " " + d.y + ")");	
 
 				eventHandler.fire("move", d);
 			}
-		});
+		});*/
 	}
 
 	var createDOMs = function(createSelection) {
@@ -249,12 +336,13 @@ NvgttChart.Blocks = new function() {
 			});
 
 		//Enable nodes to be dragged
-		//nodeGroup.call(nodeDrag);
+		//blockGroup.call(nodeDrag);
 	}
 
-	//Create object to handle nodes drag
-	/*var nodeDrag = d3.behavior.drag()
+	//Object to handle nodes drag
+	var nodeDrag = d3.behavior.drag()
 		.origin(function(d) { return d; })
+
 		.on("drag", function(d) {
 
 			if(d.x != d3.event.x || d.y != d3.event.y) {
@@ -266,12 +354,15 @@ NvgttChart.Blocks = new function() {
 				d.d3Select.attr("transform", "translate(" + d.x + " " + d.y + ")");	
 
 				eventHandler.fire("drag", d);
+				eventHandler.fire("move", d);
 			}
-
 		})
+
 		.on("dragend", function(d) {
 			eventHandler.fire("dragend", d);	
-		});*/
+		});
+
+
 
 	//Private Class
 	var NvgttBlock = function(blockData) {

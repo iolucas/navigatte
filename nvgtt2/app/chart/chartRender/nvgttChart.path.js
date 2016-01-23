@@ -11,25 +11,34 @@ nvgttChart.path = new function() {
 
 	this.isShowing = function() { return currPath != null }
 
-	nvgttChart.blocks.on("click", function(block) {
-		if(currPath)
-			return;
+	this.generatePath = function() {
+		return generatePath.apply(this, arguments);
+	}
 
-		generatePath(block);
-	});
-
-	nvgttChart.container.on("click", function() {
-		if(currPath == null)
-			return;
-
-		clearPath();
-	});	
+	this.clearPath = function() {
+		return clearPath.apply(this, arguments);
+	}
 
 	function generatePath(block) {
 
-		//Array to keep columns pointers for positioning
-		//var columnsPointers = [];
+		if(currPath) {
 
+			if(currPath == block)
+				return;
+
+			//Clear blocks marked with path class
+			d3.selectAll(".nvgtt-path")
+				.classed("nvgtt-path", false)
+				.each(function(d) {
+					if(d.path)
+						delete d.path;
+				});
+
+			//delete existing links if any
+			nvgttChart.container.select().selectAll(".nvgtt-link-path").remove();	
+		}
+
+		//Array to keep columns pointers for positioning
 		var columns = [];
 
 		//Array to store the path links generated
@@ -60,30 +69,6 @@ nvgttChart.path = new function() {
 			if(d.width > column.width)
 				column.width = d.width;
 
-			/*d.path = {
-				y: column.members.length*(blockHeight+margin),
-				width: d.width,
-				height: blockHeight
-			}*/
-
-
-			/*var column = d.GetColumn();
-						
-			if(columnsPointers[column] == undefined)
-				columnsPointers[column] = margin;
-
-			var newX = column*300 + margin;
-			var newY = columnsPointers[column];
-
-			columnsPointers[column] += blockHeight + margin;
-
-			d.path = {
-				x: newX,
-				y: newY,
-				width: d.width,
-				height: blockHeight
-			}*/
-
 			//Populate path links
 			for(var i = 0; i < d.dependences.length; i++) {
 				var dpGlobalId = d.dependences[i];
@@ -107,10 +92,10 @@ nvgttChart.path = new function() {
 
 		var colGap = (nvgttChart.container.getWidth()-2*margin - colsWidth) / (columns.length-1);
 
-		if(colGap < 100)
+		/*if(colGap < 100)
 			colGap = 100;
 		else if(colGap > 500)
-			colGap = 500;
+			colGap = 500;*/
 
 		var colsXPointer = margin;
 
@@ -129,10 +114,10 @@ nvgttChart.path = new function() {
 					x: colsXPointer,
 					y: colYPointer,
 					width: member.width,
-					height: blockHeight
+					height: (block == member ? blockHeight*2 : blockHeight)
 				}
 
-				colYPointer += blockHeight + margin;
+				colYPointer += member.path.height + margin;
 
 				if(colYPointer > higherCol)
 					higherCol = colYPointer;
@@ -142,7 +127,6 @@ nvgttChart.path = new function() {
 		}
 
 
-		//Create links
 		nvgttChart.container.select().selectAll(".nvgtt-link-path")
 			.data(pathLinks).enter()
 			.insert("path", ":first-child")
@@ -158,8 +142,10 @@ nvgttChart.path = new function() {
 			})
 			.attr("opacity", 1);
 
-
-		d3.selectAll(".nvgtt-block").transition('t1').duration(1000)
+		//Redraw blocks
+		d3.selectAll(".nvgtt-block")
+			.style("display", null)
+			.transition('t1').duration(1000)
 			.attr("transform", function(d) {
 				var select = d3.select(this);
 
@@ -181,17 +167,25 @@ nvgttChart.path = new function() {
 
 		d3.selectAll(".nvgtt-path").select(".nvgtt-block-rect")
 			.transition('t1').duration(1000)
-			.attr("height", blockHeight)
+			.attr("height", function(d) {
+				return d.path.height;
+			})
 			.attr("width", function(d) {
-				return d.width;
+				return d.path.width;
 			});
 
 		d3.selectAll(".nvgtt-path").select(".nvgtt-block-text")
 			.transition('t1').duration(1000)
-			.attr("transform", "translate(0 -" + blockHeight/2 + ")");
+			.attr("transform", function(d) {
+				if(d == block)
+					return "translate(0 0)";	
+				
+				return "translate(0 -" + d.path.height / 2 + ")";
+			});
 
 		nvgttChart.container.setHeight(higherCol, {name: 't1', duration: 1000});
 	}
+
 
 	function clearPath() {
 
@@ -207,7 +201,7 @@ nvgttChart.path = new function() {
 		.transition().duration(1000)
 		.attr("d", drawLinkPath)
 		.attr("opacity", 0)
-		.remove();
+		.remove();	
 
 		//Refresh blocks and container screens
 		nvgttChart.blocks.refresh();

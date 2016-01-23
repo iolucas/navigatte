@@ -9,6 +9,8 @@ nvgttChart.container = new function() {
 		return self;
 	}
 
+	//Private variables
+
 	var minHeight = 50;
 
 	var margin = {
@@ -18,30 +20,36 @@ nvgttChart.container = new function() {
 		left: 22
 	}
 
-	//Find svg container
-	var svgContainer = d3.select(".nvgtt-chart");
-
-	if(svgContainer.empty())
-		throw "Chart container not found. Add a 'nvgtt-chart' class to a SVG object.";
-
-	svgContainer
-		.style("background-color", "#e0e0e0")
-		.attr("width", "100%")
-		.attr("height", minHeight);
-
-	//Rect to catch mouse events
-	svgContainer.append("rect")
-		.attr("width", "100%")
-		.attr("height", "100%")
-		.attr("fill", "transparent")
-		.on("click", function(){
-			eventHandler.fire("click");
-		});
-
-	var chart = svgContainer.append("g")
-		.attr("transform", "translate(" + margin.left + " " + margin.top + ")");
+	var svgContainer;
+	var chart;
 
 	//Public methods
+
+	this.init = function() {
+		//Find svg container
+		svgContainer = d3.select(".nvgtt-chart");
+
+		if(svgContainer.empty())
+			throw "Chart container not found. Add a 'nvgtt-chart' class to a SVG object.";
+
+		svgContainer
+			.style("background-color", "#e0e0e0")
+			.attr("width", "100%")
+			.attr("height", minHeight);
+
+		//Rect to catch mouse events
+		svgContainer.append("rect")
+			.attr("width", "100%")
+			.attr("height", "100%")
+			.attr("fill", "transparent")
+			.on("click", function(){
+				eventHandler.fire("click");
+			});
+
+		chart = svgContainer.append("g")
+			.attr("transform", "translate(" + margin.left + " " + margin.top + ")");
+	}
+	
 	this.setHeight = function(height, transition) {
 		if(height == undefined)
 			height = chart.node().getBBox().height;

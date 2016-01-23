@@ -1,1 +1,1 @@
-angular.module('nvgttApp', ['nvgttApp.chart']);
+angular.module('nvgttApp',['nvgttApp.chart','ngMaterial','ngRoute', 'ngAlertify','nvgttApp.content-display', 'nvgttApp.discussions', 'nvgttApp.search']);

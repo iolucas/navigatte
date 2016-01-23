@@ -1,0 +1,128 @@
+<div layout="row">
+	<div flex="20"></div>
+	<div layout="column" flex="40" style="margin:10px;">
+
+		<h1>{{contentData.name}}</h1>
+		<p>{{ contentData.description == '' ? 'No Description' : contentData.description }}</p>
+		<br>
+		<md-progress-linear ng-if="!contentData" md-mode="indeterminate"></md-progress-linear>
+
+		<!-- Content Panel -->
+		<div>
+			<h3>Discussions</h3>
+			<md-progress-linear ng-if="!discussions" md-mode="indeterminate"></md-progress-linear>
+			<md-list>
+				<md-list-item ng-repeat="discussion in discussions track by $index" ng-href="#/discussion/1">
+			    	{{ discussion.title }}
+				</md-list-item>
+			</md-list>
+		</div>
+
+	</div><!-- End Column -->
+
+	<div layout="column" flex="20" style="margin:10px;">
+
+		<div ng-show="baseBlocks == undefined || baseBlocks.length > 0"><!--Base Blocks List Div-->
+			<h3>Base Blocks</h3>	
+			<md-progress-linear ng-if="!baseBlocks" md-mode="indeterminate"></md-progress-linear>
+			<div ng-show="baseBlocks"><!--Base Blocks List Div-->
+				<md-list>
+					<md-list-item ng-repeat="baseBlock in baseBlocks track by $index" 
+						ng-href="#/content/{{baseBlock.localId}}">
+				    	{{baseBlock.name}}
+					</md-list-item>
+				</md-list>
+
+			</div><!--End Base Blocks ListDiv-->
+		</div><!--End Base Blocks ListDiv-->			
+
+		<h3>References
+			<md-button ng-if="contentData.owner && !editing" ng-click="startChanges();" class="md-raised">Edit</md-button>
+		</h3>
+
+		<md-progress-linear ng-if="!contentData" md-mode="indeterminate"></md-progress-linear>
+
+		<div ng-show="contentData"><!--References Div-->
+
+			<div ng-if="contentData.courses.length > 0 || editing">
+				<h4>Courses</h4>
+
+				<md-input-container ng-if="editing">
+						<label>Course Name</label>
+						<input type="text" ng-model="newCourse">
+						<md-button class="md-raised" ng-click="addItem(contentData.courses, newCourse)">Insert</md-button>
+				</md-input-container>
+
+				<md-list>
+					<md-list-item ng-repeat="course in contentData.courses track by $index">
+				    	<span>{{ course }}</span>
+				    	<md-button ng-if="editing" ng-click="removeItem(contentData.courses, $index)" class="md-warn md-raised">Delete</md-button>
+					</md-list-item>
+				</md-list>
+
+			</div>
+
+			<div ng-if="contentData.books.length > 0 || editing">
+				<h4>Books</h4>
+
+				<md-input-container ng-if="editing">
+						<label>Book Name</label>
+						<input type="text" ng-model="newBook">
+						<md-button class="md-raised" ng-click="addItem(contentData.books, newBook)">Insert</md-button>
+				</md-input-container>
+
+				<md-list>
+					<md-list-item ng-repeat="book in contentData.books track by $index">
+				    	<span>{{ book }}</span>
+				    	<md-button ng-if="editing" ng-click="removeItem(contentData.books, $index)" class="md-warn md-raised">Delete</md-button>
+					</md-list-item>
+				</md-list>
+
+			</div>
+
+			<div ng-if="contentData.sites.length > 0 || editing">
+				<h4>Sites</h4>
+
+				<md-input-container ng-if="editing">
+						<label>Site Name</label>
+						<input type="text" ng-model="newSite">
+						<md-button class="md-raised" ng-click="addItem(contentData.sites, newSite)">Insert</md-button>
+				</md-input-container>
+				
+				<md-list>
+					<md-list-item ng-repeat="site in contentData.sites track by $index">
+				    	<p><a ng-href="{{ site }}" target="_blank">{{ site }}</a></p>
+				    	<md-button ng-if="editing" ng-click="removeItem(contentData.sites, $index)" class="md-warn md-raised">Delete</md-button>
+				    	<md-divider ng-if="!$last"></md-divider>
+					</md-list-item>
+				</md-list>
+
+			</div>
+
+			<div ng-if="contentData.notes || editing">
+				
+				<h4>Notes</h4>
+
+				<md-input-container ng-if="editing">
+					<textarea class="nvgtt-content-notes" placeholder="Write some notes..." 
+						ng-model="contentData.notes"></textarea>
+				</md-input-container>
+				
+				<p ng-if="!editing">{{contentData.notes}}</p>
+
+			</div>	
+
+			<div ng-if="editing">
+				<md-button class="md-primary md-raised" ng-click="saveChanges()">Save Changes</md-button>
+
+				<md-button class="md-warn md-raised" ng-click="cancelChanges()">Cancel</md-button>
+				<br><br>
+			</div>
+
+		</div><!-- End Reference Div -->
+
+	</div><!-- End Column -->
+
+	<div flex="20"></div>
+
+</div><!-- End Row -->

@@ -2,17 +2,33 @@
 
 var nvgttChart = new function() {
 
-	this.load = function(blocks, links) {
+	//Object to handle the nodes events
+	/*var eventHandler = new EventHandler();
+	this.on = function(event, callback) {
+		eventHandler.on(event, callback);
+		return self;
+	}*/
 
-		populateLinksOnBlocks(blocks, links);
+	//Execute all bootstrap functions here
+	//(Function that doesn't need any data)
+	/*this.bootstrap = function() {
+
+	}*/
+
+
+	/*this.load = function(blocks, links) {
+
+
+
 
 		nvgttChart.blocks.add(blocks);
 
-
 		nvgttChart.blocks.refresh();
 
+		eventHandler.fire('load');
 
 		//Methods to execute screen refresh when resize
+		//User timeout for performance issues
 		var timeOutRef = null;
 		window.addEventListener("resize", function() {
 			if(timeOutRef)
@@ -27,28 +43,11 @@ var nvgttChart = new function() {
 
 			}, 200);
 		});
-	}
+	}*/
 
-	function populateLinksOnBlocks(blocks, links) {
-		
-		//Create blocks map and dependence array
-		var blocksMap = [];
-		for(var i = 0; i < blocks.length; i++) {
-			var block = blocks[i];
-			block.dependences = [];
-			blocksMap[block.globalId] = block;
-		}
 
-		for(var i = 0; i < links.length; i++) {
-			var link = links[i];
 
-			//If any of the blocks do not exist, proceed next iteration
-			if(!blocksMap[link.sourceId] || !blocksMap[link.targetId])
-				continue;
 
-			blocksMap[link.targetId].dependences.push(link.sourceId)
-		}
-	}
 }
 
 

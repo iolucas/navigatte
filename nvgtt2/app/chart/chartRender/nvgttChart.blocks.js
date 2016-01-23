@@ -11,6 +11,7 @@ nvgttChart.blocks = new function() {
 
 	//Variable signalizing whether or not a full refresh is needed
 	var needFullRefresh = true;
+	var lastContainerHeight = 0;
 	window.addEventListener("resize", function() {
 		needFullRefresh = true;
 	});
@@ -68,18 +69,18 @@ nvgttChart.blocks = new function() {
 	var getBlock = function(searchObject) {
 
 		if(searchObject.hasOwnProperty('localId')) {
-			
-			for(var i = 0; i < blocks.length; i++) {
+			return blocksLocalMap[searchObject.localId]
+			/*for(var i = 0; i < blocks.length; i++) {
 				if(blocks[i].localId == searchObject.localId)
 					return blocks[i];
-			}
+			}*/
 
 		} else if(searchObject.hasOwnProperty('globalId')) {
-
-			for(var i = 0; i < blocks.length; i++) {
+			return blocksGlobalMap[searchObject.globalId];
+			/*for(var i = 0; i < blocks.length; i++) {
 				if(blocks[i].globalId == searchObject.globalId)
 					return blocks[i];
-			}
+			}*/
 		}
 
 		//If the search object is invalid, or no block were found, return null
@@ -238,7 +239,7 @@ nvgttChart.blocks = new function() {
 			colPointer += row.height + blockMargin;
 		}
 
-		nvgttChart.container.setHeight(colPointer);
+		lastContainerHeight = colPointer;
 
 		redraw();
 
@@ -267,6 +268,8 @@ nvgttChart.blocks = new function() {
 				.attr("width", function(d) {
 					return d.width + d.rowAddGap;
 				});	
+
+			nvgttChart.container.setHeight(colPointer, {name:'blocksRefresh', duration:1000});
 		}
 	}
 

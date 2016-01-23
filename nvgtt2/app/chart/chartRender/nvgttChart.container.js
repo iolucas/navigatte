@@ -9,7 +9,7 @@ nvgttChart.container = new function() {
 		return self;
 	}
 
-	var minHeight = 100;
+	var minHeight = 50;
 
 	var margin = {
 		top: 0,
@@ -42,13 +42,17 @@ nvgttChart.container = new function() {
 		.attr("transform", "translate(" + margin.left + " " + margin.top + ")");
 
 	//Public methods
-	this.setHeight = function(height) {
+	this.setHeight = function(height, transition) {
 		if(height == undefined)
 			height = chart.node().getBBox().height;
 
 		height = height < minHeight ? minHeight : height;
 
-		svgContainer.attr("height", height);
+		if(transition)
+			svgContainer.transition(transition.name).duration(transition.duration)
+				.attr("height", height);
+		else
+			svgContainer.attr("height", height);
 	}
 
 	this.getWidth = function() {

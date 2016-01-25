@@ -16,8 +16,8 @@ nvgttChart.container = new function() {
 	var margin = {
 		top: 0,
 		bottom: 0,
-		right: 22,
-		left: 22
+		right: 0,
+		left: 0
 	}
 
 	var svgContainer;
@@ -34,6 +34,7 @@ nvgttChart.container = new function() {
 
 		svgContainer
 			.style("background-color", "#e0e0e0")
+			//.style("background-color", "#111")
 			.attr("width", "100%")
 			.attr("height", minHeight);
 

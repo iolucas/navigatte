@@ -10,7 +10,7 @@ angular.module('nvgttApp.chart')
 	nvgttChart.container.init();
 
 	nvgttChart.blocks.on('click', function(block) {
-		nvgttLocation.go('#/content/' + block.localId);
+		nvgttLocation.go('#/' + $scope.profile + '/content/' + block.localId);
 	});
 
 	//Methods to execute screen refresh when resize
@@ -30,17 +30,26 @@ angular.module('nvgttApp.chart')
 		}, 200);
 	});
 
-	//Get this user blocks
-	userBlocks.get($scope.username).then(function(resp) {
-		if(resp.data.result == 'SUCCESS') {
+	$scope.$on('profileChanged', function(ev, profile) {
+		nvgttChart.blocks.clearAll();
+		nvgttChart.blocks.refresh();
 
-			onBlocksLoad(resp.data.nodes, resp.data.links);
 
-		} else {
-			console.log(resp);
-			throw 'Error while loading user blocks';
-		}
+		//Get this user blocks
+		userBlocks.get(profile).then(function(resp) {
+			if(resp.data.result == 'SUCCESS') {
+
+				onBlocksLoad(resp.data.nodes, resp.data.links);
+
+			} else {
+				console.log(resp);
+				throw 'Error while loading user blocks';
+			}
+		});
+
 	});
+
+
 
 	function onBlocksLoad(blocks, links) {
 		populateLinksOnBlocks(blocks, links);
@@ -51,14 +60,22 @@ angular.module('nvgttApp.chart')
 		//Register event to be throw when a route change occurrs
 		$scope.$on("$routeChangeSuccess", function(ev, route) {
 
-			if(route) {	//if there is any route
+			if(route && route.params.localId) {	//if there is any route and localId attached
 
 				var localId = route.params.localId;
 				var pathBlock = nvgttChart.blocks.get({ localId: localId });
-				nvgttChart.path.generatePath(pathBlock);
+
+				if(pathBlock) {	//If the path block exists
+					nvgttChart.path.generatePath(pathBlock);	//create its path
+				} else { //if not
+					//create a projection for it
+					work on projections in case content want to be showed
+				}
+
 
 			} else {	//if there is no route, clear the current path
 				nvgttChart.path.clearPath();
+				nvgttChart.project.clear();	//clear projection if any
 			}
 
 		});

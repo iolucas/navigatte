@@ -9,7 +9,7 @@ angular.module('nvgttApp.search')
 			//var queryPromise = $q.defer();
 
 			//Get the current content
-	        return $http.get("rest/find_nodes.php?node_name=" + queryString);
+	        return $http.get("../rest/find_nodes.php?node_name=" + queryString);
 		        
 		        /*.then(function(response) {
 

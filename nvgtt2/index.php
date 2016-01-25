@@ -7,7 +7,14 @@
         <link rel="stylesheet" href="app/chart/chartRender/style.css">
 
         <style>
+            body {
+                background-color: #fff;
+                padding-top: 70px;
+            }
 
+            .fixed {
+                position: fixed;
+            }
 
         </style>
 
@@ -48,21 +55,32 @@
         <script src="app/chart/chartRender/nvgttChart.container.js"></script>
         <script src="app/chart/chartRender/nvgttChart.blocks.js"></script>
         <script src="app/chart/chartRender/nvgttChart.path.js"></script>
+        <script src="app/chart/chartRender/nvgttChart.project.js"></script>
 
         <title>Navigatr</title> 
 	</head>
 
     <body ng-controller="NvgttAppController">
-    
-            <div id="testdiv" style="height:100px;padding:10px;">
+            <div flex="none" class="fixed" style="width:100%;height:70px;top:0;" id="nvgtt-main-navbar">
+                <?php include 'navbar3.html.php'; ?>
+            </div>
+
+            <div id="testdiv" style="height:100px;margin-bottom:0px;background-color:#aaf;">
                 <!--<button onclick="check();">Teste</button>-->
             </div>
             <svg class="nvgtt-chart" ng-controller="ChartController"></svg>
             <br>
             <section ng-view></section>
 
-            <script>
-                var pageName = 'lucas';
-            </script>
+             <!--           -read about unit test and write them for this app to avoid keep checking stuff all the time
+            -maybe add something like medium to the content or scoop it(although you dont know much what it is)
+            -add lot of filters to organize blocks by level, subject, area and keep the levels (this would be usefull for mobile, although it took out some of the core funcionality)
+                        -rethink the name navigatte to ensure the vision and idea is clear to everyone
+            -recompile everything a decide best next steps to avoid waste time and gather results, maybe is start study how data will be gathered (maybe start craw wikipedia)
+            -filter best contents
+
+            FOCUS ON CONTENT AND HOW CONTENT WILL BE DISPLAYED
+    
+        -->
 	</body>
 </html>

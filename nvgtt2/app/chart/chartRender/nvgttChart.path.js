@@ -35,7 +35,7 @@ nvgttChart.path = new function() {
 				});
 
 			//delete existing links if any
-			nvgttChart.container.select().selectAll(".nvgtt-link-path").remove();	
+			//nvgttChart.container.select().selectAll(".nvgtt-link-path").remove();	
 		}
 
 		//Array to keep columns pointers for positioning
@@ -81,6 +81,7 @@ nvgttChart.path = new function() {
 					source: dpRef
 				});
 			}
+
 		});
 
 
@@ -126,13 +127,34 @@ nvgttChart.path = new function() {
 			colsXPointer += column.width + colGap;
 		}
 
+		var linkSelection = nvgttChart.container.select().selectAll(".nvgtt-link-path")
+			.data(pathLinks, function(d) {
+				return d.source.globalId + "" + d.target.globalId;
+			});
 
-		nvgttChart.container.select().selectAll(".nvgtt-link-path")
-			.data(pathLinks).enter()
+		linkSelection.exit().each(function(d) {
+			//console.log(d);
+
+		}).remove();
+
+		linkSelection.enter()
 			.insert("path", ":first-child")
 			.classed("nvgtt-link-path", true)
-			.attr("d", drawLinkPath)
-			.attr("opacity", 0)
+			.attr("stroke", function(d) {
+				return d.source.bgcolor || '#fff';
+			})
+			.attr("d", function(d) {
+				/*if(d.source.path) 
+					return drawLinkPath({
+						source: d.source.path,
+						target: d.target.path
+					});*/
+
+				return drawLinkPath(d);
+			})
+			.attr("opacity", 0);
+
+		linkSelection	
 			.transition('t1').duration(1000)
 			.attr("d", function(d) {
 				return drawLinkPath({

@@ -66,6 +66,11 @@ nvgttChart.blocks = new function() {
 		return deleteBlockByIndex(refIndex);
 	}
 
+	var clearAll = function() {
+		while(blocks.length > 0)
+			deleteBlockByIndex(0);		
+	}
+
 	var getBlock = function(searchObject) {
 
 		if(searchObject.hasOwnProperty('localId')) {
@@ -107,7 +112,11 @@ nvgttChart.blocks = new function() {
 
 	var createDOMs = function(createSelection) {
 
-		//var debugColors = ["#337ab7","#5cb85c","#5bc0de","#f0ad4e","#d9534f"];
+		var debugColors = ["#337ab7","#5cb85c","#5bc0de","#f0ad4e","#d9534f"];
+
+		function getRandColor() {
+			return debugColors[(Math.random()*(debugColors.length-1)).toFixed()];
+		}
 
 		var blockGroup = createSelection.append("g")
 			.classed("nvgtt-block", function(d) {
@@ -165,6 +174,7 @@ nvgttChart.blocks = new function() {
 			.attr("width", function(d){ return d.width })
 			.attr("fill", function(d) {
 				return d.bgcolor || "#fff";
+				//return getRandColor();
 			});
 	}
 
@@ -214,10 +224,10 @@ nvgttChart.blocks = new function() {
 		//Render rows
 		var colPointer = blockMargin;
 		for(var i = 0; i < rows.length; i++) {
-			var rowPointer = 0;
+			var rowPointer = blockMargin;
 			var row = rows[i];
 
-			var rowAddGap = i < rows.length - 1 ? (chartWidth - row.width) / row.members.length : 0;
+			var rowAddGap = i < rows.length - 1 ? (chartWidth - row.width - blockMargin) / row.members.length : 0;
 
 			for(var j = 0; j < row.members.length; j++) {
 				var block = row.members[j];
@@ -251,9 +261,12 @@ nvgttChart.blocks = new function() {
 			d3.selectAll('.nvgtt-block')
 				.style("display", null)
 				.transition('blocksRefresh').duration(1000)
-				.style("opacity", 1)	
+				.style("opacity", 1)
 				.attr("transform", function(d) {
 					return "translate(" + d.x + " " + d.y + ")";
+				}).each('end', function() {
+					//Fix bug in case return to this screen and things are all hide
+					d3.select(this).style("display", null);
 				});
 
 			d3.selectAll('.nvgtt-block').select(".nvgtt-block-text")
@@ -269,7 +282,7 @@ nvgttChart.blocks = new function() {
 					return d.width + d.rowAddGap;
 				});	
 
-			nvgttChart.container.setHeight(colPointer, {name:'blocksRefresh', duration:1000});
+			nvgttChart.container.setHeight(lastContainerHeight, {name:'blocksRefresh', duration:1000});
 		}
 	}
 
@@ -348,6 +361,10 @@ nvgttChart.blocks = new function() {
 					deletedBlocks.push(deleteBlockByRef(bbi[i]));
 				return deletedBlocks;
 		}*/
+	}
+
+	this.clearAll = function() {
+		return clearAll();
 	}
 
 	this.get = function(searchObject) {

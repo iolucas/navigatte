@@ -31,6 +31,15 @@ angular.module('nvgttApp')
 		}
 	})
 
+	//
+	.service('nvgttProfile', function($http) {
+
+		this.get = function(username) {
+			return $http.get('../rest/user_profile.php?user=' + username);
+		}
+
+	})
+
 	//Service to encapsulates toasts to be shown on the application
 	.service('nvgttAlert', function($mdToast) {
 

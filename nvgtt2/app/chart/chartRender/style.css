@@ -55,7 +55,7 @@
 }
 
 .nvgtt-link-path {
-	stroke: #37474F;
+	/*stroke: #37474F;*/
 	stroke-width: 4;
 	fill: none;
 }

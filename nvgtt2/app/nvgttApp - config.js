@@ -3,23 +3,29 @@
 angular.module('nvgttApp')
 	.config(function($routeProvider, $mdThemingProvider) {
 
-        $routeProvider.when('/content/:localId', {
-            controller: 'ContentDisplayController',
-            templateUrl: 'app/content-display/nvgttApp.content-display - view2.html',
+        $routeProvider.when('/:profile/', {
+            template :'ola'
+            /*keep doing profile stuff, blocks load once the profile changes
+            and projections be made once a block doesn't exists*/
         })
 
-        .when('/discussion/:id', {
+        .when('/:profile/content/:localId', {
+            controller: 'ContentDisplayController',
+            templateUrl: 'app/content-display/nvgttApp.content-display - view4.html',
+        })
+
+        .when('/:profile/content/:localId/discussion/:id', {
             controller: 'DiscussionsController',
             templateUrl: 'app/discussions/nvgttApp.discussions - view.html',
         });
 
         //Configuration of the theme
-        $mdThemingProvider.theme('default')
+        /*$mdThemingProvider.theme('default')
             .primaryPalette('blue-grey',{
                 'default': '900'
             })
             .accentPalette('teal')
-            .backgroundPalette('teal');
+            .backgroundPalette('teal');*/
 /*
 Palette
 Primary:blue-grey 900

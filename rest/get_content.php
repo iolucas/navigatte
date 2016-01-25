@@ -57,7 +57,7 @@
 
 	exit();
 
-	//keep writing query to get the node content and to submit changes
+	//TODO:keep writing query to get the node content and to submit changes
 	//in case node dont have content (return null), must create an standard obj to be submitted
 
 	/*print_r($nodeContent);

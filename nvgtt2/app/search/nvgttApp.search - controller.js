@@ -22,7 +22,7 @@ angular.module('nvgttApp.search')
             		for(var i = 0; i < response.data.length; i++){
                 		//If the block exist, proceed next iteration, if not, put it into the result array
 
-                		if(NvgttChart.Blocks.get({ globalId:response.data[i].globalId }))
+                		if(nvgttChart.blocks.get({ globalId:response.data[i].globalId }))
                 			continue;
 
                     	resultArray.push(response.data[i]);
@@ -47,19 +47,15 @@ angular.module('nvgttApp.search')
 		$scope.searchTextChange = function(searchText) {
 
 			if(searchText == false) {
-				NvgttChart.Project.clear();
+				nvgttChart.project.clear();
 			}
-
-
-			//console.log("Search text changed: " + $scope.searchText);
-			//$scope.searchItems.push('new');
 		}
 
 		$scope.selectedItemChange = function(selectedItem) {
+			console.log(selectedItem);
 			//If a valid selected item, project it
 			if(selectedItem)
-				NvgttChart.Project.create(selectedItem);
-				//nvgttChart.Project(selectedItem.localId);
+				nvgttChart.project.create(selectedItem);
 		}
 
 

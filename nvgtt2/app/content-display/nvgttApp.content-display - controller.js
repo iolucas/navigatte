@@ -5,7 +5,7 @@ angular.module('nvgttApp.content-display')
 
     $scope.editing = false;
 
-    $scope.username = pageName;
+    //$scope.username = pageName;
 
     //Load the user content data
     blockContent.get($routeParams.localId, function(contentData) {

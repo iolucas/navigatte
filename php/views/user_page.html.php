@@ -149,17 +149,12 @@
 
 
             /*-MUST OBSOLETE THINGS NOT USED
-            -use the input/outputs reference to calculate the nodes format base on number of i/o s
+
             -must generate outputs and inputs numbers and container width and height
-            -read about unit test and write them for this app to avoid keep checking stuff all the time
-            -maybe add something like medium to the content or scoop it(although you dont know much what it is)
-            -add lot of filters to organize blocks by level, subject, area and keep the levels (this would be usefull for mobile, although it took out some of the core funcionality)
             -must implement way to refresh only a set of blocks
 
 
-            -rethink the name navigatte to ensure the vision and idea is clear to everyone
-            -recompile everything a decide best next steps to avoid waste time and gather results, maybe is start study how data will be gathered (maybe start craw wikipedia)
-            -filter best contents
+
 
 
             */

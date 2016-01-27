@@ -4,7 +4,7 @@ angular.module('nvgttApp')
 	.config(function($routeProvider, $mdThemingProvider) {
 
         $routeProvider.when('/:profile/', {
-            template :'ola'
+            template :''
             /*keep doing profile stuff, blocks load once the profile changes
             and projections be made once a block doesn't exists*/
         })

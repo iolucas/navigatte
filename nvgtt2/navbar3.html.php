@@ -4,10 +4,10 @@
 		<!--<div class="user-img" style="width:50px;height:50px;"></div>-->
 	</div>
 
-	<img hide show-gt-md src="assets/img/boat-9-48.png">
+	<!--<img hide show-gt-md src="../assets/img/boat-9-48.png">-->
 
 	<h2 hide show-gt-md>
-		<span style="font-family: 'Fredoka One', cursive;">Navigatte</span>
+		<!--<span style="font-family: 'Fredoka One', cursive;">Navigatte</span>-->
 	</h2>
 
 	<div flex ng-controller="SearchController" style="margin: 0 30px 0 30px;color:#000;">

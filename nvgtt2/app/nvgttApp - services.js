@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('nvgttApp')
+
 	.service('nvgttLocation', function($window) {
 
 		this.go = function(url) {

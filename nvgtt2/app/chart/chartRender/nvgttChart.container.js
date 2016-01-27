@@ -33,7 +33,7 @@ nvgttChart.container = new function() {
 			throw "Chart container not found. Add a 'nvgtt-chart' class to a SVG object.";
 
 		svgContainer
-			.style("background-color", "#e0e0e0")
+			//.style("background-color", "#e0e0e0")
 			//.style("background-color", "#111")
 			.attr("width", "100%")
 			.attr("height", minHeight);

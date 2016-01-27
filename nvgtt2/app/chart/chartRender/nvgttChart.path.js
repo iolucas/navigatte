@@ -181,7 +181,8 @@ nvgttChart.path = new function() {
 					return 1;
 
 				return 0;
-			}).each('end', function(d) {
+			})
+			.each('end', function(d) {
 				
 				if(d.path == undefined)
 					d3.select(this).style("display", "none");				

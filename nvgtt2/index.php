@@ -94,7 +94,7 @@
         <script src="app/chart/chartRender/nvgttChart.path.js"></script>
         <script src="app/chart/chartRender/nvgttChart.project.js"></script>
 
-        <title>Navigatr</title> 
+        <title>Navigatte</title> 
 	</head>
 
     <body ng-controller="NvgttAppController">
@@ -118,7 +118,9 @@
             <br>
             <section ng-view ng-hide="false"></section>
 
-             <!--           -read about unit test and write them for this app to avoid keep checking stuff all the time
+             <!--           
+
+             -read about unit test and write them for this app to avoid keep checking stuff all the time
             -maybe add something like medium to the content or scoop it(although you dont know much what it is)
             -add lot of filters to organize blocks by level, subject, area and keep the levels (this would be usefull for mobile, although it took out some of the core funcionality)
                         -rethink the name navigatte to ensure the vision and idea is clear to everyone

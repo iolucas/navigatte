@@ -11,13 +11,15 @@ angular.module('nvgttApp')
 
         .when('/:profile/content/:localId', {
             controller: 'ContentDisplayController',
-            templateUrl: 'app/content-display/nvgttApp.content-display - view4.html',
+            templateUrl: 'app/content-display/nvgttApp.content-display - view1.html',
         })
 
         .when('/:profile/content/:localId/discussion/:id', {
             controller: 'DiscussionsController',
             templateUrl: 'app/discussions/nvgttApp.discussions - view.html',
         });
+
+console.log('craw wikipedia links');
 
         //Configuration of the theme
         /*$mdThemingProvider.theme('default')

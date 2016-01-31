@@ -27,7 +27,7 @@ angular.module('nvgttApp')
         }
     });
 
-    must create name for the project
+    console.log('must create name for the project');
 
     $scope.$on('profileInfo', function(ev, profileData) {
         $scope.userProfileName = profileData.screen_name;
